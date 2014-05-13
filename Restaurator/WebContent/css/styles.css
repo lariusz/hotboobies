@@ -3,7 +3,9 @@
 	color:red;
 }
 
-#loginform{
-	text-align:right;
-	margin: auto; 
+#form{
+	text-align: right;
+	margin: auto;
+	width: 280px; 
+	height: 185px;
 }
