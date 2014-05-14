@@ -11,19 +11,20 @@
 <title>Zaloguj się</title>
 </h:head>
 <h:body>
+
+<h:form id="loginform" >
 <h1 class="title">Logowanie</h1>
-
-<h:form id="form">
-	<div id="loginform">
-	<h:panelGrid columns="2">
-        Login: <h:inputText value="#{logowanie.login}" id="login" />
-        Hasło: <h:inputText value="#{logowanie.haslo}" id="haslo" />
-        <p></p>
-        <h:commandButton value="Zaloguj" action="#{logowanie.zaloguj()}"/>
+	<h:panelGrid columns="3">
+        Login: 
+        <h:inputText value="#{logowanie.zalogowany.login}" id="login" required="true" requiredMessage="Pole wymagane" />
+        <h:message for="login" styleClass="error" />
+        Hasło:
+        <h:inputSecret value="#{logowanie.zalogowany.haslo}" required="true" id="haslo" requiredMessage="Pole wymagane" />
+        <h:message for="haslo" styleClass="error" />
+        <span/>
+        <h:commandButton value="Zaloguj" action="#{logowanie.zaloguj()}" style=" width : 87px; height : 29px;" />
      </h:panelGrid>
-     </div>
 </h:form>
-
 
 
 

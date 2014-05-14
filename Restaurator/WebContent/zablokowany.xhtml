@@ -8,19 +8,12 @@
 <h:head>
 <link href="./css/styles.css" 
       rel="stylesheet" type="text/css"/> 
-<title>Kierownik</title>
+<title>Nieudane logowanie</title>
 </h:head>
 <h:body>
-<h1 class="title">Kierownik</h1>
+<h1 class="title">Użytkownik zablokowany</h1>
 
 <h:form id="form">
-<h2>Zalogowałeś się</h2>
-<h:panelGrid columns="2"> 
-	Imię: <h:outputText value="#{logowanie.zalogowany.imie}" />
-	Nazwisko: <h:outputText value="#{logowanie.zalogowany.nazwisko}" />
-	e-mail: <h:outputText value="#{logowanie.zalogowany.mail}" />
-	tel: <h:outputText value="#{logowanie.zalogowany.telefon}" />
-	</h:panelGrid>
+<a href="index.jsf">Spróbuj ponownie</a>
 </h:form>
-</h:body>
-</html>
+</h:body></html>

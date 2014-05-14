@@ -5,43 +5,32 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Hashtable;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.*;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.primefaces.event.SelectEvent;
-
 @ManagedBean
+@SessionScoped
 public class Logowanie implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
-	private String login = "";
-	private String haslo = "";
+	Uzytkownik zalogowany = new Uzytkownik();
 
-	public String getLogin() {
-		return login;
+
+	public Uzytkownik getZalogowany() {
+		return zalogowany;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+
+	public void setZalogowany(Uzytkownik zalogowany) {
+		this.zalogowany = zalogowany;
 	}
 
-	public String getHaslo() {
-		return haslo;
-	}
-
-	public void setHaslo(String haslo) {
-		this.haslo = haslo;
-	}
 
 	public String zaloguj() {
 		Context initContext;
@@ -54,11 +43,26 @@ public class Logowanie implements Serializable  {
 			conn = ds.getConnection();
 			st = conn.createStatement();
 			ResultSet uzytkownik = st
-					.executeQuery("SELECT login, haslo FROM UZYTKOWNIK");
-
+					.executeQuery("SELECT login, haslo,  blokuj, id_rola, imie, "
+							+ "nazwisko, mail, telefon FROM UZYTKOWNIK");
 			while(uzytkownik.next()){
-				if(login.equals(uzytkownik.getString("login")) && haslo.equals(uzytkownik.getString("haslo"))){
-					wynik = "kierownik";
+				if(zalogowany.getLogin().toLowerCase().equals(uzytkownik.getString("login").toLowerCase()) && 
+					zalogowany.getHaslo().equals(uzytkownik.getString("haslo"))){
+					if(uzytkownik.getInt("blokuj") != 1){
+						zalogowany.setImie(uzytkownik.getString("imie"));
+						zalogowany.setNazwisko(uzytkownik.getString("nazwisko"));
+						zalogowany.setMail(uzytkownik.getString("mail"));
+						zalogowany.setTelefon(uzytkownik.getInt("telefon"));
+						int rola = uzytkownik.getInt("id_rola");
+						switch(rola){
+							case 1: wynik = "kierownik"; break;
+							case 2: wynik = "kelner"; break;
+							case 3: wynik = "kucharz"; break;
+						}
+					} else {
+						wynik = "zablokowany";
+					}
+					
 				}
 			}
 
