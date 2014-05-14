@@ -6,15 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class Logowanie implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
@@ -29,6 +32,20 @@ public class Logowanie implements Serializable  {
 
 	public void setZalogowany(Uzytkownik zalogowany) {
 		this.zalogowany = zalogowany;
+	}
+	
+
+	public String walidujPola() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (zalogowany.getLogin().length() < 3) {
+			context.addMessage("loginForm:login", 
+			new FacesMessage("Login musi posiadac co najmniej 3 znaki"));
+		}
+		if (context.getMessageList().size() > 0) {
+			return(null);
+			} else {
+				return zaloguj();
+			}
 	}
 
 
@@ -89,5 +106,7 @@ public class Logowanie implements Serializable  {
 
 		
 	}
+
+
 
 }
