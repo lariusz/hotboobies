@@ -9,7 +9,6 @@ import java.sql.Statement;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,7 +21,18 @@ public class Logowanie implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
-	Uzytkownik zalogowany = new Uzytkownik();
+	private Uzytkownik zalogowany = new Uzytkownik();
+	private String komunikat = "";
+	
+
+	public String getKomunikat() {
+		return komunikat;
+	}
+
+
+	public void setKomunikat(String komunikat) {
+		this.komunikat = komunikat;
+	}
 
 
 	public Uzytkownik getZalogowany() {
@@ -53,7 +63,7 @@ public class Logowanie implements Serializable  {
 		Context initContext;
 		Connection conn = null;
 		Statement st = null;
-		String wynik = "blad";
+		String wynik = null;
 		try {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource) initContext.lookup("java:/oracle");
@@ -77,9 +87,11 @@ public class Logowanie implements Serializable  {
 							case 3: wynik = "kucharz"; break;
 						}
 					} else {
-						wynik = "zablokowany";
+						komunikat = "U¿ytkownik jest zablokowany. Skontaktuj siê z administratorem";
 					}
-					
+					break;
+				} else{
+					komunikat = "Wpisa³eœ niepoprawny login i/lub has³o";
 				}
 			}
 
@@ -103,7 +115,6 @@ public class Logowanie implements Serializable  {
 			}
 		}
 			return wynik;
-
 		
 	}
 

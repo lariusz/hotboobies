@@ -10,20 +10,18 @@ public class Uzytkownik implements Serializable{
 	
 	private static final long serialVersionUID = 6938394833521667060L;
 	
+	private String rola;
 	private String login = "";
 	private String haslo = "";
 	private String imie;
 	private String nazwisko;
 	private String mail;
 	private String telefon;
-	boolean czyZablokowany;
+	private boolean zablokowany;
 	
-	public Uzytkownik(){
-		super();
-	}
 	
 	public Uzytkownik(String login, String haslo, String imie, String nazwisko,
-			String mail, String telefon, boolean czyZablokowany) {
+			String mail, String telefon, boolean zablokowany) {
 		super();
 		this.login = login;
 		this.haslo = haslo;
@@ -31,7 +29,12 @@ public class Uzytkownik implements Serializable{
 		this.nazwisko = nazwisko;
 		this.mail = mail;
 		this.telefon = telefon;
-		this.czyZablokowany = czyZablokowany;
+		this.zablokowany = zablokowany;
+	}
+
+	
+	public Uzytkownik(){
+		super();
 	}
 	
 	public String getLogin() {
@@ -71,9 +74,9 @@ public class Uzytkownik implements Serializable{
 		this.telefon = String.valueOf(telefon);
 	}
 	public boolean isCzyZablokowany() {
-		return czyZablokowany;
+		return zablokowany;
 	}
-	public void setCzyZablokowany(boolean czyZablokowany) {
-		this.czyZablokowany = czyZablokowany;
+	public void setCzyZablokowany(boolean zablokowany) {
+		this.zablokowany = zablokowany;
 	}
 }

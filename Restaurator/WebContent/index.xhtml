@@ -7,11 +7,10 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
 <link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> 
+      rel="stylesheet" type="text/css"/>
 <title>Zaloguj się</title>
 </h:head>
 <h:body>
-
 <h:form id="loginForm" >
 <h1 class="title">Logowanie</h1>
 	<h:panelGrid columns="3">
@@ -22,10 +21,12 @@
         <h:inputSecret value="#{logowanie.zalogowany.haslo}" id="haslo" required="true"  requiredMessage="Pole wymagane" />
         <h:message for="haslo" styleClass="error" />
         <span/>
-        <h:commandButton value="Zaloguj" action="#{logowanie.walidujPola()}" style=" width : 87px; height : 29px;" />
-     </h:panelGrid>
+        <h:commandButton value="Zaloguj" action="#{logowanie.walidujPola()}" style=" width : 87px; height : 29px;">
+        	<f:ajax render="@all" execute="login haslo" />
+        </h:commandButton>
+     </h:panelGrid>     
 </h:form>
-
-
-
+<h:form id="messageForm">
+	<h:outputText value="#{logowanie.komunikat}" id="loginMessage" />
+</h:form>
 </h:body></html>
