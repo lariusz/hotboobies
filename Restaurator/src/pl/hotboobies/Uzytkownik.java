@@ -2,15 +2,16 @@ package pl.hotboobies;
 
 import java.io.Serializable;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-
-@ManagedBean
 public class Uzytkownik implements Serializable{
 	
-	private static final long serialVersionUID = 6938394833521667060L;
-	
+	private static final long serialVersionUID = 6938394833521667060L;	
+
 	private String rola;
+	private String identyfikator;
 	private String login = "";
 	private String haslo = "";
 	private String imie;
@@ -18,24 +19,6 @@ public class Uzytkownik implements Serializable{
 	private String mail;
 	private String telefon;
 	private boolean zablokowany;
-	
-	
-	public Uzytkownik(String login, String haslo, String imie, String nazwisko,
-			String mail, String telefon, boolean zablokowany) {
-		super();
-		this.login = login;
-		this.haslo = haslo;
-		this.imie = imie;
-		this.nazwisko = nazwisko;
-		this.mail = mail;
-		this.telefon = telefon;
-		this.zablokowany = zablokowany;
-	}
-
-	
-	public Uzytkownik(){
-		super();
-	}
 	
 	public String getLogin() {
 		return login;
@@ -73,10 +56,26 @@ public class Uzytkownik implements Serializable{
 	public void setTelefon(int telefon) {
 		this.telefon = String.valueOf(telefon);
 	}
-	public boolean isCzyZablokowany() {
+	public boolean isZablokowany() {
 		return zablokowany;
 	}
-	public void setCzyZablokowany(boolean zablokowany) {
+	public void setZablokowany(boolean zablokowany) {
 		this.zablokowany = zablokowany;
+	}
+	
+	public String getRola() {
+		return rola;
+	}
+
+	public void setRola(String rola) {
+		this.rola = rola;
+	}
+
+	public String getIdentyfikator() {
+		return identyfikator;
+	}
+
+	public void setIdentyfikator(String identyfikator) {
+		this.identyfikator = identyfikator;
 	}
 }

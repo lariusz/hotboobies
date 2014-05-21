@@ -1,12 +1,14 @@
 package pl.hotboobies;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kierownika
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a>
  */
 @ManagedBean
+@SessionScoped
 public class Kierownik {
 	
 	Raport raport;

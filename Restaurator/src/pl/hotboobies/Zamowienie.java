@@ -1,10 +1,11 @@
 package pl.hotboobies;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-@ManagedBean
 public class Zamowienie {
 	
 	private String status;
@@ -17,7 +18,7 @@ public class Zamowienie {
 	private String przyczynaAnulowania;
 	private Date dataAnulowania;
 	
-	private Produkt[] produkty;
+	private List<Produkt> produkty;
 	
 
 	public String getStatus() {
@@ -60,11 +61,11 @@ public class Zamowienie {
 		this.idKelnera = idKelnera;
 	}
 
-	public Produkt[] getProdukty() {
+	public List<Produkt> getProdukty() {
 		return produkty;
 	}
 
-	public void setProdukty(Produkt[] produkty) {
+	public void setProdukty(List<Produkt> produkty) {
 		this.produkty = produkty;
 	}
 

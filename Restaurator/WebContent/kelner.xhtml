@@ -5,6 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">      
 <h:head>
 <link href="./css/styles.css" 
       rel="stylesheet" type="text/css"/> 
@@ -13,13 +14,21 @@
 <h:body>
 <h1 class="title">Kelner</h1>
 
-<h:form id="form">
-<h2>Moje zamówienia</h2>
-	<h:panelGrid columns="3"> 
-		
-	</h:panelGrid>
-	
-	<h:commandButton value="Dodaj zamówienie" action="#{logowanie.walidujPola()}" style="width : 122px; height : 47px;" />
+<h:form>
+ <h:panelGroup>
+		<h2>Moje zamówienia</h2>
+		<h3>Nowe Zamówienia</h3>
+		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/>
+		<h:panelGrid>
+		</h:panelGrid>
+		<br />
+		<h3>Zamówienia do podania</h3>
+		Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
+		<h:panelGrid>
+		</h:panelGrid>
+	    <br />
+		<h:commandLink value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" style="float: right; width : 122px; height : 47px;" />
+		</h:panelGroup>
 </h:form>
-</h:body>
+</h:body></f:view>
 </html>

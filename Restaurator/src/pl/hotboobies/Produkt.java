@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean
 public class Produkt {
 	
 	private String nazwa;
