@@ -37,6 +37,18 @@ public class Kelner implements Serializable{
 		return zamowieniaDoPodania.size();
 	}
 	
+	/** Wybrany identyfikator grupy produktów */
+	private int idGrupy;
+	
+	public int getIdGrupy() {
+		return idGrupy;
+	}
+
+	public void setIdGrupy(int idGrupy) {		
+		System.out.println("Ustawi³em id grupy na " + idGrupy);
+		this.idGrupy = idGrupy;
+	}
+
 	/** Wybrana nazwa grupy produktów */
 	private String nazwaGrupy;
 	
@@ -44,7 +56,7 @@ public class Kelner implements Serializable{
 	private List<Produkt> produktyGrupy = new LinkedList<Produkt>();
 	
 	public List<Produkt> getProduktyGrupy() {
-		wyswietlProduktyGrupy();
+		pobierzProduktyGrupy();
 		return produktyGrupy;
 	}
 
@@ -60,6 +72,7 @@ public class Kelner implements Serializable{
 	}
 
 	public void setNazwaGrupy(String nazwaGrupy) {
+		System.out.println("Ustawi³em nazwê grupy na " + nazwaGrupy);
 		this.nazwaGrupy = nazwaGrupy;
 	}
 
@@ -89,15 +102,6 @@ public class Kelner implements Serializable{
 		return "zamowienie";
 	}
 	
-	public void wyswietlProduktyGrupy(){
-		for (Grupa grupa : grupy) {
-			if(grupa.getNazwa().equals(nazwaGrupy)){
-				pobierzNazwyProduktow(grupa.getId());
-			}
-		}	
-	}
-	
-	
 	/**
 	 * Pobiera z bazy identyfikatory i nazwy grup produktów umieszcza je w obiektach grup
 	 * i obiekty umieszcza na liœcie grup produktów. Lista jest czyszczona na pocz¹tku,
@@ -118,15 +122,15 @@ public class Kelner implements Serializable{
 		}
 	}
 	
+	
 	/**
 	 * Pobiera z bazy wszystkie informacje o produktach danej grupy  i umieszcza obiekty na liœcie produktów.
-	 * @param grupa - identyfikator grupy produktów
 	 */
-	private void pobierzNazwyProduktow(int grupa){
+	private void pobierzProduktyGrupy(){
 		produktyGrupy.clear();
 		DaoProdukt daoProdukt = new DaoProdukt();
 		try {
-		ResultSet wszystkieProdukty = daoProdukt.pobierzWszystkieKolumny(grupa);
+		ResultSet wszystkieProdukty = daoProdukt.pobierzWszystkieKolumny(idGrupy);
 			while(wszystkieProdukty.next()){
 				produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 						wszystkieProdukty.getString("nazwa"),
@@ -192,13 +196,7 @@ public class Kelner implements Serializable{
 		
 	}
 	
-	/**
-	 * Pobiera listê produktów przynale¿¹cych do danej grupy (kategorii)
-	 * @param grupa - kategoria produktów
-	 */
-	public void pokazProdukty(String grupa){
-		
-	}
+
 	
 	
 }

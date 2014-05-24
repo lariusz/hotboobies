@@ -17,18 +17,15 @@
 
 
 <h:form>
-<h:panelGrid columns="2">
-<h:selectOneListbox value="#{kelner.nazwaGrupy}">
-	<f:selectItems value="#{kelner.grupy}"  var="grupa" itemValue="#{grupa}" itemLabel="#{grupa.nazwa}" />
+<h:panelGrid columns="3">
+<h:selectOneListbox value="#{kelner.idGrupy}">
+	<f:selectItems value="#{kelner.grupy}"  var="grupa" itemValue="#{grupa.id}" itemLabel="#{grupa.nazwa}" />
 	<f:ajax render="produkty"/>
 </h:selectOneListbox>
-<h:dataTable id="produkty">
-<h:column>#{kelner.produktyGrupy.nazwa}</h:column>
-<h:column>#{kelner.produktyGrupy.ilosc}</h:column>
-<h:column>#{kelner.produktyGrupy.czasWykonania}</h:column>
+
+<h:dataTable id="produkty" var="produkt" value="#{kelner.produktyGrupy}">
+<h:column><h:commandButton value="#{produkt.nazwa}" action="" />"</h:column>
 </h:dataTable>
-
-
 </h:panelGrid>
 
  <h:commandButton value="Zapisz" action="#{kelner.anuluj()}" />
