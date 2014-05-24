@@ -13,24 +13,44 @@
 <h:body>
 <h1 class="title">Złóż zamówienie</h1>
 
-<h3>Dodaj produkty do zamówienia</h3>
-
-
 <h:form>
-<h:panelGrid columns="3">
-<h:selectOneListbox value="#{kelner.idGrupy}">
-	<f:selectItems value="#{kelner.grupy}"  var="grupa" itemValue="#{grupa.id}" itemLabel="#{grupa.nazwa}" />
-	<f:ajax render="produkty"/>
-</h:selectOneListbox>
+<h:panelGrid columns="2">
+<h:panelGroup> 
+<h3>Dodane produkty do zamówienia</h3>
+<h:dataTable id="produktyZamowienia" var="produktZamowienia" value="#{kelner.produktyZamowienia}">
+<h:column>#{produktZamowienia.nazwa}</h:column>
+<h:column>#{produktZamowienia.iloscZamawianych}</h:column>
+<h:column><h:commandButton value="-1" action="#{kelner.usunProdukt(produktZamowienia.id)}"> 
+	<f:ajax render="@all"/>
+</h:commandButton>
+</h:column>
 
-<h:dataTable id="produkty" var="produkt" value="#{kelner.produktyGrupy}">
-<h:column><h:commandButton value="#{produkt.nazwa}" action="" />"</h:column>
 </h:dataTable>
-</h:panelGrid>
 
  <h:commandButton value="Zapisz" action="#{kelner.anuluj()}" />
  <h:commandButton value="Anuluj" action="#{kelner.zapisz()}"/>
+</h:panelGroup>
+<h:panelGroup>
 
+<h3>Dodaj produkty do zamówienia</h3>
+<h:panelGrid columns="2">
+<h:selectOneListbox value="#{kelner.idGrupy}">
+	<f:selectItems value="#{kelner.grupy}"  var="grupa" itemValue="#{grupa.id}" itemLabel="#{grupa.nazwa}" />
+	<f:ajax render="produktyGrupy"/>
+</h:selectOneListbox>
+
+<h:dataTable id="produktyGrupy" var="produktGrupy" value="#{kelner.produktyGrupy}">
+<h:column>
+	<h:commandButton value="#{produktGrupy.nazwa}" action="#{kelner.dodajProdukt(produktGrupy.id)}" >
+	<f:ajax render="@all"/>
+	</h:commandButton>
+</h:column>
+
+</h:dataTable>
+</h:panelGrid>
+</h:panelGroup>
+
+</h:panelGrid>
 </h:form>
 </h:body>
 </html>

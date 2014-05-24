@@ -23,6 +23,9 @@ public class Kelner implements Serializable{
 	
 	private static final long serialVersionUID = -2043621321850425369L;
 
+	/** Zamówienie które jest realizowane przez kelnera */
+	private Zamowienie tymczasowe;
+	
 	/** Zamówienia, które utworzy³ kelner w celu przekazania do kuchni */
 	private List<Zamowienie> noweZamowienia = new LinkedList<Zamowienie>();
 	
@@ -37,6 +40,17 @@ public class Kelner implements Serializable{
 		return zamowieniaDoPodania.size();
 	}
 	
+	/** Produkty zamówienia tymczasowego */
+	private List<Produkt> produktyZamowienia = new LinkedList<Produkt>();
+	
+	public List<Produkt> getProduktyZamowienia() {
+		return produktyZamowienia;
+	}
+
+	public void setProduktyZamowienia(List<Produkt> produktyZamowienia) {
+		this.produktyZamowienia = produktyZamowienia;
+	}
+
 	/** Wybrany identyfikator grupy produktów */
 	private int idGrupy;
 	
@@ -56,7 +70,7 @@ public class Kelner implements Serializable{
 	private List<Produkt> produktyGrupy = new LinkedList<Produkt>();
 	
 	public List<Produkt> getProduktyGrupy() {
-		pobierzProduktyGrupy();
+		pobierzProdukty();
 		return produktyGrupy;
 	}
 
@@ -95,7 +109,8 @@ public class Kelner implements Serializable{
 	 * Tworzy puste zamówienie ze statusem <b>Tymczasowe</b>
 	 */
 	public String dodajZamowienie() throws SQLException{
-		Zamowienie tymczasowe = new Zamowienie();
+		tymczasowe = new Zamowienie();
+		produktyZamowienia.clear();
 		tymczasowe.setIdKelnera(uzytkownik.getIdentyfikator());
 		tymczasowe.setIdStatus(1); // Status: Tymczasowe
 		pobierzNazwyGrupProduktow();
@@ -126,7 +141,7 @@ public class Kelner implements Serializable{
 	/**
 	 * Pobiera z bazy wszystkie informacje o produktach danej grupy  i umieszcza obiekty na liœcie produktów.
 	 */
-	private void pobierzProduktyGrupy(){
+	private void pobierzProdukty(){
 		produktyGrupy.clear();
 		DaoProdukt daoProdukt = new DaoProdukt();
 		try {
@@ -169,17 +184,49 @@ public class Kelner implements Serializable{
 	}
 	
 	/**
-	 * Dodaje produkt do tymczasowego zamówienia
+	 * Dodaje produkt do tymczasowego zamówienia. Je¿eli produkt jest na liœcie zamówienia to 
+	 * zostaje zwiêkszona iloœæ sztuk w zamówieniu
 	 */
-	public void dodajProdukt(){
-		
+	public String dodajProdukt(String id) {
+		boolean jestNaLiscie = false;
+		for (Produkt produktGrupy : produktyGrupy) {
+			if (produktGrupy.getId() == Integer.valueOf(id)) {
+				if (produktyZamowienia.isEmpty()) {
+					produktGrupy.inkrementujIloscZamawianych();
+					produktyZamowienia.add(produktGrupy);
+					jestNaLiscie = true;
+				} else {
+					for (Produkt produktZamowienia : produktyZamowienia) {
+						if (produktZamowienia.getId() == produktGrupy.getId()) {
+							jestNaLiscie = true;
+							produktZamowienia.inkrementujIloscZamawianych();
+						}
+					}
+				}
+				if(!jestNaLiscie){
+					produktGrupy.inkrementujIloscZamawianych();
+					produktyZamowienia.add(produktGrupy);
+				}
+				
+			}
+		}
+
+		return null;
 	}
 	
 	/**
-	 * Usuwa produkt z tymczasowego zamówienia
+	 * Usuwa produkt z tymczasowego zamówienia. W przypadku gdy iloœæ produktu jest wiêksza od 1 to 
+	 * iloœæ jest pomniejszana
 	 */
-	public void usunProdukt(){
-		
+	public String usunProdukt(String id){
+		for (Produkt produkt : produktyZamowienia) {
+			if(produkt.getId() == Integer.valueOf(id)){
+				produkt.dekrementujIloscZamawianych();
+				if(produkt.getIloscZamawianych() == 0)
+					produktyZamowienia.remove(produkt);
+			}
+		}
+		return null;
 	}
 	
 	/**
