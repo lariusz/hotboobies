@@ -3,6 +3,7 @@ package pl.hotboobies;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +30,25 @@ public class Kelner implements Serializable{
 	/** Zamówienia, które utworzy³ kelner w celu przekazania do kuchni */
 	private List<Zamowienie> noweZamowienia = new LinkedList<Zamowienie>();
 	
+	public List<Zamowienie> getNoweZamowienia() {
+		return noweZamowienia;
+	}
+
+	public void setNoweZamowienia(List<Zamowienie> noweZamowienia) {
+		this.noweZamowienia = noweZamowienia;
+	}
+
 	/** Zamówienia, które przygotowa³ kucharz i s¹ gotowe do wydania */
 	private List<Zamowienie> zamowieniaDoPodania = new LinkedList<Zamowienie>();
+	
+
+	public List<Zamowienie> getZamowieniaDoPodania() {
+		return zamowieniaDoPodania;
+	}
+
+	public void setZamowieniaDoPodania(List<Zamowienie> zamowieniaDoPodania) {
+		this.zamowieniaDoPodania = zamowieniaDoPodania;
+	}
 
 	public int getIloscNowychZamowien() {
 		return noweZamowienia.size();
@@ -41,7 +59,7 @@ public class Kelner implements Serializable{
 	}
 	
 	/** Produkty zamówienia tymczasowego */
-	private List<Produkt> produktyZamowienia = new LinkedList<Produkt>();
+	private List<Produkt> produktyZamowienia;
 	
 	public List<Produkt> getProduktyZamowienia() {
 		return produktyZamowienia;
@@ -58,8 +76,7 @@ public class Kelner implements Serializable{
 		return idGrupy;
 	}
 
-	public void setIdGrupy(int idGrupy) {		
-		System.out.println("Ustawi³em id grupy na " + idGrupy);
+	public void setIdGrupy(int idGrupy) {
 		this.idGrupy = idGrupy;
 	}
 
@@ -110,7 +127,7 @@ public class Kelner implements Serializable{
 	 */
 	public String dodajZamowienie() throws SQLException{
 		tymczasowe = new Zamowienie();
-		produktyZamowienia.clear();
+		produktyZamowienia = new LinkedList<Produkt>();
 		tymczasowe.setIdKelnera(uzytkownik.getIdentyfikator());
 		tymczasowe.setIdStatus(1); // Status: Tymczasowe
 		pobierzNazwyGrupProduktow();
@@ -216,7 +233,7 @@ public class Kelner implements Serializable{
 	
 	/**
 	 * Usuwa produkt z tymczasowego zamówienia. W przypadku gdy iloœæ produktu jest wiêksza od 1 to 
-	 * iloœæ jest pomniejszana
+	 * jest pomniejszana
 	 */
 	public String usunProdukt(String id){
 		for (Produkt produkt : produktyZamowienia) {
@@ -232,18 +249,19 @@ public class Kelner implements Serializable{
 	/**
 	 * Zapisuje tymczasowe zamówienie w bazie danych nadaj¹c mu status <b>Zamówiony</b>.
 	 */
-	public void zapisz(){
-		
+	public String zapisz(){
+		tymczasowe.setProdukty(produktyZamowienia);
+		tymczasowe.setDataPrzyjecia(new Date());
+		noweZamowienia.add(tymczasowe);
+		return "kelner";
 	}
 	
 	/**
 	 * Anuluje sk³adanie zamówienia, dodaj¹c do bazy informacje o przyczynie anulowania.
 	 */
-	public void anuluj(){
-		
-	}
-	
-
-	
-	
+	public String anuluj(){
+		produktyZamowienia = null;
+		tymczasowe = null;
+		return "kelner";		
+	}	
 }
