@@ -11,7 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
- * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
+ * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Grupa
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
 public class DaoGrupa {
@@ -20,6 +20,32 @@ public class DaoGrupa {
 	private Statement st;
 	private Context initContext;
 	private DataSource ds;
+
+	
+	/**
+	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public ResultSet pobierzWszystkieNazwy() throws SQLException{
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT nazwa FROM grupa");
+	}
+	
+	/**
+	 * Pobiera wszystkie kolumny dla wszystkich grup produktów z bazy danych
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public ResultSet pobierzWszystkieKolumny() throws SQLException{
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT * FROM grupa");
+	}
+	
 	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -36,17 +62,14 @@ public class DaoGrupa {
 	}
 	
 	/**
-	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
-	 * @return zbiór wyników
+	 * Otwiera po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkieNazwy() throws SQLException{
-		if(ds == null)
-			ds = utworzZrodloDanych();
+	private void otworzPolaczenie() throws SQLException {
 		conn = ds.getConnection();
 		st = conn.createStatement();
-		return st.executeQuery("SELECT nazwa FROM GRUPA");	
 	}
+	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych

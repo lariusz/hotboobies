@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 public class Zamowienie {
 	
 	private String status;
+	private int idStatus;
 	private Date dataPrzyjecia;
 	private String nrStolika;
 	private String idKucharza;
@@ -20,6 +21,14 @@ public class Zamowienie {
 	
 	private List<Produkt> produkty;
 	
+
+	public int getIdStatus() {
+		return idStatus;
+	}
+
+	public void setIdStatus(int idStatus) {
+		this.idStatus = idStatus;
+	}
 
 	public String getStatus() {
 		return status;

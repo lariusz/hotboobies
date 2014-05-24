@@ -4,15 +4,33 @@ import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 
-public class Produkt {
+public class Produkt {	
 	
+	private int idProduktu;
 	private String nazwa;
 	private String grupa;
 	private int ilosc;
 	private Date czasAktualizacji;
-	private boolean aktywny;
 	private int czasWykonania;
+	private boolean aktywny;
+
 	
+	public Produkt(int idProduktu, String nazwa, int ilosc,
+			 int czasWykonania, boolean aktywny) {
+		super();
+		this.idProduktu = idProduktu;
+		this.nazwa = nazwa;
+		this.ilosc = ilosc;		
+		this.czasWykonania = czasWykonania;
+		this.aktywny = aktywny;
+	}
+	
+	public int getIdProduktu() {
+		return idProduktu;
+	}
+	public void setIdProduktu(int idProduktu) {
+		this.idProduktu = idProduktu;
+	}
 	public String getNazwa() {
 		return nazwa;
 	}

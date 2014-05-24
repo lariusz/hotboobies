@@ -19,6 +19,20 @@ public class DaoUzytkownik {
 	private Connection conn;
 	private Statement st;
 	private Context initContext;
+	private DataSource ds;
+	
+	/**
+	 * Pobiera wszystkie kolumny dla wszystkich u¿ytkowników z bazy danych
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public ResultSet pobierzWszystkich() throws SQLException{				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT * FROM uzytkownik");
+
+	}
 	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -36,15 +50,14 @@ public class DaoUzytkownik {
 	}
 	
 	/**
-	 * Pobiera wszystkie kolumny dla wszystkich u¿ytkowników z bazy danych
-	 * @return zbiór wyników
+	 * Otwiera po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkich() throws SQLException{				
-			conn = utworzZrodloDanych().getConnection();
-			st = conn.createStatement();
-			return st.executeQuery("SELECT * FROM UZYTKOWNIK");	
+	private void otworzPolaczenie() throws SQLException {
+		conn = ds.getConnection();
+		st = conn.createStatement();
 	}
+	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
