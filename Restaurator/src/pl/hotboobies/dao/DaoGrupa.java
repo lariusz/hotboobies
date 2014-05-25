@@ -16,11 +16,14 @@ import javax.sql.DataSource;
  */
 public class DaoGrupa {
 	
-	private Connection conn;
-	private Statement st;
-	private Context initContext;
+	/** Obiekt ¿ród³ danych*/	
 	private DataSource ds;
-
+	
+	/** Obiekt po³¹czenia z baza danych */	
+	private Connection conn;
+	
+	/** Obiekt zapytania do bazy danych */	
+	private Statement st;
 	
 	/**
 	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
@@ -53,7 +56,7 @@ public class DaoGrupa {
 	 */
 	private DataSource utworzZrodloDanych(){
 		try {
-			initContext = new InitialContext();
+			InitialContext initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
 		} catch (NamingException e) {
 			e.printStackTrace();

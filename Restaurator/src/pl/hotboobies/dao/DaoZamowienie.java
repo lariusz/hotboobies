@@ -11,10 +11,10 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
- * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
+ * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Grupa
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoUzytkownik {
+public class DaoZamowienie {
 	
 	/** Obiekt ¿ród³ danych*/	
 	private DataSource ds;
@@ -25,26 +25,23 @@ public class DaoUzytkownik {
 	/** Obiekt zapytania do bazy danych */	
 	private Statement st;
 	
-	
 	/**
-	 * Pobiera wszystkie kolumny dla wszystkich u¿ytkowników z bazy danych
+	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkich() throws SQLException{				
+	public ResultSet dodajZamowienie() throws SQLException{
 		if(ds == null)
 			ds = utworzZrodloDanych();
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM uzytkownik");
-
+		return st.executeQuery("SELECT nazwa FROM grupa");
 	}
-	
+		
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
 	private DataSource utworzZrodloDanych(){
-		DataSource ds = null;
 		try {
 			InitialContext initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");

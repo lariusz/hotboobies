@@ -7,11 +7,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import pl.hotboobies.dao.DaoGrupa;
+import pl.hotboobies.dao.DaoPozycja;
 import pl.hotboobies.dao.DaoProdukt;
 
 /**
@@ -134,6 +137,10 @@ public class Kelner implements Serializable{
 		return "zamowienie";
 	}
 	
+	public String przejdzDoZamowien(){
+		return "zamowienie";
+	} 
+	
 	/**
 	 * Pobiera z bazy identyfikatory i nazwy grup produktów umieszcza je w obiektach grup
 	 * i obiekty umieszcza na liœcie grup produktów. Lista jest czyszczona na pocz¹tku,
@@ -250,10 +257,38 @@ public class Kelner implements Serializable{
 	 * Zapisuje tymczasowe zamówienie w bazie danych nadaj¹c mu status <b>Zamówiony</b>.
 	 */
 	public String zapisz(){
-		tymczasowe.setProdukty(produktyZamowienia);
-		tymczasowe.setDataPrzyjecia(new Date());
-		noweZamowienia.add(tymczasowe);
-		return "kelner";
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (produktyZamowienia.size() == 0) {
+			context.addMessage("zamowienieForm:zamowienieMessage", new FacesMessage(
+					"Nie mo¿esz zapisaæ pustego zamówienia"));
+		}
+		if (context.getMessageList().size() > 0) {
+			return (null);
+		} else {
+			tymczasowe.setProdukty(produktyZamowienia);
+			DaoPozycja daoPozycja = new DaoPozycja();
+			try {
+			for(Produkt produkt : produktyZamowienia){			
+				daoPozycja.dodajPozycjeZamowienia(1, produkt.getId(), produkt.getIloscZamawianych());
+			}
+			daoPozycja.zamknijPolaczenie();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}			
+			tymczasowe.setDataPrzyjecia(new Date());
+			noweZamowienia.add(tymczasowe);
+			 daoPozycja = new DaoPozycja();
+			try {
+			for(Produkt produkt : produktyZamowienia){			
+				daoPozycja.dodajPozycjeZamowienia(1, produkt.getId(), produkt.getIloscZamawianych());
+			}
+			daoPozycja.zamknijPolaczenie();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}			
+			
+			return "kelner";
+		}
 	}
 	
 	/**
