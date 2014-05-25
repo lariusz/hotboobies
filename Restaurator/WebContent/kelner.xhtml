@@ -14,22 +14,24 @@
 <h1 class="title">Kelner</h1>
 
 <h:form>
- <h:panelGroup>
 		<h2>Moje zamówienia</h2>
 		<h3>Nowe Zamówienia</h3>
 		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/>
-		<h:panelGrid>
-		</h:panelGrid>
+		<h:dataTable id="noweZamowienia" var="noweZamowienie" value="#{kelner.noweZamowienia}" >
+			<h:column>#{noweZamowienie.dataPrzyjecia}</h:column>
+			
+		</h:dataTable>
 		<br />
 		<h3>Zamówienia do podania</h3>
 		Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
-		<h:panelGrid>
-		</h:panelGrid>
+		<h:dataTable id="zamowieniaDoPodania" var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}" >
+			<h:column>#{zamowienieDoPodania.dataPrzyjecia}</h:column>
+		</h:dataTable>
 	    <br />
-	    <f:view>
 		<h:commandButton value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" immediate="true" style="float: right; width : 122px; height : 47px;" />
-		</f:view>
-		</h:panelGroup>
+</h:form>
+<h:form>
+<h:commandButton value="Przejdz do zamówień" action="#{kelner.przejdzDoZamowien}" />
 </h:form>
 </h:body>
 </html>

@@ -11,10 +11,11 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
- * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
+ * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Pozycja
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoUzytkownik {
+public class DaoPozycja {
+
 	
 	/** Obiekt ¿ród³ danych*/	
 	private DataSource ds;
@@ -24,19 +25,31 @@ public class DaoUzytkownik {
 	
 	/** Obiekt zapytania do bazy danych */	
 	private Statement st;
-	
-	
+		
 	/**
-	 * Pobiera wszystkie kolumny dla wszystkich u¿ytkowników z bazy danych
+	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkich() throws SQLException{				
+	public void dodajPozycjeZamowienia(int idZamowienia, int idProdukt, int ilosc) throws SQLException{
 		if(ds == null)
 			ds = utworzZrodloDanych();
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM uzytkownik");
-
+		
+		int id = pobierzIdOstatniejPozycji();
+		System.out.println(id);
+		
+//		st.executeUpdate("INSERT INTO pozycja "
+//				+ "(id_uzytkownik, id_ststus, id_zamowienie, data_przyjecia, nr_stolika) VALUES("
+//				+ customerId + ", '" + firstName + "', '"
+//				+ lastName + "', " + "TO_DATE('" + dob
+//				+ "', 'YY, MM, DD'), '" + phone + "')");
+	}
+	
+	
+	private int pobierzIdOstatniejPozycji() throws SQLException{
+		ResultSet max = st.executeQuery("SELECT max(id_pozycja) FROM pozycja");
+		return max.getInt(1);
 	}
 	
 	/**
@@ -44,9 +57,8 @@ public class DaoUzytkownik {
 	 * @return obiekt ¿ród³a danych
 	 */
 	private DataSource utworzZrodloDanych(){
-		DataSource ds = null;
 		try {
-			InitialContext initContext = new InitialContext();
+			Context initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
 		} catch (NamingException e) {
 			e.printStackTrace();
