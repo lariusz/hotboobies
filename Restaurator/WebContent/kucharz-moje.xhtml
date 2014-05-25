@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+<link href="./css/styles.css" 
+      rel="stylesheet" type="text/css"/> 
+<title>Kucharz - Kuchnia</title>
+</h:head>
+<h:body>
+<h1 class="title">Kucharz - Kuchnia</h1>
+
+
+
+#{kucharz.wyswietlZamowieniaMoje()}
+
+<h:form>
+  <p:dataList value="#{kucharz.zamowienia}" var="zam" type="ordered">
+        <f:facet name="header">
+        Moje zamówienia 
+        </f:facet>
+   Status : #{zam.status} (#{zam.idStatus.toString()}) NR stolika : #{zam.nrStolika} ID Użytkownika : ID Kucharza : #{zam.idKucharza} Data Przyjęcia : #{zam.dataPrzyjecia} 
+    </p:dataList>
+</h:form>
+
+
+<p><a href="kucharz.jsf">Powrót</a></p>
+</h:body>
+</html>

@@ -21,6 +21,18 @@ public class Zamowienie {
 	
 	private List<Produkt> produkty;
 	
+	public Zamowienie() {
+		
+	}
+	
+	public Zamowienie(String status, int idStatus, Date dataPrzyjecia, String nrStolika, String idKucharza) {
+		this.status=status;
+		this.idStatus=idStatus;
+		this.dataPrzyjecia=dataPrzyjecia;
+		this.nrStolika=nrStolika;
+		this.idKucharza=idKucharza;
+	
+	}
 
 	public int getIdStatus() {
 		return idStatus;
