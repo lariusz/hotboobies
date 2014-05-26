@@ -52,6 +52,16 @@ public class DaoPozycja {
 		return max.getInt(1);
 	}
 	
+	
+	// Pobiera wszystkie pozycje 
+	public ResultSet pobierzWszystkie() throws SQLException{				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT * FROM pozycja");
+
+	}
+	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych

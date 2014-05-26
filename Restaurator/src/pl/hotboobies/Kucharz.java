@@ -7,8 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import pl.hotboobies.dao.DaoPozycja;
+import pl.hotboobies.dao.DaoProdukt;
 import pl.hotboobies.dao.DaoZamowienie;
 
 /**
@@ -22,6 +25,13 @@ public class Kucharz {
 	
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
+	
+	@ManagedProperty(value="#{logowanie.zalogowany}")
+	private Uzytkownik uzytkownik;	
+
+	public void setUzytkownik(Uzytkownik uzytkownik) {
+		this.uzytkownik = uzytkownik;
+	}
 
 	public Zamowienie getWybrane() {
 		return wybrane;
@@ -79,8 +89,9 @@ public class Kucharz {
 							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
 							zamowieniaResult.getDate("data_przyjecia"),
 							zamowieniaResult.getInt("nr_stolika"),
-							zamowieniaResult.getInt("kucharz_id"),
-							zamowieniaResult.getInt("id_uzytkownik")
+							zamowieniaResult.getInt("id_uzytkownik"),
+							zamowieniaResult.getInt("kucharz_id")
+				
 							));	
 				}
 				
@@ -108,17 +119,35 @@ public class Kucharz {
 		ResultSet zamowieniaResult = null;
 		
 		try{
+			
+			
+			
 			zamowieniaResult = dao.pobierzWszystkich();
 			while(zamowieniaResult.next()){
-				if(zamowieniaResult.getString("id_status").trim().equals("4") && zamowieniaResult.getString("kucharz_id").trim().equals("3")) {
+				if(zamowieniaResult.getString("id_status").trim().equals("4") && zamowieniaResult.getInt("kucharz_id")==uzytkownik.getIdentyfikator()) {
+					
+					List<Produkt> tmp_produkty = new ArrayList<Produkt>();
+					
+					
+					
+					DaoPozycja daoPozycja = new DaoPozycja();
+					ResultSet pozycjaResult = daoPozycja.pobierzWszystkie();
+					
+					while(pozycjaResult.next()) {
+						if(zamowieniaResult.getInt("ID_ZAMOWIENIE")==pozycjaResult.getInt("ID_ZAMOWIENIE")) {
+							tmp_produkty.add(new Produkt(0, "Barszcz czerwony", 1, 10, true));	
+						}
+					}
+					
 					zamowienia.add(new Zamowienie(
-							0,
+							zamowieniaResult.getInt("ID_ZAMOWIENIE"),
 							zamowieniaResult.getString("id_status").trim().equals("3") ? "W kuchni" : "Inne",
 							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
 							zamowieniaResult.getDate("data_przyjecia"),
 							zamowieniaResult.getInt("nr_stolika"),
+							zamowieniaResult.getInt("id_uzytkownik"),
 							zamowieniaResult.getInt("kucharz_id"),
-							zamowieniaResult.getInt("id_uzytkownik")
+							tmp_produkty
 							));	
 					
 				

@@ -17,14 +17,17 @@
 
 #{kucharz.wyswietlZamowieniaMoje()}
 
-<h:form>
-  <p:dataList value="#{kucharz.zamowienia}" var="zam" type="ordered">
-        <f:facet name="header">
-        Moje zamówienia 
-        </f:facet>
-   Status : #{zam.status} (#{zam.idStatus.toString()}) NR stolika : #{zam.nrStolika} ID Użytkownika : ID Kucharza : #{zam.idKucharza} Data Przyjęcia : #{zam.dataPrzyjecia} 
-    </p:dataList>
-</h:form>
+<ui:repeat var="zam" value="#{kucharz.zamowienia}">
+
+
+<b>Zamówienie nr #{zam.idZamowienia}   </b> <br/>
+Nr stolika : #{zam.nrStolika} Id Kelnera : #{zam.idKelnera} Data Przyjęcia : #{zam.dataPrzyjecia} <br/>
+
+<ui:repeat var="pro" value="#{zam.produkty}">
+<b>Produkt #{pro.nazwa} ilość : #{pro.ilosc}  </b><br/> 
+</ui:repeat>
+
+</ui:repeat>
 
 
 <p><a href="kucharz.jsf">Powrót</a></p>
