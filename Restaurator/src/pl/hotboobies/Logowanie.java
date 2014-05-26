@@ -81,7 +81,7 @@ public class Logowanie implements Serializable  {
 						zalogowany.setNazwisko(uzytkownik.getString("nazwisko"));
 						zalogowany.setMail(uzytkownik.getString("mail"));
 						zalogowany.setTelefon(uzytkownik.getInt("telefon"));
-						zalogowany.setIdentyfikator(String.valueOf(uzytkownik.getInt("id_uzytkownik")));
+						zalogowany.setIdentyfikator(uzytkownik.getInt("id_uzytkownik"));
 						int rola = uzytkownik.getInt("id_rola");
 						switch(rola){
 							case 1: wynik = "kierownik"; break;

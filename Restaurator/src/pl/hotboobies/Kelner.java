@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import pl.hotboobies.dao.DaoGrupa;
 import pl.hotboobies.dao.DaoPozycja;
 import pl.hotboobies.dao.DaoProdukt;
+import pl.hotboobies.dao.DaoZamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kelnera
@@ -34,6 +35,19 @@ public class Kelner implements Serializable{
 	private List<Zamowienie> noweZamowienia = new LinkedList<Zamowienie>();
 	
 	public List<Zamowienie> getNoweZamowienia() {
+		DaoZamowienie daoZamowienie = new DaoZamowienie();
+		try{
+		ResultSet nowe = daoZamowienie.pobierzZamowione();
+		while(nowe.next()){
+			noweZamowienia.add(new Zamowienie(
+					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
+					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),nowe.getInt("id_kucharz"), nowe.getInt("kucharz_id")));
+
+		}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		
 		return noweZamowienia;
 	}
 

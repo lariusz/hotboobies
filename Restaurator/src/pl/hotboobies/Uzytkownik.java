@@ -11,7 +11,7 @@ public class Uzytkownik implements Serializable{
 	private static final long serialVersionUID = 6938394833521667060L;	
 
 	private String rola;
-	private String identyfikator;
+	private int identyfikator;
 	private String login = "";
 	private String haslo = "";
 	private String imie;
@@ -71,11 +71,11 @@ public class Uzytkownik implements Serializable{
 		this.rola = rola;
 	}
 
-	public String getIdentyfikator() {
+	public int getIdentyfikator() {
 		return identyfikator;
 	}
 
-	public void setIdentyfikator(String identyfikator) {
+	public void setIdentyfikator(int identyfikator) {
 		this.identyfikator = identyfikator;
 	}
 }

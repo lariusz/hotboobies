@@ -34,6 +34,13 @@ public class DaoZamowienie {
 
 	}
 	
+	public ResultSet pobierzZamowione() throws SQLException {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT * FROM zamowienie INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS WHERE zamowienie.id_status = 2");		
+	}
+	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
@@ -71,5 +78,6 @@ public class DaoZamowienie {
 				conn.close();
 			}
 	}
+
 
 }
