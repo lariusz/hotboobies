@@ -12,9 +12,9 @@ public class Zamowienie {
 	private String status;
 	private int idStatus;
 	private Date dataPrzyjecia;
-	private String nrStolika;
-	private String idKucharza;
-	private String idKelnera;
+	private int nrStolika;
+	private int idKucharza;
+	private int idKelnera;
 	private String uwaga;
 	private boolean anulowane;
 	private String przyczynaAnulowania;
@@ -26,12 +26,13 @@ public class Zamowienie {
 		
 	}
 	
-	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, String nrStolika, String idKucharza) {
+	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza) {
 		this.idZamowienia = idZamowienia;
 		this.status=status;
 		this.idStatus=idStatus;
 		this.dataPrzyjecia=dataPrzyjecia;
 		this.nrStolika=nrStolika;
+		this.idKelnera=idKelnera;
 		this.idKucharza=idKucharza;
 	
 	}
@@ -68,27 +69,27 @@ public class Zamowienie {
 		this.dataPrzyjecia = dataPrzyjecia;
 	}
 
-	public String getNrStolika() {
+	public int getNrStolika() {
 		return nrStolika;
 	}
 
-	public void setNrStolika(String nrStolika) {
+	public void setNrStolika(int nrStolika) {
 		this.nrStolika = nrStolika;
 	}
 
-	public String getIdKucharza() {
+	public int getIdKucharza() {
 		return idKucharza;
 	}
 
-	public void setIdKucharza(String idKucharza) {
+	public void setIdKucharza(int idKucharza) {
 		this.idKucharza = idKucharza;
 	}
 
-	public String getIdKelnera() {
+	public int getIdKelnera() {
 		return idKelnera;
 	}
 
-	public void setIdKelnera(String idKelnera) {
+	public void setIdKelnera(int idKelnera) {
 		this.idKelnera = idKelnera;
 	}
 
