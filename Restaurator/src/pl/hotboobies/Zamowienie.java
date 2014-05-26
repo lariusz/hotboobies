@@ -8,6 +8,7 @@ import javax.faces.bean.SessionScoped;
 
 public class Zamowienie {
 	
+	private int idZamowienia;
 	private String status;
 	private int idStatus;
 	private Date dataPrzyjecia;
@@ -25,13 +26,22 @@ public class Zamowienie {
 		
 	}
 	
-	public Zamowienie(String status, int idStatus, Date dataPrzyjecia, String nrStolika, String idKucharza) {
+	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, String nrStolika, String idKucharza) {
+		this.idZamowienia = idZamowienia;
 		this.status=status;
 		this.idStatus=idStatus;
 		this.dataPrzyjecia=dataPrzyjecia;
 		this.nrStolika=nrStolika;
 		this.idKucharza=idKucharza;
 	
+	}
+	
+	public int getIdZamowienia() {
+		return idZamowienia;
+	}
+
+	public void setIdZamowienia(int idZamowienia) {
+		this.idZamowienia = idZamowienia;
 	}
 
 	public int getIdStatus() {
