@@ -3,6 +3,7 @@ package pl.hotboobies;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -17,9 +18,18 @@ import pl.hotboobies.dao.DaoZamowienie;
 @ManagedBean
 public class Kucharz {
 	
-
+	private Zamowienie wybrane;
+	
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
+
+	public Zamowienie getWybrane() {
+		return wybrane;
+	}
+
+	public void setWybrane(Zamowienie wybrane) {
+		this.wybrane = wybrane;
+	}
 	
 	public List<Zamowienie> getZamowienia() {
 		
@@ -64,13 +74,17 @@ public class Kucharz {
 			while(zamowieniaResult.next()){
 				if(zamowieniaResult.getString("id_status").trim().equals("3")) {
 					zamowienia.add(new Zamowienie(
+							0,
 							zamowieniaResult.getString("id_status").trim().equals("3") ? "W kuchni" : "Inne",
 							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
 							zamowieniaResult.getDate("data_przyjecia"),
-							"Stolik 5",
-							zamowieniaResult.getString("kucharz_id")
+							zamowieniaResult.getInt("nr_stolika"),
+							zamowieniaResult.getInt("kucharz_id"),
+							zamowieniaResult.getInt("id_uzytkownik")
 							));	
 				}
+				
+							
 		
 			}
 			}catch (SQLException e) {
@@ -98,15 +112,21 @@ public class Kucharz {
 			while(zamowieniaResult.next()){
 				if(zamowieniaResult.getString("id_status").trim().equals("4") && zamowieniaResult.getString("kucharz_id").trim().equals("3")) {
 					zamowienia.add(new Zamowienie(
-							zamowieniaResult.getString("id_status").trim().equals("4") ? "Przygotowywany" : "Inne",
+							0,
+							zamowieniaResult.getString("id_status").trim().equals("3") ? "W kuchni" : "Inne",
 							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
 							zamowieniaResult.getDate("data_przyjecia"),
-							"Stolik 5",
-							zamowieniaResult.getString("kucharz_id")
-							));
+							zamowieniaResult.getInt("nr_stolika"),
+							zamowieniaResult.getInt("kucharz_id"),
+							zamowieniaResult.getInt("id_uzytkownik")
+							));	
 					
 				
 				}
+				
+			
+				
+				
 		
 			}
 			}catch (SQLException e) {
