@@ -37,18 +37,18 @@ public class DaoPozycja {
 		otworzPolaczenie();
 		
 		int id = pobierzIdOstatniejPozycji();
-		System.out.println(id);
 		
-//		st.executeUpdate("INSERT INTO pozycja "
-//				+ "(id_uzytkownik, id_ststus, id_zamowienie, data_przyjecia, nr_stolika) VALUES("
-//				+ customerId + ", '" + firstName + "', '"
-//				+ lastName + "', " + "TO_DATE('" + dob
-//				+ "', 'YY, MM, DD'), '" + phone + "')");
+		st.executeUpdate("INSERT INTO pozycja "
+				+ "(id_pozycja, id_zamowienie, id_produkt, ilosc) VALUES('"
+				+ (id+1) + "', '" + idZamowienia + "', '"
+				+ idProdukt + "', '" +  ilosc + "')");
 	}
 	
 	
 	private int pobierzIdOstatniejPozycji() throws SQLException{
+		
 		ResultSet max = st.executeQuery("SELECT max(id_pozycja) FROM pozycja");
+		max.next();
 		return max.getInt(1);
 	}
 	
