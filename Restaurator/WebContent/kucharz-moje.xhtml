@@ -16,18 +16,16 @@
 
 
 #{kucharz.wyswietlZamowieniaMoje()}
-
 <ui:repeat var="zam" value="#{kucharz.zamowienia}">
-
-
 <b>Zamówienie nr #{zam.idZamowienia}   </b> <br/>
 Nr stolika : #{zam.nrStolika} Id Kelnera : #{zam.idKelnera} Data Przyjęcia : #{zam.dataPrzyjecia} <br/>
 
 <ui:repeat var="pro" value="#{zam.produkty}">
-<b>Produkt #{pro.nazwa} ilość : #{pro.ilosc}  </b><br/> 
+Produkt <b>#{pro.nazwa}</b> ilość : <b>#{pro.ilosc}</b><br/> 
 </ui:repeat>
 
 </ui:repeat>
+
 
 
 <p><a href="kucharz.jsf">Powrót</a></p>

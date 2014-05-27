@@ -135,9 +135,18 @@ public class Kucharz {
 					
 					while(pozycjaResult.next()) {
 						if(zamowieniaResult.getInt("ID_ZAMOWIENIE")==pozycjaResult.getInt("ID_ZAMOWIENIE")) {
-							tmp_produkty.add(new Produkt(0, "Barszcz czerwony", 1, 10, true));	
+							
+							
+							DaoProdukt daoProdukt = new DaoProdukt();
+							ResultSet produktResult = daoProdukt.pobierzProdukt(pozycjaResult.getInt("ID_PRODUKT"));
+							if(produktResult.next()) {
+							tmp_produkty.add(new Produkt(produktResult.getInt("ID_PRODUKT"), produktResult.getString("NAZWA"), pozycjaResult.getInt("ILOSC"), produktResult.getInt("CZAS_WYKONANIA"), true));		
+							}
+							
 						}
 					}
+					
+					
 					
 					zamowienia.add(new Zamowienie(
 							zamowieniaResult.getInt("ID_ZAMOWIENIE"),

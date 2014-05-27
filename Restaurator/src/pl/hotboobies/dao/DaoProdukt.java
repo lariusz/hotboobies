@@ -61,6 +61,19 @@ public class DaoProdukt {
 		otworzPolaczenie();
 		return st.executeQuery("SELECT * FROM produkt WHERE id_grupa = " + grupa);
 	}
+	
+	/**
+	 * Pobiera wszystkie produkt o podanym id
+	 * @param id produkty dla którego ma zostaæ zwrócony wynik
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public ResultSet pobierzProdukt(int id) throws SQLException{
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		return st.executeQuery("SELECT * FROM produkt WHERE id_produkt = " + id);
+	}
 
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
