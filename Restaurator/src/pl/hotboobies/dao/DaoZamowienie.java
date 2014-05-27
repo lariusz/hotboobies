@@ -51,6 +51,59 @@ public class DaoZamowienie {
 		return wszystkie;
 	}
 	
+	
+	/**
+	 * Pobiera wszystkie kolumny dla wszystkich zamówieñ nieprzydzielonych
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public Collection<Zamowienie> pobierzWszystkieNieprzydzielone(){				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+		try{
+		otworzPolaczenie();
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3");
+		while(wszysieZamowienia.next()){
+			wszystkie.add(new Zamowienie(
+					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
+					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
+		}
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return wszystkie;
+	}
+	
+
+	/**
+	 * Pobiera wszystkie kolumny dla zamówieñ przypisanych do kucharza o odpowiednim id
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public Collection<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+		try{
+		otworzPolaczenie();
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 4 AND KUCHARZ_ID = "+idKucharza);
+		while(wszysieZamowienia.next()){
+			wszystkie.add(new Zamowienie(
+					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
+					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
+		}
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return wszystkie;
+	}
+	
+	
 	public Collection<Zamowienie> pobierzZamowione(int idUzytkownika) {
 		if(ds == null)
 			ds = utworzZrodloDanych();		

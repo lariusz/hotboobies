@@ -18,10 +18,9 @@ import pl.hotboobies.dao.DaoZamowienie;
  * 	Kontroler dla czynnoœci wykonywanych przez Kucharza
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a>
  */
+
 @ManagedBean
 public class Kucharz {
-	
-	private Zamowienie wybrane;
 	
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
@@ -31,14 +30,6 @@ public class Kucharz {
 
 	public void setUzytkownik(Uzytkownik uzytkownik) {
 		this.uzytkownik = uzytkownik;
-	}
-
-	public Zamowienie getWybrane() {
-		return wybrane;
-	}
-
-	public void setWybrane(Zamowienie wybrane) {
-		this.wybrane = wybrane;
 	}
 	
 	public List<Zamowienie> getZamowienia() {
@@ -77,62 +68,27 @@ public class Kucharz {
 	public void wyswietlZamowieniaWolne() {
 	
 		DaoZamowienie dao = new DaoZamowienie();
-		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkie();
-
-		for (Zamowienie zamowienie : wszystkie) {
-
-				if(zamowienie.getIdStatus()==3) {
-					zamowienia.add(zamowienie);	
-				}
-
-			}		
+		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkieNieprzydzielone();	
+		zamowienia=wszystkie;
+		
 	}
 	
 	
 	public void wyswietlZamowieniaMoje() {
 		
 		DaoZamowienie dao = new DaoZamowienie();
-		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkie();
+		ArrayList<Zamowienie> wszystkieZamowienia = (ArrayList<Zamowienie>) dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
-		for (Zamowienie zamowienie : wszystkie) {
-
-			if (zamowienie.getIdStatus() == 4
-					&& zamowienie.getIdKucharza() == uzytkownik.getIdentyfikator()) {
-
-				List<Produkt> tmp_produkty = new ArrayList<Produkt>();
-
-				try {
-					DaoPozycja daoPozycja = new DaoPozycja();
-					ResultSet pozycjaResult = daoPozycja.pobierzWszystkie();
-
-					while (pozycjaResult.next()) {
-						if (zamowienie.getIdZamowienia() == pozycjaResult
-								.getInt("ID_ZAMOWIENIE")) {
-
-							DaoProdukt daoProdukt = new DaoProdukt();
-							ResultSet produktResult = daoProdukt
-									.pobierzProdukt(pozycjaResult
-											.getInt("ID_PRODUKT"));
-							if (produktResult.next()) {
-								tmp_produkty.add(new Produkt(produktResult
-										.getInt("ID_PRODUKT"), produktResult
-										.getString("NAZWA"), pozycjaResult
-										.getInt("ILOSC"), produktResult
-										.getInt("CZAS_WYKONANIA"), true));
-							}
-
-						}
-					}
-
-					zamowienie.setProdukty(tmp_produkty);
-					zamowienia.add(zamowienie);
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-
-				}
-
-			}
+		for (Zamowienie zamowienie : wszystkieZamowienia) {
+			DaoProdukt daoProdukt = new DaoProdukt();
+			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
 		}
+		
+		zamowienia = wszystkieZamowienia;
+		
 	}
+
+
+
 }

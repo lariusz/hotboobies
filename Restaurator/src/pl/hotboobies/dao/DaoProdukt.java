@@ -56,9 +56,35 @@ public class DaoProdukt {
 				e.printStackTrace();
 			}
 		
-		
-		
-
+		return produktyGrupy;
+	}
+	
+	
+	/**
+	 * Pobiera wszystkie kolumny pozycji i produktów dla konkretnego zamówienia
+	 * @param identyfikator zamówienia dla którego maja zostaæ zwrócone wyniki
+	 * @return zbiór wyników
+	 * @throws SQLException
+	 */
+	public Collection<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		try {
+			otworzPolaczenie();
+			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM POZYCJA P, PRODUKT PR WHERE P.ID_PRODUKT=PR.ID_PRODUKT AND P.ID_ZAMOWIENIE = "+ idZamowienia);
+				while(wszystkieProdukty.next()){
+					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
+							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getInt("ilosc"),
+							wszystkieProdukty.getInt("czas_wykonania"),
+							wszystkieProdukty.getInt("aktywny") == 1));
+				}
+				wszystkieProdukty.close();
+				zamknijPolaczenie();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		
 		return produktyGrupy;
 	}
