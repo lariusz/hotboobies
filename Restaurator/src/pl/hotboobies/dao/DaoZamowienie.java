@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import pl.hotboobies.Zamowienie;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
@@ -38,7 +41,35 @@ public class DaoZamowienie {
 		if(ds == null)
 			ds = utworzZrodloDanych();
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM zamowienie INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS WHERE zamowienie.id_status = 2");		
+		return st.executeQuery("SELECT * FROM zamowienie "
+				+ "INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS "
+				+ "WHERE zamowienie.id_status = 2");		
+	}
+	
+	public int pobierzIdOstatniegoZamowienia() throws SQLException{
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		ResultSet max = st.executeQuery("SELECT max(id_zamowienie) FROM zamowienie");
+		max.next();
+		int idOstatniego = max.getInt(1);
+		max.close();
+		zamknijPolaczenie();
+		return idOstatniego;
+		
+	}
+	
+	
+	public void dodajZamowione(Zamowienie tymczasowe) throws SQLException {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		otworzPolaczenie();
+		st.executeUpdate("INSERT INTO zamowienie "
+				+ "(id_zamowienie, id_status, id_uzytkownik, data_przyjecia) VALUES('"
+				+ tymczasowe.getIdZamowienia() + "', '" + tymczasowe.getIdStatus() + "', '"
+				+ tymczasowe.getIdKelnera() + "', " 
+				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd").format(tymczasowe.getDataPrzyjecia())
+				+ "', 'YY, MM, DD'))");		
 	}
 	
 	/**
@@ -78,6 +109,8 @@ public class DaoZamowienie {
 				conn.close();
 			}
 	}
+
+
 
 
 }

@@ -3,9 +3,11 @@ package pl.hotboobies;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -35,15 +37,18 @@ public class Kelner implements Serializable{
 	private List<Zamowienie> noweZamowienia = new LinkedList<Zamowienie>();
 	
 	public List<Zamowienie> getNoweZamowienia() {
+		noweZamowienia.clear();
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
 		try{
 		ResultSet nowe = daoZamowienie.pobierzZamowione();
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
-					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),nowe.getInt("id_kucharz"), nowe.getInt("kucharz_id")));
-
+					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),
+					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
 		}
+		nowe.close();
+		daoZamowienie.zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -68,6 +73,7 @@ public class Kelner implements Serializable{
 	}
 
 	public int getIloscNowychZamowien() {
+		getNoweZamowienia();
 		return noweZamowienia.size();
 	}
 
@@ -147,6 +153,7 @@ public class Kelner implements Serializable{
 		produktyZamowienia = new LinkedList<Produkt>();
 		tymczasowe.setIdKelnera(uzytkownik.getIdentyfikator());
 		tymczasowe.setIdStatus(1); // Status: Tymczasowe
+		tymczasowe.setIdZamowienia(new DaoZamowienie().pobierzIdOstatniegoZamowienia()+1);
 		pobierzNazwyGrupProduktow();
 		return "zamowienie";
 	}
@@ -280,27 +287,21 @@ public class Kelner implements Serializable{
 			return (null);
 		} else {
 			tymczasowe.setProdukty(produktyZamowienia);
-			DaoPozycja daoPozycja = new DaoPozycja();
-			try {
-			for(Produkt produkt : produktyZamowienia){			
-				daoPozycja.dodajPozycjeZamowienia(1, produkt.getId(), produkt.getIloscZamawianych());
-			}
-			daoPozycja.zamknijPolaczenie();
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}			
 			tymczasowe.setDataPrzyjecia(new Date());
-			noweZamowienia.add(tymczasowe);
-			 daoPozycja = new DaoPozycja();
+			tymczasowe.setIdStatus(2);
+			DaoZamowienie daoZamowienie = new DaoZamowienie();
+			DaoPozycja daoPozycja = new DaoPozycja();			
 			try {
+				daoZamowienie.dodajZamowione(tymczasowe);				
+				daoZamowienie.zamknijPolaczenie();			
+				
 			for(Produkt produkt : produktyZamowienia){			
-				daoPozycja.dodajPozycjeZamowienia(1, produkt.getId(), produkt.getIloscZamawianych());
+				daoPozycja.dodajPozycjeZamowienia(tymczasowe.getIdZamowienia(), produkt.getId(), produkt.getIloscZamawianych());
 			}
 			daoPozycja.zamknijPolaczenie();
 			}catch (SQLException e) {
 				e.printStackTrace();
-			}			
-			
+			}						
 			return "kelner";
 		}
 	}
