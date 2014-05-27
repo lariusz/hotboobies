@@ -3,6 +3,7 @@ package pl.hotboobies;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -69,48 +70,33 @@ public class Logowanie implements Serializable  {
 	 */
 	public String zaloguj() {
 		String wynik = null;
-		DaoUzytkownik dao = new DaoUzytkownik();
-		ResultSet uzytkownik = null;
-		try{
-			uzytkownik = dao.pobierzWszystkich();
-			while(uzytkownik.next()){
-				if(zalogowany.getLogin().toLowerCase().equals(uzytkownik.getString("login").toLowerCase()) && 
-					zalogowany.getHaslo().equals(uzytkownik.getString("haslo"))){
-					if(uzytkownik.getInt("blokuj") != 1){
-						zalogowany.setImie(uzytkownik.getString("imie"));
-						zalogowany.setNazwisko(uzytkownik.getString("nazwisko"));
-						zalogowany.setMail(uzytkownik.getString("mail"));
-						zalogowany.setTelefon(uzytkownik.getInt("telefon"));
-						zalogowany.setIdentyfikator(uzytkownik.getInt("id_uzytkownik"));
-						int rola = uzytkownik.getInt("id_rola");
-						switch(rola){
-							case 1: wynik = "kierownik"; break;
-							case 2: wynik = "kelner" ; break;
-							case 3: wynik = "kucharz"; break;
-						}
-					} else {
-						komunikat = "U¿ytkownik jest zablokowany. Skontaktuj siê z administratorem";
+		DaoUzytkownik daoUzytkowmik = new DaoUzytkownik();
+		ArrayList<Uzytkownik> uzytkownicy = (ArrayList<Uzytkownik>) daoUzytkowmik.pobierzWszystkich();
+		for (Uzytkownik uzytkownik : uzytkownicy) {
+			if (zalogowany.getLogin().toLowerCase().equals(uzytkownik.getLogin().toLowerCase())
+					&& zalogowany.getHaslo().equals(uzytkownik.getHaslo())) {
+				if (!uzytkownik.isZablokowany()) {
+					zalogowany = uzytkownik;
+					switch (uzytkownik.getIdRola()) {
+					case 1:
+						wynik = "kierownik";
+						break;
+					case 2:
+						wynik = "kelner";
+						break;
+					case 3:
+						wynik = "kucharz";
+						break;
 					}
-					break;
-				} else{
-					komunikat = "Wpisa³eœ niepoprawny login i/lub has³o";
+				} else {
+					komunikat = "U¿ytkownik jest zablokowany. Skontaktuj siê z administratorem";
 				}
+				break;
+			} else {
+				komunikat = "Wpisa³eœ niepoprawny login i/lub has³o";
 			}
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}finally{
-				try {
-					uzytkownik.close();
-					dao.zamknijPolaczenie();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-			}
-			return wynik;
-		
+		}
+		return wynik;
 	}
-
-
 
 }

@@ -10,16 +10,35 @@ public class Uzytkownik implements Serializable{
 	
 	private static final long serialVersionUID = 6938394833521667060L;	
 
-	private String rola;
 	private int identyfikator;
 	private String login = "";
 	private String haslo = "";
+	private int idRola;
 	private String imie;
 	private String nazwisko;
 	private String mail;
 	private String telefon;
 	private boolean zablokowany;
 	
+	
+	public Uzytkownik(){
+		super();
+	}
+	
+	public Uzytkownik(int identyfikator, String login, String haslo,
+			int idRola, String imie, String nazwisko, String mail,
+			String telefon, boolean zablokowany) {
+		super();
+		this.identyfikator = identyfikator;
+		this.login = login;
+		this.haslo = haslo;
+		this.idRola = idRola;
+		this.imie = imie;
+		this.nazwisko = nazwisko;
+		this.mail = mail;
+		this.telefon = telefon;
+		this.zablokowany = zablokowany;
+	}
 	public String getLogin() {
 		return login;
 	}
@@ -31,6 +50,12 @@ public class Uzytkownik implements Serializable{
 	}
 	public void setHaslo(String haslo) {
 		this.haslo = haslo;
+	}
+	public int getIdRola() {
+		return idRola;
+	}
+	public void setIdRola(int idRola) {
+		this.idRola = idRola;
 	}
 	public String getImie() {
 		return imie;
@@ -53,8 +78,8 @@ public class Uzytkownik implements Serializable{
 	public String getTelefon() {
 		return telefon;
 	}
-	public void setTelefon(int telefon) {
-		this.telefon = String.valueOf(telefon);
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
 	}
 	public boolean isZablokowany() {
 		return zablokowany;
@@ -63,14 +88,6 @@ public class Uzytkownik implements Serializable{
 		this.zablokowany = zablokowany;
 	}
 	
-	public String getRola() {
-		return rola;
-	}
-
-	public void setRola(String rola) {
-		this.rola = rola;
-	}
-
 	public int getIdentyfikator() {
 		return identyfikator;
 	}

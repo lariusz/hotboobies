@@ -68,8 +68,8 @@ public class DaoZamowienie {
 				+ "(id_zamowienie, id_status, id_uzytkownik, data_przyjecia) VALUES('"
 				+ tymczasowe.getIdZamowienia() + "', '" + tymczasowe.getIdStatus() + "', '"
 				+ tymczasowe.getIdKelnera() + "', " 
-				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd").format(tymczasowe.getDataPrzyjecia())
-				+ "', 'YY, MM, DD'))");		
+				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())
+				+ "', 'YYYY/MM/DD hh24:mi:ss'))");		
 	}
 	
 	/**

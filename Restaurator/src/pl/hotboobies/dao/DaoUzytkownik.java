@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import pl.hotboobies.Uzytkownik;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
@@ -31,12 +35,31 @@ public class DaoUzytkownik {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkich() throws SQLException{				
+	public Collection<Uzytkownik> pobierzWszystkich() {				
 		if(ds == null)
 			ds = utworzZrodloDanych();
+		Collection<Uzytkownik> wszyscy = new ArrayList<Uzytkownik>();
+		try{
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM uzytkownik");
-
+		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik");
+		while(uzytkownik.next()){
+			wszyscy.add(new Uzytkownik(
+					uzytkownik.getInt("id_uzytkownik"),
+					uzytkownik.getString("login"),
+					uzytkownik.getString("haslo"),
+					uzytkownik.getInt("id_rola"),
+					uzytkownik.getString("imie"),
+					uzytkownik.getString("nazwisko"),
+					uzytkownik.getString("mail"),
+					uzytkownik.getString("telefon"),
+					uzytkownik.getInt("blokuj") == 1));
+		}
+		uzytkownik.close();
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return wszyscy;
 	}
 	
 	/**
