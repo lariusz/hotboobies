@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,13 +39,28 @@ public class DaoZamowienie {
 
 	}
 	
-	public ResultSet pobierzZamowione() throws SQLException {
+	public Collection<Zamowienie> pobierzZamowione() {
 		if(ds == null)
-			ds = utworzZrodloDanych();
+			ds = utworzZrodloDanych();		
+		Collection<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
+		try{
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM zamowienie "
+		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "
 				+ "INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS "
-				+ "WHERE zamowienie.id_status = 2");		
+				+ "WHERE zamowienie.id_status = 2");	
+		while(nowe.next()){
+			noweZamowienia.add(new Zamowienie(
+					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
+					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),
+					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
+		}
+		nowe.close();
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		
+		return noweZamowienia;
 	}
 	
 	public int pobierzIdOstatniegoZamowienia() throws SQLException{
@@ -60,16 +77,21 @@ public class DaoZamowienie {
 	}
 	
 	
-	public void dodajZamowione(Zamowienie tymczasowe) throws SQLException {
+	public void dodajZamowione(Zamowienie tymczasowe) {
 		if(ds == null)
 			ds = utworzZrodloDanych();
+		try{
 		otworzPolaczenie();
 		st.executeUpdate("INSERT INTO zamowienie "
 				+ "(id_zamowienie, id_status, id_uzytkownik, data_przyjecia) VALUES('"
 				+ tymczasowe.getIdZamowienia() + "', '" + tymczasowe.getIdStatus() + "', '"
 				+ tymczasowe.getIdKelnera() + "', " 
 				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())
-				+ "', 'YYYY/MM/DD hh24:mi:ss'))");		
+				+ "', 'YYYY/MM/DD hh24:mi:ss'))");	
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -101,7 +123,7 @@ public class DaoZamowienie {
 	 * Zamyka po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public void zamknijPolaczenie() throws SQLException{
+	private void zamknijPolaczenie() throws SQLException{
 			if (st != null) {
 				st.close();
 			}

@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import pl.hotboobies.Produkt;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Produkt
@@ -55,11 +59,31 @@ public class DaoProdukt {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkieKolumny(int grupa) throws SQLException{
+	public Collection<Produkt> pobierzWszystkieKolumny(int grupa) {
 		if(ds == null)
 			ds = utworzZrodloDanych();
-		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM produkt WHERE id_grupa = " + grupa);
+		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		try {
+			otworzPolaczenie();
+			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM produkt WHERE id_grupa = " + grupa);
+				while(wszystkieProdukty.next()){
+					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
+							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getInt("ilosc"),
+							wszystkieProdukty.getInt("czas_wykonania"),
+							wszystkieProdukty.getInt("aktywny") == 1));
+				}
+				wszystkieProdukty.close();
+				zamknijPolaczenie();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+		
+		
+
+		
+		return produktyGrupy;
 	}
 	
 	/**
@@ -103,7 +127,7 @@ public class DaoProdukt {
 	 * Zamyka po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public void zamknijPolaczenie() throws SQLException{
+	private void zamknijPolaczenie() throws SQLException{
 			if (st != null) {
 				st.close();
 			}

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,20 +40,7 @@ public class Kelner implements Serializable{
 	public List<Zamowienie> getNoweZamowienia() {
 		noweZamowienia.clear();
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		try{
-		ResultSet nowe = daoZamowienie.pobierzZamowione();
-		while(nowe.next()){
-			noweZamowienia.add(new Zamowienie(
-					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
-					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),
-					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
-		}
-		nowe.close();
-		daoZamowienie.zamknijPolaczenie();
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-		
+		ArrayList<Zamowienie> noweZamowienia =  (ArrayList<Zamowienie>) daoZamowienie.pobierzZamowione();	
 		return noweZamowienia;
 	}
 
@@ -170,16 +158,7 @@ public class Kelner implements Serializable{
 	private void pobierzNazwyGrupProduktow(){
 		grupy.clear();
 		DaoGrupa daoGrupa = new DaoGrupa();
-		try {
-		ResultSet wszystkieGrupy = daoGrupa.pobierzWszystkieKolumny();
-			while(wszystkieGrupy.next()){
-				grupy.add(new Grupa(wszystkieGrupy.getInt("id_grupa"), wszystkieGrupy.getString("nazwa")));
-			}
-		wszystkieGrupy.close();
-		daoGrupa.zamknijPolaczenie();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		grupy = (List<Grupa>) daoGrupa.pobierzWszystkieKolumny();
 	}
 	
 	
@@ -189,20 +168,7 @@ public class Kelner implements Serializable{
 	private void pobierzProdukty(){
 		produktyGrupy.clear();
 		DaoProdukt daoProdukt = new DaoProdukt();
-		try {
-		ResultSet wszystkieProdukty = daoProdukt.pobierzWszystkieKolumny(idGrupy);
-			while(wszystkieProdukty.next()){
-				produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
-						wszystkieProdukty.getString("nazwa"),
-						wszystkieProdukty.getInt("ilosc"),
-						wszystkieProdukty.getInt("czas_wykonania"),
-						wszystkieProdukty.getInt("aktywny") == 1));
-			}
-			wszystkieProdukty.close();
-			daoProdukt.zamknijPolaczenie();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		produktyGrupy = (List<Produkt>) daoProdukt.pobierzWszystkieKolumny(idGrupy);
 	}
 	
 	/**
@@ -291,17 +257,10 @@ public class Kelner implements Serializable{
 			tymczasowe.setIdStatus(2);
 			DaoZamowienie daoZamowienie = new DaoZamowienie();
 			DaoPozycja daoPozycja = new DaoPozycja();			
-			try {
-				daoZamowienie.dodajZamowione(tymczasowe);				
-				daoZamowienie.zamknijPolaczenie();			
-				
+			daoZamowienie.dodajZamowione(tymczasowe);				
 			for(Produkt produkt : produktyZamowienia){			
 				daoPozycja.dodajPozycjeZamowienia(tymczasowe.getIdZamowienia(), produkt.getId(), produkt.getIloscZamawianych());
-			}
-			daoPozycja.zamknijPolaczenie();
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}						
+			}					
 			return "kelner";
 		}
 	}

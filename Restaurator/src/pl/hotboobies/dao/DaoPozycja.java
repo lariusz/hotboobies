@@ -31,17 +31,20 @@ public class DaoPozycja {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public void dodajPozycjeZamowienia(int idZamowienia, int idProdukt, int ilosc) throws SQLException{
-		if(ds == null)
+	public void dodajPozycjeZamowienia(int idZamowienia, int idProdukt,	int ilosc) {
+		if (ds == null)
 			ds = utworzZrodloDanych();
-		otworzPolaczenie();
-		
-		int id = pobierzIdOstatniejPozycji();
-		
-		st.executeUpdate("INSERT INTO pozycja "
-				+ "(id_pozycja, id_zamowienie, id_produkt, ilosc) VALUES('"
-				+ (id+1) + "', '" + idZamowienia + "', '"
-				+ idProdukt + "', '" +  ilosc + "')");
+		try {
+			otworzPolaczenie();
+			int id = pobierzIdOstatniejPozycji();
+			st.executeUpdate("INSERT INTO pozycja "
+					+ "(id_pozycja, id_zamowienie, id_produkt, ilosc) VALUES('"
+					+ (id + 1) + "', '" + idZamowienia + "', '" + idProdukt
+					+ "', '" + ilosc + "')");
+			zamknijPolaczenie();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -90,7 +93,7 @@ public class DaoPozycja {
 	 * Zamyka po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public void zamknijPolaczenie() throws SQLException{
+	private void zamknijPolaczenie() throws SQLException{
 			if (st != null) {
 				st.close();
 			}

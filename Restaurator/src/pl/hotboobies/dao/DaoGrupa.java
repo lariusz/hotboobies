@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import pl.hotboobies.Grupa;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Grupa
@@ -42,11 +46,23 @@ public class DaoGrupa {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkieKolumny() throws SQLException{
-		if(ds == null)
+	public Collection<Grupa> pobierzWszystkieKolumny() {
+		if (ds == null)
 			ds = utworzZrodloDanych();
-		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM grupa");
+		Collection<Grupa> grupy = new ArrayList<Grupa>();
+		try {
+			otworzPolaczenie();
+			ResultSet wszystkieGrupy = st.executeQuery("SELECT * FROM grupa");
+			while (wszystkieGrupy.next()) {
+				grupy.add(new Grupa(wszystkieGrupy.getInt("id_grupa"),
+						wszystkieGrupy.getString("nazwa")));
+			}
+			wszystkieGrupy.close();
+			zamknijPolaczenie();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return grupy;
 	}
 	
 	
@@ -78,7 +94,7 @@ public class DaoGrupa {
 	 * Zamyka po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
-	public void zamknijPolaczenie() throws SQLException{
+	private void zamknijPolaczenie() throws SQLException{
 			if (st != null) {
 				st.close();
 			}
