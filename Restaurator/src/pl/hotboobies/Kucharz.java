@@ -77,108 +77,62 @@ public class Kucharz {
 	public void wyswietlZamowieniaWolne() {
 	
 		DaoZamowienie dao = new DaoZamowienie();
-		ResultSet zamowieniaResult = null;
-		
-		try{
-			zamowieniaResult = dao.pobierzWszystkich();
-			while(zamowieniaResult.next()){
-				if(zamowieniaResult.getString("id_status").trim().equals("3")) {
-					zamowienia.add(new Zamowienie(
-							0,
-							zamowieniaResult.getString("id_status").trim().equals("3") ? "W kuchni" : "Inne",
-							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
-							zamowieniaResult.getDate("data_przyjecia"),
-							zamowieniaResult.getInt("nr_stolika"),
-							zamowieniaResult.getInt("id_uzytkownik"),
-							zamowieniaResult.getInt("kucharz_id")
-				
-							));	
+		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkie();
+
+		for (Zamowienie zamowienie : wszystkie) {
+
+				if(zamowienie.getIdStatus()==3) {
+					zamowienia.add(zamowienie);	
 				}
-				
-							
-		
-			}
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}finally{
-				try {
-					zamowieniaResult.close();
-					dao.zamknijPolaczenie();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		
+
+			}		
 	}
 	
 	
 	public void wyswietlZamowieniaMoje() {
 		
 		DaoZamowienie dao = new DaoZamowienie();
-		ResultSet zamowieniaResult = null;
-		
-		try{
-			
-			
-			
-			zamowieniaResult = dao.pobierzWszystkich();
-			while(zamowieniaResult.next()){
-				if(zamowieniaResult.getString("id_status").trim().equals("4") && zamowieniaResult.getInt("kucharz_id")==uzytkownik.getIdentyfikator()) {
-					
-					List<Produkt> tmp_produkty = new ArrayList<Produkt>();
-					
-					
-					
+		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkie();
+
+		for (Zamowienie zamowienie : wszystkie) {
+
+			if (zamowienie.getIdStatus() == 4
+					&& zamowienie.getIdKucharza() == uzytkownik.getIdentyfikator()) {
+
+				List<Produkt> tmp_produkty = new ArrayList<Produkt>();
+
+				try {
 					DaoPozycja daoPozycja = new DaoPozycja();
 					ResultSet pozycjaResult = daoPozycja.pobierzWszystkie();
-					
-					while(pozycjaResult.next()) {
-						if(zamowieniaResult.getInt("ID_ZAMOWIENIE")==pozycjaResult.getInt("ID_ZAMOWIENIE")) {
-							
-							
+
+					while (pozycjaResult.next()) {
+						if (zamowienie.getIdZamowienia() == pozycjaResult
+								.getInt("ID_ZAMOWIENIE")) {
+
 							DaoProdukt daoProdukt = new DaoProdukt();
-							ResultSet produktResult = daoProdukt.pobierzProdukt(pozycjaResult.getInt("ID_PRODUKT"));
-							if(produktResult.next()) {
-							tmp_produkty.add(new Produkt(produktResult.getInt("ID_PRODUKT"), produktResult.getString("NAZWA"), pozycjaResult.getInt("ILOSC"), produktResult.getInt("CZAS_WYKONANIA"), true));		
+							ResultSet produktResult = daoProdukt
+									.pobierzProdukt(pozycjaResult
+											.getInt("ID_PRODUKT"));
+							if (produktResult.next()) {
+								tmp_produkty.add(new Produkt(produktResult
+										.getInt("ID_PRODUKT"), produktResult
+										.getString("NAZWA"), pozycjaResult
+										.getInt("ILOSC"), produktResult
+										.getInt("CZAS_WYKONANIA"), true));
 							}
-							
+
 						}
 					}
-					
-					
-					
-					zamowienia.add(new Zamowienie(
-							zamowieniaResult.getInt("ID_ZAMOWIENIE"),
-							zamowieniaResult.getString("id_status").trim().equals("3") ? "W kuchni" : "Inne",
-							Integer.valueOf(zamowieniaResult.getString("id_status").trim()),
-							zamowieniaResult.getDate("data_przyjecia"),
-							zamowieniaResult.getInt("nr_stolika"),
-							zamowieniaResult.getInt("id_uzytkownik"),
-							zamowieniaResult.getInt("kucharz_id"),
-							tmp_produkty
-							));	
-					
-				
-				}
-				
-			
-				
-				
-		
-			}
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}finally{
-				try {
-					zamowieniaResult.close();
-					dao.zamknijPolaczenie();
+
+					zamowienie.setProdukty(tmp_produkty);
+					zamowienia.add(zamowienie);
+
 				} catch (SQLException e) {
 					e.printStackTrace();
+
 				}
-				
+
 			}
-		
+		}
 	}
-	
 }

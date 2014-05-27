@@ -27,19 +27,31 @@ public class DaoZamowienie {
 	private DataSource ds;
 	
 	/**
-	 * Pobiera wszystkie kolumny dla wszystkich u¿ytkowników z bazy danych
+	 * Pobiera wszystkie kolumny dla wszystkich zamówieñ
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public ResultSet pobierzWszystkich() throws SQLException{				
+	public Collection<Zamowienie> pobierzWszystkie(){				
 		if(ds == null)
 			ds = utworzZrodloDanych();
+		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+		try{
 		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM zamowienie");
-
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie");
+		while(wszysieZamowienia.next()){
+			wszystkie.add(new Zamowienie(
+					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
+					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
+		}
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return wszystkie;
 	}
 	
-	public Collection<Zamowienie> pobierzZamowione() {
+	public Collection<Zamowienie> pobierzZamowione(int idUzytkownika) {
 		if(ds == null)
 			ds = utworzZrodloDanych();		
 		Collection<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
@@ -47,7 +59,7 @@ public class DaoZamowienie {
 		otworzPolaczenie();
 		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "
 				+ "INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS "
-				+ "WHERE zamowienie.id_status = 2");	
+				+ "WHERE zamowienie.id_status = 2 AND zamowienie.ID_UZYTKOWNIK = " + idUzytkownika);	
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),

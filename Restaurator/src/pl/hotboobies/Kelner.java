@@ -40,7 +40,8 @@ public class Kelner implements Serializable{
 	public List<Zamowienie> getNoweZamowienia() {
 		noweZamowienia.clear();
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		ArrayList<Zamowienie> noweZamowienia =  (ArrayList<Zamowienie>) daoZamowienie.pobierzZamowione();	
+		ArrayList<Zamowienie> noweZamowienia =  (ArrayList<Zamowienie>) 
+				daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
 		return noweZamowienia;
 	}
 

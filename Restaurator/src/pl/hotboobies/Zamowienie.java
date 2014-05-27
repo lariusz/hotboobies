@@ -39,6 +39,19 @@ public class Zamowienie {
 	
 	}
 	
+
+
+public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza) {
+	this.idZamowienia = idZamowienia;
+	this.idStatus=idStatus;
+	this.dataPrzyjecia=dataPrzyjecia;
+	this.nrStolika=nrStolika;
+	this.idKelnera=idKelnera;
+	this.idKucharza=idKucharza;
+
+
+}
+	
 	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza, List<Produkt> produkty) {
 		this.idZamowienia = idZamowienia;
 		this.status=status;
