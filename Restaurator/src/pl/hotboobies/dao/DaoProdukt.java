@@ -29,29 +29,6 @@ public class DaoProdukt {
 	/** Obiekt zapytania do bazy danych */	
 	private Statement st;
 		
-	/**
-	 * Pobiera wszystkie nazwy dla wszystkich produktów z bazy danych
-	 * @return zbiór wyników
-	 * @throws SQLException
-	 */
-	public ResultSet pobierzWszystkieNazwy() throws SQLException{
-		if(ds == null)
-			ds = utworzZrodloDanych();
-		otworzPolaczenie();
-		return st.executeQuery("SELECT nazwa FROM produkt");
-	}
-	
-	/**
-	 * Pobiera wszystkie kolumny dla wszystkich produktów z bazy danych
-	 * @return zbiór wyników
-	 * @throws SQLException
-	 */
-	public ResultSet pobierzWszystkieKolumny() throws SQLException{
-		if(ds == null)
-			ds = utworzZrodloDanych();
-		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM PRODUKT");
-	}
 	
 	/**
 	 * Pobiera wszystkie kolumny dla produktów z grupy
