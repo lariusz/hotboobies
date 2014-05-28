@@ -52,7 +52,6 @@ public class Kucharz {
 	 * ustawiaj¹c status zamówienia na <b>Przygotywywany</b>
 	 */
 	public String pobierzZamowienie(){
-		System.out.println("errr!!!!!");
 		DaoZamowienie dao = new DaoZamowienie();
 		ArrayList<Zamowienie> ostatnieNieprzydzielone = (ArrayList<Zamowienie>) dao.pobierzNajstarszeNieprzydzielone();
 		
@@ -60,12 +59,10 @@ public class Kucharz {
 			DaoZamowienie daoPrzypisz = new DaoZamowienie();
 			daoPrzypisz.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
 			wyswietlZamowieniaMoje();
-		}
-		
+		}		
 		else  {
 		Komunikat="Brak zamówieñ do pobrania!";	
 		}
-		wyswietlZamowieniaMoje();
 		return null;
 	}
 
@@ -105,7 +102,6 @@ public class Kucharz {
 		
 	
 	public String wyswietlZamowieniaMoje() {
-		System.out.println("wyswietlZamowieniaMoje");
 		DaoZamowienie dao = new DaoZamowienie();
 		ArrayList<Zamowienie> wszystkieZamowienia = (ArrayList<Zamowienie>) dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 

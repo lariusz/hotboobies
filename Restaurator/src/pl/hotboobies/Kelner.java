@@ -38,9 +38,8 @@ public class Kelner implements Serializable{
 	private List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 	
 	public List<Zamowienie> getNoweZamowienia() {
-		noweZamowienia.clear();
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		noweZamowienia = (List<Zamowienie>) daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
+		noweZamowienia = daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
 		return noweZamowienia;
 	}
 
@@ -53,6 +52,8 @@ public class Kelner implements Serializable{
 	
 
 	public List<Zamowienie> getZamowieniaDoPodania() {
+		DaoZamowienie daoZamowienie = new DaoZamowienie();
+		zamowieniaDoPodania = daoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());		
 		return zamowieniaDoPodania;
 	}
 
@@ -154,7 +155,6 @@ public class Kelner implements Serializable{
 	 * poniewa¿ czynnoœæ bedzie powtarzana przy sk³adaniu ka¿dego zamówienia.
 	 */
 	private void pobierzNazwyGrupProduktow(){
-		grupy.clear();
 		DaoGrupa daoGrupa = new DaoGrupa();
 		grupy = (List<Grupa>) daoGrupa.pobierzWszystkieKolumny();
 	}
@@ -164,7 +164,6 @@ public class Kelner implements Serializable{
 	 * Pobiera z bazy wszystkie informacje o produktach danej grupy  i umieszcza obiekty na liœcie produktów.
 	 */
 	private void pobierzProdukty(){
-		produktyGrupy.clear();
 		DaoProdukt daoProdukt = new DaoProdukt();
 		produktyGrupy = (List<Produkt>) daoProdukt.pobierzWszystkieKolumny(idGrupy);
 	}

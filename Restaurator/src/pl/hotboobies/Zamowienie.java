@@ -1,6 +1,5 @@
 package pl.hotboobies;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,17 +22,7 @@ public class Zamowienie {
 	public Zamowienie() {
 		
 	}
-	
-	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza) {
-		this.idZamowienia = idZamowienia;
-		this.status=status;
-		this.idStatus=idStatus;
-		this.dataPrzyjecia=dataPrzyjecia;
-		this.nrStolika=nrStolika;
-		this.idKelnera=idKelnera;
-		this.idKucharza=idKucharza;
-	
-	}	
+
 
 	public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia,
 			int nrStolika, int idKelnera, int idKucharza) {
@@ -44,18 +33,6 @@ public class Zamowienie {
 		this.idKelnera = idKelnera;
 		this.idKucharza = idKucharza;
 
-	}
-	
-	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza, List<Produkt> produkty) {
-		this.idZamowienia = idZamowienia;
-		this.status=status;
-		this.idStatus=idStatus;
-		this.dataPrzyjecia=dataPrzyjecia;
-		this.nrStolika=nrStolika;
-		this.idKelnera=idKelnera;
-		this.idKucharza=idKucharza;
-		this.produkty=produkty;	
-	
 	}
 	
 	public int getIdZamowienia() {

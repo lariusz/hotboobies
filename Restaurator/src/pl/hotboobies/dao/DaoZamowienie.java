@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -26,29 +27,6 @@ public class DaoZamowienie {
 	private Statement st;
 	private Context initContext;
 	private DataSource ds;
-	
-	/**
-	 * Pobiera wszystkie kolumny dla wszystkich zamówieñ
-	 * @return zbiór wyników
-	 * @throws SQLException
-	 */
-	public Collection<Zamowienie> pobierzWszystkie(){				
-		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
-		try{
-		otworzPolaczenie();
-		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie");
-		while(wszysieZamowienia.next()){
-			wszystkie.add(new Zamowienie(
-					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
-					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
-		}
-		zamknijPolaczenie();
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
-		return wszystkie;
-	}
 	
 	
 	/**
@@ -122,16 +100,15 @@ public class DaoZamowienie {
 	}
 	
 	
-	public Collection<Zamowienie> pobierzZamowione(int idUzytkownika) {
-		Collection<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
+	public List<Zamowienie> pobierzZamowione(int idUzytkownika) {
+		List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
-		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "
-				+ "INNER JOIN status ON zamowienie.ID_STATUS=status.ID_STATUS "
-				+ "WHERE zamowienie.id_status = 2 AND zamowienie.ID_UZYTKOWNIK = " + idUzytkownika);	
+		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
+				+ "WHERE id_status = 2 AND ID_UZYTKOWNIK = " + idUzytkownika);	
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
-					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
+					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
 					nowe.getTimestamp("data_przyjecia"), nowe.getInt("nr_stolika"),
 					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
 		}
@@ -142,6 +119,29 @@ public class DaoZamowienie {
 		}
 		
 		return noweZamowienia;
+	}
+	
+
+
+	public List<Zamowienie> pobierzDlaKlienta(int idUzytkownika) {
+		List<Zamowienie> zamowieniaDoPodania = new ArrayList<Zamowienie>();
+		try{
+		otworzPolaczenie();
+		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
+				+ "WHERE id_status = 4 AND ID_UZYTKOWNIK = " + idUzytkownika);	
+		while(nowe.next()){
+			zamowieniaDoPodania.add(new Zamowienie(
+					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
+					nowe.getTimestamp("data_przyjecia"), nowe.getInt("nr_stolika"),
+					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
+		}
+		nowe.close();
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		
+		return zamowieniaDoPodania;
 	}
 	
 	public int pobierzIdOstatniegoZamowienia() throws SQLException{
@@ -285,11 +285,5 @@ public class DaoZamowienie {
 				conn.close();
 			}
 	}
-
-
-
-
-
-
 
 }
