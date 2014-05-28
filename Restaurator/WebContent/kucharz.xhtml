@@ -22,9 +22,9 @@
 	tel: <h:outputText value="#{logowanie.zalogowany.telefon}" />
 	</h:panelGrid>
 	
-	<h:commandButton value="wyswietlZamowieniaMoje" action="#{kucharz.wyswietlZamowieniaMoje()}"/>
+	<h:commandButton value="Nieprzydzielone zamówienia" action="kucharz-nieprzydzielone" style="height : 47px;" />
+	<h:commandButton value="Moje Zamówienia" action="#{kucharz.wyswietlZamowieniaMoje()}" style="height : 47px;" />
 </h:form>
-<a href="kucharz-nieprzydzielone.jsf">Pokaż nieprzydzielone zamówienia</a> <br/>
 
 </h:body>
 </html>

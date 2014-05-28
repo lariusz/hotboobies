@@ -16,7 +16,7 @@
 		<h:dataTable id="mojeZamowienia" var="zam2" value="#{kucharz.zamowienia}" >
 			
 			<h:column>			
-		
+		 
 			<b>Zamówienie nr #{zam2.idZamowienia}</b>  <br/>
 			
 			Nr stolika : #{zam2.nrStolika} Id Kelnera : #{zam2.idKelnera} Data Przyjęcia : #{zam2.dataPrzyjecia} <br/>
@@ -25,7 +25,8 @@
 			<h:column>Produkt <b>#{pro2.nazwa}</b> ilość : <b>#{pro2.ilosc}</b><br/> </h:column>
 		</h:dataTable>
 	
-		<h:commandButton value="TEST" action="#{kucharz.test()}" />
+		<h:commandButton value="Zwróć zamówienie" action="#{kucharz.zwrocZamowienie(zam2.idZamowienia)}" style="height : 47px;" />
+		<h:commandButton value="Przekaż do kelnera" action="#{kucharz.doKelnera(zam2.idZamowienia)}" style="height : 47px;" />
 			</h:column> <br/>
 		</h:dataTable>
 
