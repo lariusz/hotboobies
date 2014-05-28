@@ -1,16 +1,12 @@
 package pl.hotboobies;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
-import pl.hotboobies.dao.DaoPozycja;
 import pl.hotboobies.dao.DaoProdukt;
 import pl.hotboobies.dao.DaoZamowienie;
 
@@ -20,6 +16,7 @@ import pl.hotboobies.dao.DaoZamowienie;
  */
 
 @ManagedBean
+@SessionScoped
 public class Kucharz {
 	
 	/** Zamówienia które pobra³ kucharz do przygotowania */
@@ -68,7 +65,7 @@ public class Kucharz {
 		Komunikat="Brak zamówieñ do pobrania!";	
 		}
 		
-		return "kucharz-moje.jsf";
+		return null;
 	}
 
 	/**
@@ -98,9 +95,14 @@ public class Kucharz {
 		
 	}
 	
+	public String test(){
+		System.out.println("OK");
+		return null;		
+	}
 	
-	public void wyswietlZamowieniaMoje() {
-		
+	
+	public String wyswietlZamowieniaMoje() {
+		System.out.println("wyswietlZamowieniaMoje");
 		DaoZamowienie dao = new DaoZamowienie();
 		ArrayList<Zamowienie> wszystkieZamowienia = (ArrayList<Zamowienie>) dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
@@ -111,7 +113,7 @@ public class Kucharz {
 		}
 		
 		zamowienia = wszystkieZamowienia;
-		
+		return "kucharz-moje";
 	}
 
 

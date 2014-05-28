@@ -1,11 +1,8 @@
 package pl.hotboobies;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 
 public class Zamowienie {
 	
@@ -36,21 +33,18 @@ public class Zamowienie {
 		this.idKelnera=idKelnera;
 		this.idKucharza=idKucharza;
 	
-	
+	}	
+
+	public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia,
+			int nrStolika, int idKelnera, int idKucharza) {
+		this.idZamowienia = idZamowienia;
+		this.idStatus = idStatus;
+		this.dataPrzyjecia = dataPrzyjecia;
+		this.nrStolika = nrStolika;
+		this.idKelnera = idKelnera;
+		this.idKucharza = idKucharza;
+
 	}
-	
-
-
-public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza) {
-	this.idZamowienia = idZamowienia;
-	this.idStatus=idStatus;
-	this.dataPrzyjecia=dataPrzyjecia;
-	this.nrStolika=nrStolika;
-	this.idKelnera=idKelnera;
-	this.idKucharza=idKucharza;
-
-
-}
 	
 	public Zamowienie(int idZamowienia, String status, int idStatus, Date dataPrzyjecia, int nrStolika, int idKelnera, int idKucharza, List<Produkt> produkty) {
 		this.idZamowienia = idZamowienia;
@@ -60,8 +54,7 @@ public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia, int nrStol
 		this.nrStolika=nrStolika;
 		this.idKelnera=idKelnera;
 		this.idKucharza=idKucharza;
-		this.produkty=produkty;
-	
+		this.produkty=produkty;	
 	
 	}
 	
@@ -89,7 +82,7 @@ public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia, int nrStol
 		this.status = status;
 	}
 
-	public Date getDataPrzyjecia() {
+	public Date getDataPrzyjecia() {	
 		return dataPrzyjecia;
 	}
 

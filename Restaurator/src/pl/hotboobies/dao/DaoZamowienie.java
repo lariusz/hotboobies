@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -41,7 +42,7 @@ public class DaoZamowienie {
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
 		zamknijPolaczenie();
@@ -67,7 +68,7 @@ public class DaoZamowienie {
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
 		zamknijPolaczenie();
@@ -92,7 +93,7 @@ public class DaoZamowienie {
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
 		zamknijPolaczenie();
@@ -118,7 +119,7 @@ public class DaoZamowienie {
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
 		zamknijPolaczenie();
@@ -141,7 +142,7 @@ public class DaoZamowienie {
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getString("nazwa"), nowe.getInt("id_status"),
-					nowe.getDate("data_przyjecia"), nowe.getInt("nr_stolika"),
+					nowe.getTimestamp("data_przyjecia"), nowe.getInt("nr_stolika"),
 					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
 		}
 		nowe.close();
