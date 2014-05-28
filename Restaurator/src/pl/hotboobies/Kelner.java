@@ -35,13 +35,12 @@ public class Kelner implements Serializable{
 	private Zamowienie tymczasowe;
 	
 	/** Zamówienia, które utworzy³ kelner w celu przekazania do kuchni */
-	private List<Zamowienie> noweZamowienia = new LinkedList<Zamowienie>();
+	private List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 	
 	public List<Zamowienie> getNoweZamowienia() {
 		noweZamowienia.clear();
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		ArrayList<Zamowienie> noweZamowienia =  (ArrayList<Zamowienie>) 
-				daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
+		noweZamowienia = (List<Zamowienie>) daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
 		return noweZamowienia;
 	}
 
@@ -50,7 +49,7 @@ public class Kelner implements Serializable{
 	}
 
 	/** Zamówienia, które przygotowa³ kucharz i s¹ gotowe do wydania */
-	private List<Zamowienie> zamowieniaDoPodania = new LinkedList<Zamowienie>();
+	private List<Zamowienie> zamowieniaDoPodania = new ArrayList<Zamowienie>();
 	
 
 	public List<Zamowienie> getZamowieniaDoPodania() {
@@ -173,26 +172,37 @@ public class Kelner implements Serializable{
 	}
 	
 	/**
-	 * Uswa zamówienie z listy zamówieñ
+	 * Uswa nowe zamówienie z listy zamówieñ
 	 */
-	public void usunZamowienie(){
-		
+	public String usunNoweZamowienie(int idZamowienia){
+		System.out.println("Usuwam zamówienie nr: " + idZamowienia);
+		return null;
+	}
+	
+	/**
+	 * Uswa zamówienie do podania z listy zamówieñ
+	 */
+	public String usunZamowienieDoPodania(int idZamowienia){
+		System.out.println("Usuwam zamówienie do podania nr: " + idZamowienia);
+		return null;
 	}
 
 	/**
 	 * Dodaje do listy zamówieñ oczekuj¹cych na pobranie przez kucharza
 	 * Zmienia status zamówienia na <b>W kuchni</b>
 	 */
-	public void doKuchni(){
-		
+	public String doKuchni(int idZamowienia){
+		System.out.println("Do kuchni zamówienie nr: " + idZamowienia);
+		return null;
 	}
 	
 	/**
 	 * Usuwa z listy zamówieñ do podania
 	 * Zmienia status zamówienia na <b>Zaserwowany</b>
 	 */
-	public void doKlienta(){
-		
+	public String doKlienta(int idZamowienia){
+		System.out.println("Do klienta zamówienie nr: " + idZamowienia);
+		return null;
 	}
 	
 	/**

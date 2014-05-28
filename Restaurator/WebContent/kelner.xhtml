@@ -18,19 +18,58 @@
 		<h3>Nowe Zamówienia</h3>
 		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/>
 		<h:dataTable id="noweZamowienia" var="noweZamowienie" value="#{kelner.noweZamowienia}" >
-			<h:column>#{noweZamowienie.dataPrzyjecia}</h:column>
-			
+			<h:column>
+			<f:facet name="header">Numer zamówienia</f:facet>
+			#{noweZamowienie.idZamowienia}
+			</h:column>
+			<h:column>
+			<f:facet name="header">Data złożenia zamówienia</f:facet>
+				<h:outputText value="#{noweZamowienie.dataPrzyjecia}">
+			  		<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Berlin" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Usuń</f:facet>
+				<h:commandButton value="Usuń" action="#{kelner.usunNoweZamowienie(noweZamowienie.idZamowienia)}"> 
+					<f:ajax render="@all"/>
+				</h:commandButton>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Przekaż</f:facet>
+				<h:commandButton value="Do kuchni" action="#{kelner.doKuchni(noweZamowienie.idZamowienia)}"> 
+					<f:ajax render="@all"/>
+				</h:commandButton>
+			</h:column>
 		</h:dataTable>
 		<br />
 		<h3>Zamówienia do podania</h3>
 		Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
 		<h:dataTable id="zamowieniaDoPodania" var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}" >
-			<h:column>#{zamowienieDoPodania.dataPrzyjecia}</h:column>
+						<h:column>
+			<f:facet name="header">Numer zamówienia</f:facet>
+			#{zamowienieDoPodania.idZamowienia}
+			</h:column>
+			<h:column>
+			<f:facet name="header">Data złożenia zamówienia</f:facet>
+				<h:outputText value="#{zamowienieDoPodania.dataPrzyjecia}">
+			  		<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Berlin" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Usuń</f:facet>
+				<h:commandButton value="Usuń" action="#{kelner.usunZamowienieDoPodania(zamowienieDoPodania.idZamowienia)}"> 
+					<f:ajax render="@all"/>
+				</h:commandButton>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Przekaż</f:facet>
+				<h:commandButton value="Do klienta" action="#{kelner.doKlienta(zamowienieDoPodania.idZamowienia)}"> 
+					<f:ajax render="@all"/>
+				</h:commandButton>
+			</h:column>
 		</h:dataTable>
 	    <br />
-		<h:commandButton value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" immediate="true" style="float: right; width : 122px; height : 47px;" />
-</h:form>
-<h:form>
+		<h:commandButton value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" style="float: right; width : 122px; height : 47px;" />
 <h:commandButton value="Przejdz do zamówień" action="#{kelner.przejdzDoZamowien}" />
 </h:form>
 </h:body>
