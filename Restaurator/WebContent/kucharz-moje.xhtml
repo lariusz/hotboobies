@@ -12,23 +12,38 @@
 </h:head>
 <h:body>
 <h1 class="title">Kucharz - Kuchnia</h1>
-
-
-
+<h:form>
 #{kucharz.wyswietlZamowieniaMoje()}
-<ui:repeat var="zam" value="#{kucharz.zamowienia}">
-<b>Zamówienie nr #{zam.idZamowienia}   </b> <br/>
-Nr stolika : #{zam.nrStolika} Id Kelnera : #{zam.idKelnera} Data Przyjęcia : #{zam.dataPrzyjecia} <br/>
 
-<ui:repeat var="pro" value="#{zam.produkty}">
-Produkt <b>#{pro.nazwa}</b> ilość : <b>#{pro.ilosc}</b><br/> 
-</ui:repeat>
-<br/>
-</ui:repeat>
+		<h:dataTable id="mojeZamowienia" var="zam2" value="#{kucharz.zamowienia}" >
+			
+			<h:column>
+				<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" style="float: right; height : 47px;" />
+		
+			<b>Zamówienie nr #{zam2.idZamowienia}</b>  <br/>
+			
+			Nr stolika : #{zam2.nrStolika} Id Kelnera : #{zam2.idKelnera} Data Przyjęcia : #{zam2.dataPrzyjecia} <br/>
+			
+		<h:dataTable id="mojeZamowienia2" var="pro2" value="#{zam2.produkty}" >
+			<h:column>Produkt <b>#{pro2.nazwa}</b> ilość : <b>#{pro2.ilosc}</b><br/> </h:column>
+		</h:dataTable>
+
+
+			</h:column> <br/>
+		</h:dataTable>
+</h:form>
 <p>#{kucharz.komunikat}</p>
 <h:form>
 		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;" />
 </h:form>
+<h:form>
+		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;" />
+</h:form>
+<h:form>
+		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;" />
+</h:form>
+
+
 
 <p><a href="kucharz.jsf">Powrót</a></p>
 </h:body>

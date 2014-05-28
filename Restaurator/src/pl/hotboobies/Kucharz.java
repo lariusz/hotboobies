@@ -55,7 +55,7 @@ public class Kucharz {
 	 * ustawiaj¹c status zamówienia na <b>Przygotywywany</b>
 	 */
 	public String pobierzZamowienie(){
-		
+		System.out.println("errr!!!!!");
 		DaoZamowienie dao = new DaoZamowienie();
 		ArrayList<Zamowienie> ostatnieNieprzydzielone = (ArrayList<Zamowienie>) dao.pobierzNajstarszeNieprzydzielone();
 		
@@ -64,7 +64,7 @@ public class Kucharz {
 			daoPrzypisz.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
 		}
 		
-		if(ostatnieNieprzydzielone.isEmpty()) {
+		else  {
 		Komunikat="Brak zamówieñ do pobrania!";	
 		}
 		
@@ -75,15 +75,18 @@ public class Kucharz {
 	 * Pozwala zwróciæ zamówienia które zosta³y pobrane na listê zamówieñ kucharza.
 	 * Zmienia status zamówienia na <b>W kuchni</b>
 	 */
-	public void zwrocZamowienie(){
-		
-	}	
+	public String zwrocZamowienie(int idZamowienie){
 	
+		Komunikat = "hello! "+idZamowienie;
+	
+		return "kucharz-moje.jsf";
+	}	
+	 
 	/**
 	 * Przekazuje przygotowane zamówienia do listy zamówieñ kelnera który zainicjowa³ sk³adanie zamówienia.
 	 * Status zamówienia zmienia sie na <b>Do podania</b>
 	 */
-	public void doKelnera(){
+	public void doKelnera(int idZamowienia){
 		
 	}
 	
