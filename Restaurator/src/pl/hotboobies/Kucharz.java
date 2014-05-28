@@ -59,6 +59,7 @@ public class Kucharz {
 		if (!ostatnieNieprzydzielone.isEmpty()) {
 			DaoZamowienie daoPrzypisz = new DaoZamowienie();
 			daoPrzypisz.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
+			wyswietlZamowieniaMoje();
 		}
 		
 		else  {
@@ -72,19 +73,26 @@ public class Kucharz {
 	 * Pozwala zwróciæ zamówienia które zosta³y pobrane na listê zamówieñ kucharza.
 	 * Zmienia status zamówienia na <b>W kuchni</b>
 	 */
-	public String zwrocZamowienie(int idZamowienie){
+	public String zwrocZamowienie(int idZamowienia){
 	
-		Komunikat = "hello! "+idZamowienie;
+		DaoZamowienie daoPrzypisz = new DaoZamowienie();
+		daoPrzypisz.zwrocZamowienie(idZamowienia);
+		wyswietlZamowieniaMoje();
 	
-		return "kucharz-moje.jsf";
+		return null;
 	}	
 	 
 	/**
 	 * Przekazuje przygotowane zamówienia do listy zamówieñ kelnera który zainicjowa³ sk³adanie zamówienia.
 	 * Status zamówienia zmienia sie na <b>Do podania</b>
 	 */
-	public void doKelnera(int idZamowienia){
+	public String doKelnera(int idZamowienia){
 		
+		DaoZamowienie daoPrzypisz = new DaoZamowienie();
+		daoPrzypisz.przekazDoKelnera(idZamowienia);
+		wyswietlZamowieniaMoje();
+		
+		return null;
 	}
 	
 	public void wyswietlZamowieniaWolne() {
@@ -94,12 +102,7 @@ public class Kucharz {
 		zamowienia=wszystkie;
 		
 	}
-	
-	public String test(){
-		System.out.println("OK");
-		return null;		
-	}
-	
+		
 	
 	public String wyswietlZamowieniaMoje() {
 		System.out.println("wyswietlZamowieniaMoje");
@@ -113,6 +116,7 @@ public class Kucharz {
 		}
 		
 		zamowienia = wszystkieZamowienia;
+		Komunikat="";
 		return "kucharz-moje";
 	}
 

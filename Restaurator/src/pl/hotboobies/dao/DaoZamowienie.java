@@ -215,6 +215,38 @@ public class DaoZamowienie {
 	
 	
 	/**
+	 * Zwraca zamówienie do puli zamówieñ nieprzydzielonych
+	 * @return void
+	 */
+	public void zwrocZamowienie(int idZamowienia) {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		try{
+		otworzPolaczenie();
+		st.executeUpdate("UPDATE ZAMOWIENIE SET ID_STATUS = 3 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Przekazuje zrealizowane zamówienie do Kelnera
+	 * @return void
+	 */
+	public void przekazDoKelnera(int idZamowienia) {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		try{
+		otworzPolaczenie();
+		st.executeUpdate("UPDATE ZAMOWIENIE SET ID_STATUS = 5 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
