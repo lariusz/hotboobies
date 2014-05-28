@@ -143,12 +143,10 @@ public class Kelner implements Serializable{
 		tymczasowe.setIdStatus(1); // Status: Tymczasowe
 		tymczasowe.setIdZamowienia(new DaoZamowienie().pobierzIdOstatniegoZamowienia()+1);
 		pobierzNazwyGrupProduktow();
+		setIdGrupy(1); //Ustawia grupê na pierwszej pozycji
 		return "zamowienie";
 	}
-	
-	public String przejdzDoZamowien(){
-		return "zamowienie";
-	} 
+
 	
 	/**
 	 * Pobiera z bazy identyfikatory i nazwy grup produktów umieszcza je w obiektach grup
@@ -175,7 +173,10 @@ public class Kelner implements Serializable{
 	 * Uswa nowe zamówienie z listy zamówieñ
 	 */
 	public String usunNoweZamowienie(int idZamowienia){
-		System.out.println("Usuwam zamówienie nr: " + idZamowienia);
+		DaoPozycja daoPozycja = new DaoPozycja();
+		daoPozycja.usunPozycje(idZamowienia);
+		DaoZamowienie daoZamowienie = new DaoZamowienie();
+		daoZamowienie.usunZamowienie(idZamowienia);		
 		return null;
 	}
 	
@@ -183,7 +184,7 @@ public class Kelner implements Serializable{
 	 * Uswa zamówienie do podania z listy zamówieñ
 	 */
 	public String usunZamowienieDoPodania(int idZamowienia){
-		System.out.println("Usuwam zamówienie do podania nr: " + idZamowienia);
+		
 		return null;
 	}
 
@@ -192,7 +193,8 @@ public class Kelner implements Serializable{
 	 * Zmienia status zamówienia na <b>W kuchni</b>
 	 */
 	public String doKuchni(int idZamowienia){
-		System.out.println("Do kuchni zamówienie nr: " + idZamowienia);
+		DaoZamowienie zamowienie = new DaoZamowienie();
+		zamowienie.zmienStatusZamowienia(idZamowienia, 3);
 		return null;
 	}
 	

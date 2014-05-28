@@ -64,7 +64,7 @@ public class Kucharz {
 		else  {
 		Komunikat="Brak zamówieñ do pobrania!";	
 		}
-		
+		wyswietlZamowieniaMoje();
 		return null;
 	}
 

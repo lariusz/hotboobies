@@ -33,12 +33,9 @@ public class DaoProdukt {
 	/**
 	 * Pobiera wszystkie kolumny dla produktów z grupy
 	 * @param grupa produktów dla której maja zostaæ zwrócone wyniki
-	 * @return zbiór wyników
-	 * @throws SQLException
+	 * @return kolekcjê obiektów Zamowienie
 	 */
 	public Collection<Produkt> pobierzWszystkieKolumny(int grupa) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
 		try {
 			otworzPolaczenie();
@@ -63,12 +60,9 @@ public class DaoProdukt {
 	/**
 	 * Pobiera wszystkie kolumny pozycji i produktów dla konkretnego zamówienia
 	 * @param identyfikator zamówienia dla którego maja zostaæ zwrócone wyniki
-	 * @return zbiór wyników
-	 * @throws SQLException
+	 * @return kolekcjê obiektów Zamowienie
 	 */
 	public Collection<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
 		try {
 			otworzPolaczenie();
@@ -96,11 +90,10 @@ public class DaoProdukt {
 	 * @throws SQLException
 	 */
 	public ResultSet pobierzProdukt(int id) throws SQLException{
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		otworzPolaczenie();
 		return st.executeQuery("SELECT * FROM produkt WHERE id_produkt = " + id);
 	}
+	
 
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -121,6 +114,8 @@ public class DaoProdukt {
 	 * @throws SQLException
 	 */
 	private void otworzPolaczenie() throws SQLException {
+		if(ds == null)
+			ds = utworzZrodloDanych();
 		conn = ds.getConnection();
 		st = conn.createStatement();
 	}
@@ -138,5 +133,8 @@ public class DaoProdukt {
 				conn.close();
 			}
 	}
+
+
+
 
 }

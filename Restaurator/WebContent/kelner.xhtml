@@ -31,7 +31,7 @@
 			<h:column>
 			<f:facet name="header">Usuń</f:facet>
 				<h:commandButton value="Usuń" action="#{kelner.usunNoweZamowienie(noweZamowienie.idZamowienia)}"> 
-					<f:ajax render="@all"/>
+					<f:ajax render="@form"/>
 				</h:commandButton>
 			</h:column>
 			<h:column>
@@ -70,7 +70,6 @@
 		</h:dataTable>
 	    <br />
 		<h:commandButton value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" style="float: right; width : 122px; height : 47px;" />
-<h:commandButton value="Przejdz do zamówień" action="#{kelner.przejdzDoZamowien}" />
 </h:form>
 </h:body>
 </html>

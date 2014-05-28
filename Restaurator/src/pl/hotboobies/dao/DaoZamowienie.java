@@ -33,8 +33,6 @@ public class DaoZamowienie {
 	 * @throws SQLException
 	 */
 	public Collection<Zamowienie> pobierzWszystkie(){				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
@@ -59,8 +57,6 @@ public class DaoZamowienie {
 	 * @throws SQLException
 	 */
 	public Collection<Zamowienie> pobierzWszystkieNieprzydzielone(){				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
@@ -84,8 +80,6 @@ public class DaoZamowienie {
 	 * @throws SQLException
 	 */
 	public Collection<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
@@ -110,8 +104,6 @@ public class DaoZamowienie {
 	 * @throws SQLException
 	 */
 	public Collection<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
@@ -131,8 +123,6 @@ public class DaoZamowienie {
 	
 	
 	public Collection<Zamowienie> pobierzZamowione(int idUzytkownika) {
-		if(ds == null)
-			ds = utworzZrodloDanych();		
 		Collection<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
@@ -155,8 +145,6 @@ public class DaoZamowienie {
 	}
 	
 	public int pobierzIdOstatniegoZamowienia() throws SQLException{
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		otworzPolaczenie();
 		ResultSet max = st.executeQuery("SELECT max(id_zamowienie) FROM zamowienie");
 		max.next();
@@ -169,8 +157,6 @@ public class DaoZamowienie {
 	
 	
 	public void dodajZamowione(Zamowienie tymczasowe) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		try{
 		otworzPolaczenie();
 		st.executeUpdate("INSERT INTO zamowienie "
@@ -190,8 +176,6 @@ public class DaoZamowienie {
 	 * @return void
 	 */
 	public void przypiszZamowienieKucharzowi(int idKucharza, int idZamowienia) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		try{
 		otworzPolaczenie();
 		st.executeUpdate("UPDATE ZAMOWIENIE SET KUCHARZ_ID = " + idKucharza +", ID_STATUS = 4 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
@@ -200,6 +184,35 @@ public class DaoZamowienie {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Przypisuje zamówienie odpowiedniemu kucharzowi 
+	 * @return void
+	 */
+	public void zmienStatusZamowienia(int idZamowienia, int idStatus) {
+		try{
+		otworzPolaczenie();
+		st.executeUpdate("UPDATE zamowienie SET id_status = " + idStatus +"WHERE id_zamowienie = " + idZamowienia);	
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Usuwa zamówienie o danym identyfikatorze
+	 * @param idZamowienia
+	 */
+	public void usunZamowienie(int idZamowienia) {
+		try {
+			otworzPolaczenie();
+			st.executeUpdate("DELETE FROM zamowienie WHERE id_zamowienie = " + idZamowienia);
+			zamknijPolaczenie();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -221,6 +234,8 @@ public class DaoZamowienie {
 	 * @throws SQLException
 	 */
 	private void otworzPolaczenie() throws SQLException {
+		if(ds == null)
+			ds = utworzZrodloDanych();
 		conn = ds.getConnection();
 		st = conn.createStatement();
 	}
@@ -238,6 +253,9 @@ public class DaoZamowienie {
 				conn.close();
 			}
 	}
+
+
+
 
 
 

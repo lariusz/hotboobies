@@ -31,7 +31,9 @@
 
 <p>#{kucharz.komunikat}</p>
 
-		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;" />
+		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;">
+			<f:ajax render="@all"/>
+		</h:commandButton>
 </h:form>
 
 

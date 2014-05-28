@@ -29,11 +29,8 @@ public class DaoPozycja {
 	/**
 	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
 	 * @return zbiór wyników
-	 * @throws SQLException
 	 */
 	public void dodajPozycjeZamowienia(int idZamowienia, int idProdukt,	int ilosc) {
-		if (ds == null)
-			ds = utworzZrodloDanych();
 		try {
 			otworzPolaczenie();
 			int id = pobierzIdOstatniejPozycji();
@@ -48,6 +45,21 @@ public class DaoPozycja {
 	}
 	
 	
+	/**
+	 * Usuwa wszystkie pozycje z danego zamówienia
+	 * @param idZamowienia
+	 */
+	public void usunPozycje(int idZamowienia) {
+		try {
+			otworzPolaczenie();
+			st.executeUpdate("DELETE FROM pozycja WHERE id_zamowienie = " + idZamowienia);
+			zamknijPolaczenie();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	
 	private int pobierzIdOstatniejPozycji() throws SQLException{
 		
 		ResultSet max = st.executeQuery("SELECT max(id_pozycja) FROM pozycja");
@@ -58,8 +70,7 @@ public class DaoPozycja {
 	
 	// Pobiera wszystkie pozycje 
 	public ResultSet pobierzWszystkie() throws SQLException{				
-		if(ds == null)
-			ds = utworzZrodloDanych();
+
 		otworzPolaczenie();
 		return st.executeQuery("SELECT * FROM pozycja");
 
@@ -78,12 +89,15 @@ public class DaoPozycja {
 		}
 		return ds;
 	}
+
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
 	 * @throws SQLException
 	 */
 	private void otworzPolaczenie() throws SQLException {
+		if(ds == null)
+			ds = utworzZrodloDanych();
 		conn = ds.getConnection();
 		st = conn.createStatement();
 	}
@@ -101,5 +115,8 @@ public class DaoPozycja {
 				conn.close();
 			}
 	}
+
+
+
 
 }
