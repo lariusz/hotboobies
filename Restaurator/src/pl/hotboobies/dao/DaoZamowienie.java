@@ -63,7 +63,32 @@ public class DaoZamowienie {
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
-		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3");
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3 ORDER BY ID_ZAMOWIENIE");
+		while(wszysieZamowienia.next()){
+			wszystkie.add(new Zamowienie(
+					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
+					wszysieZamowienia.getDate("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
+					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
+		}
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return wszystkie;
+	}
+	
+	/**
+	 * Pobiera wszystkie kolumny dla ostatniego nieprzydzielongo zamówienia (max 1 wynik)
+	 * @return pojedynczy wynik
+	 * @throws SQLException
+	 */
+	public Collection<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+		try{
+		otworzPolaczenie();
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS=3 AND ROWNUM <= 1 ORDER BY ID_ZAMOWIENIE");
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
@@ -153,6 +178,22 @@ public class DaoZamowienie {
 				+ tymczasowe.getIdKelnera() + "', " 
 				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())
 				+ "', 'YYYY/MM/DD hh24:mi:ss'))");	
+		zamknijPolaczenie();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Przypisuje zamówienie odpowiedniemu kucharzowi 
+	 * @return void
+	 */
+	public void przypiszZamowienieKucharzowi(int idKucharza, int idZamowienia) {
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		try{
+		otworzPolaczenie();
+		st.executeUpdate("UPDATE ZAMOWIENIE SET KUCHARZ_ID = " + idKucharza +", ID_STATUS = 4 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
 		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();

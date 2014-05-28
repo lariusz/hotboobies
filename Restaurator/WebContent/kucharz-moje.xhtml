@@ -23,10 +23,12 @@ Nr stolika : #{zam.nrStolika} Id Kelnera : #{zam.idKelnera} Data Przyjęcia : #{
 <ui:repeat var="pro" value="#{zam.produkty}">
 Produkt <b>#{pro.nazwa}</b> ilość : <b>#{pro.ilosc}</b><br/> 
 </ui:repeat>
-
+<br/>
 </ui:repeat>
-
-
+<p>#{kucharz.komunikat}</p>
+<h:form>
+		<h:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" immediate="true" style="float: right; height : 47px;" />
+</h:form>
 
 <p><a href="kucharz.jsf">Powrót</a></p>
 </h:body>

@@ -24,12 +24,21 @@ public class Kucharz {
 	
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
-	
+	private String Komunikat;
+
 	@ManagedProperty(value="#{logowanie.zalogowany}")
 	private Uzytkownik uzytkownik;	
 
 	public void setUzytkownik(Uzytkownik uzytkownik) {
 		this.uzytkownik = uzytkownik;
+	}
+	
+	public String getKomunikat() {
+		return Komunikat;
+	}
+
+	public void setKomunikat(String komunikat) {
+		Komunikat = komunikat;
 	}
 	
 	public List<Zamowienie> getZamowienia() {
@@ -45,8 +54,21 @@ public class Kucharz {
 	 * Pobiera zamówienie z listy zamówieñ o statusie <b>W kuchni</b> i dodaje go do swojej listy zamówieñ 
 	 * ustawiaj¹c status zamówienia na <b>Przygotywywany</b>
 	 */
-	public void pobierzZamowienie(){
+	public String pobierzZamowienie(){
 		
+		DaoZamowienie dao = new DaoZamowienie();
+		ArrayList<Zamowienie> ostatnieNieprzydzielone = (ArrayList<Zamowienie>) dao.pobierzNajstarszeNieprzydzielone();
+		
+		if (!ostatnieNieprzydzielone.isEmpty()) {
+			DaoZamowienie daoPrzypisz = new DaoZamowienie();
+			daoPrzypisz.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
+		}
+		
+		if(ostatnieNieprzydzielone.isEmpty()) {
+		Komunikat="Brak zamówieñ do pobrania!";	
+		}
+		
+		return "kucharz-moje.jsf";
 	}
 
 	/**
