@@ -14,30 +14,40 @@
 <h1 class="title">Złóż zamówienie</h1>
 
 <h:form id="zamowienieForm">
-Wpisz numer stolika<h:inputText value="#{kelner.tymczasowe.nrStolika}"  id="nrStolika"/>
+Wpisz numer stolika<h:inputText value="#{kelner.tymczasowe.nrStolika}"  id="nrStolika" required="true"  
+	requiredMessage="Pole wymagane"
+	validator="#{kelner.sprawdzNrStolika}" />
+	<h:message for="nrStolika" styleClass="error"/>
 <h:panelGrid columns="2">
 <h:panelGroup > 
-<h3>Dodane produkty do zamówienia</h3>
-<h:dataTable id="produktyZamowienia" var="produktZamowienia" value="#{kelner.produktyZamowienia}" border="1">
-	<h:column>
-		<f:facet name="header">Nazwa produktu</f:facet>
-		<h:outputText value="#{produktZamowienia.nazwa}" id="nazwa"/>		
-	</h:column>
-	<h:column>
-		<f:facet name="header">Ilość sztuk</f:facet>
-		<h:outputText value="#{produktZamowienia.iloscZamawianych}" id="sztuki"/>	
-		
-	</h:column>
-	<h:column>
-		<f:facet name="header">Usuń</f:facet>
-		<h:commandButton value="-1" action="#{kelner.usunProdukt(produktZamowienia.id)}"> 
-			<f:ajax render="nazwa sztuki"/>
-		</h:commandButton>
-	</h:column>
-</h:dataTable>
+
+
+<p:dataTable id="produktyZamowienia" var="produktZamowienia" value="#{kelner.produktyZamowienia}">
+    <f:facet name="header">
+        Produkty
+    </f:facet>
+ 
+    <p:column headerText="Nazwa">
+        <h:outputText value="#{produktZamowienia.nazwa}" />
+    </p:column>
+ 
+    <p:column headerText="Ilość">
+        <h:outputText value="#{produktZamowienia.iloscZamawianych}" />
+    </p:column>
+ 
+    <p:column headerText="Usuń">
+       <h:commandButton value="-1" action="#{kelner.usunProdukt(produktZamowienia.id)}" /> 
+    </p:column>
+    <f:facet name="footer">
+        Dodane produkty do zamówienia: #{kelner.iloscProduktowZamowienia}
+    </f:facet>
+</p:dataTable>
+
 
  <h:commandButton value="Zapisz"   id="zamowienieMessage" action="#{kelner.zapisz()}" />
- <h:commandButton value="Anuluj" action="#{kelner.anuluj()}"/>
+ <h:commandButton value="Anuluj" action="#{kelner.anuluj()}">
+ 	<f:ajax execute="@none"/>
+ </h:commandButton>
  <br />
  <h:message for="zamowienieMessage" styleClass="error" />
 </h:panelGroup>	  

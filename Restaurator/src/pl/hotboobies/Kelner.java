@@ -14,7 +14,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 
 import pl.hotboobies.dao.DaoGrupa;
 import pl.hotboobies.dao.DaoPozycja;
@@ -99,6 +101,10 @@ public class Kelner implements Serializable{
 
 	public void setProduktyZamowienia(List<Produkt> produktyZamowienia) {
 		this.produktyZamowienia = produktyZamowienia;
+	}
+	
+	public int getIloscProduktowZamowienia(){
+		return produktyZamowienia.size();
 	}
 
 	/** Wybrany identyfikator grupy produktów */
@@ -286,6 +292,7 @@ public class Kelner implements Serializable{
 			context.addMessage("zamowienieForm:zamowienieMessage", new FacesMessage(
 					"Nie mo¿esz zapisaæ pustego zamówienia"));
 		}
+		
 		if (context.getMessageList().size() > 0) {
 			return (null);
 		} else {
@@ -299,6 +306,17 @@ public class Kelner implements Serializable{
 				daoPozycja.dodajPozycjeZamowienia(tymczasowe.getIdZamowienia(), produkt.getId(), produkt.getIloscZamawianych());
 			}					
 			return "kelner";
+		}
+	}
+	
+	public void sprawdzNrStolika(FacesContext context, UIComponent componentToValidate, Object value)
+		throws ValidatorException {
+		try{
+			Integer.valueOf((String) value);
+		} catch (NumberFormatException e){
+			FacesMessage message =
+			new FacesMessage("Numer stolika musi byæ liczb¹");
+			throw new ValidatorException(message);
 		}
 	}
 	

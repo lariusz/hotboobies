@@ -18,17 +18,23 @@
 
 		<h2>Moje zamówienia</h2>
 		<h3>Nowe Zamówienia</h3>
-		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/>
-		<h:dataTable id="noweZamowienia" var="noweZamowienie" value="#{kelner.noweZamowienia}" >
+		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/> <br />
+		<h:dataTable id="noweZamowienia" var="noweZamowienie" value="#{kelner.noweZamowienia}" rendered="#{kelner.iloscNowychZamowien >0}" border="1" cellpadding="3">
 			<h:column>
 				<f:facet name="header">Zamówienie</f:facet>
 				#{noweZamowienie.idZamowienia}
 			</h:column>
 			<h:column>
-				<h:dataTable id="produkty" var="produkt" value="#{noweZamowienie.produkty}" >
-					<h:column><b>#{produkt.nazwa}</b></h:column>					
-					<h:column><b>#{produkt.ilosc}</b></h:column>
-				</h:dataTable>
+			<f:facet name="header">Nazwa produktu</f:facet>
+			<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
+				<h:outputText value="#{produkt.nazwa}"/> <br />
+			</ui:repeat>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Ilość</f:facet>
+			<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
+				<h:outputText value="#{produkt.ilosc}" style="float:center;" /> <br/>			
+			</ui:repeat>
 			</h:column>			
 			<h:column>
 				<f:facet name="header">Stolik</f:facet>
@@ -56,17 +62,23 @@
 		<br />
 		<h3>Zamówienia do podania</h3>
 		Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
-		<h:dataTable id="zamowieniaDoPodania" var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}" >
+		<h:dataTable id="zamowieniaDoPodania" var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}" rendered="#{kelner.iloscZamowienDoPodania >0}" border="1" cellpadding="3">
 			<h:column>
 				<f:facet name="header">Zamówienie</f:facet>
 				#{zamowienieDoPodania.idZamowienia}
-				<h:column>
-				<h:dataTable id="produkty" var="produkt" value="#{zamowienieDoPodania.produkty}" >
-					<h:column><b>#{produkt.nazwa}</b></h:column>					
-					<h:column><b>#{produkt.ilosc}</b></h:column>
-				</h:dataTable>
-				</h:column>
 			</h:column>
+			<h:column>
+			<f:facet name="header">Nazwa produktu</f:facet>
+			<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
+				<h:outputText value="#{produkt.nazwa}"/> <br />
+			</ui:repeat>
+			</h:column>
+			<h:column>
+			<f:facet name="header">Ilość</f:facet>
+			<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
+				<h:outputText value="#{produkt.ilosc}" style="float:center;" /> <br/>			
+			</ui:repeat>
+			</h:column>			
 			<h:column>
 				<f:facet name="header">Stolik</f:facet>
 				#{zamowienieDoPodania.nrStolika}
