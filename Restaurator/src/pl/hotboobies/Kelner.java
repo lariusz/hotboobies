@@ -34,6 +34,14 @@ public class Kelner implements Serializable{
 	/** Zamówienie które jest realizowane przez kelnera */
 	private Zamowienie tymczasowe;
 	
+	public Zamowienie getTymczasowe() {
+		return tymczasowe;
+	}
+
+	public void setTymczasowe(Zamowienie tymczasowe) {
+		this.tymczasowe = tymczasowe;
+	}
+
 	/** Zamówienia, które utworzy³ kelner w celu przekazania do kuchni */
 	private List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 	
@@ -168,14 +176,19 @@ public class Kelner implements Serializable{
 		produktyGrupy = (List<Produkt>) daoProdukt.pobierzWszystkieKolumny(idGrupy);
 	}
 	
+	private String usunZamówienie(int idZamowienia){
+		DaoPozycja daoPozycja = new DaoPozycja();
+		daoPozycja.usunPozycje(idZamowienia);
+		DaoZamowienie daoZamowienie = new DaoZamowienie();
+		daoZamowienie.usunZamowienie(idZamowienia);
+		return null;
+	}
+	
 	/**
 	 * Uswa nowe zamówienie z listy zamówieñ
 	 */
 	public String usunNoweZamowienie(int idZamowienia){
-		DaoPozycja daoPozycja = new DaoPozycja();
-		daoPozycja.usunPozycje(idZamowienia);
-		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		daoZamowienie.usunZamowienie(idZamowienia);		
+		
 		return null;
 	}
 	

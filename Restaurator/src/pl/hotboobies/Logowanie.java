@@ -98,5 +98,11 @@ public class Logowanie implements Serializable  {
 		}
 		return wynik;
 	}
+	
+	public String wyloguj(){
+		zalogowany = new Uzytkownik();
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		return "index";
+	}
 
 }
