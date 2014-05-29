@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,8 +36,8 @@ public class DaoProdukt {
 	 * @param grupa produktów dla której maja zostaæ zwrócone wyniki
 	 * @return kolekcjê obiektów Zamowienie
 	 */
-	public Collection<Produkt> pobierzWszystkieKolumny(int grupa) {
-		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
+	public List<Produkt> pobierzWszystkieKolumny(int grupa) {
+		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
 		try {
 			otworzPolaczenie();
 			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM produkt WHERE id_grupa = " + grupa);
@@ -62,8 +63,8 @@ public class DaoProdukt {
 	 * @param identyfikator zamówienia dla którego maja zostaæ zwrócone wyniki
 	 * @return kolekcjê obiektów Zamowienie
 	 */
-	public Collection<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
-		Collection<Produkt> produktyGrupy = new ArrayList<Produkt>();
+	public List<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
+		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
 		try {
 			otworzPolaczenie();
 			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM POZYCJA P, PRODUKT PR WHERE P.ID_PRODUKT=PR.ID_PRODUKT AND P.ID_ZAMOWIENIE = "+ idZamowienia);

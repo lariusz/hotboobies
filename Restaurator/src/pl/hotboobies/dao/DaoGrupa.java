@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,10 +36,10 @@ public class DaoGrupa {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public Collection<Grupa> pobierzWszystkieKolumny() {
+	public List<Grupa> pobierzWszystkieKolumny() {
 		if (ds == null)
 			ds = utworzZrodloDanych();
-		Collection<Grupa> grupy = new ArrayList<Grupa>();
+		List<Grupa> grupy = new ArrayList<Grupa>();
 		try {
 			otworzPolaczenie();
 			ResultSet wszystkieGrupy = st.executeQuery("SELECT * FROM grupa");

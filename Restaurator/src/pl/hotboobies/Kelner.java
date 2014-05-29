@@ -48,6 +48,12 @@ public class Kelner implements Serializable{
 	public List<Zamowienie> getNoweZamowienia() {
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
 		noweZamowienia = daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
+		
+		for (Zamowienie zamowienie : noweZamowienia) {
+			DaoProdukt daoProdukt = new DaoProdukt();
+			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}
 		return noweZamowienia;
 	}
 
@@ -61,7 +67,13 @@ public class Kelner implements Serializable{
 
 	public List<Zamowienie> getZamowieniaDoPodania() {
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		zamowieniaDoPodania = daoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());		
+		zamowieniaDoPodania = daoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());
+		
+		for (Zamowienie zamowienie : zamowieniaDoPodania) {
+			DaoProdukt daoProdukt = new DaoProdukt();
+			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}
 		return zamowieniaDoPodania;
 	}
 
@@ -164,7 +176,7 @@ public class Kelner implements Serializable{
 	 */
 	private void pobierzNazwyGrupProduktow(){
 		DaoGrupa daoGrupa = new DaoGrupa();
-		grupy = (List<Grupa>) daoGrupa.pobierzWszystkieKolumny();
+		grupy = daoGrupa.pobierzWszystkieKolumny();
 	}
 	
 	
@@ -173,7 +185,7 @@ public class Kelner implements Serializable{
 	 */
 	private void pobierzProdukty(){
 		DaoProdukt daoProdukt = new DaoProdukt();
-		produktyGrupy = (List<Produkt>) daoProdukt.pobierzWszystkieKolumny(idGrupy);
+		produktyGrupy = daoProdukt.pobierzWszystkieKolumny(idGrupy);
 	}
 	
 	private String usunZamówienie(int idZamowienia){

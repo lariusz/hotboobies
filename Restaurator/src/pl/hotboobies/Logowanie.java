@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -71,7 +72,7 @@ public class Logowanie implements Serializable  {
 	public String zaloguj() {
 		String wynik = null;
 		DaoUzytkownik daoUzytkowmik = new DaoUzytkownik();
-		ArrayList<Uzytkownik> uzytkownicy = (ArrayList<Uzytkownik>) daoUzytkowmik.pobierzWszystkich();
+		List<Uzytkownik> uzytkownicy = daoUzytkowmik.pobierzWszystkich();
 		for (Uzytkownik uzytkownik : uzytkownicy) {
 			if (zalogowany.getLogin().toLowerCase().equals(uzytkownik.getLogin().toLowerCase())
 					&& zalogowany.getHaslo().equals(uzytkownik.getHaslo())) {

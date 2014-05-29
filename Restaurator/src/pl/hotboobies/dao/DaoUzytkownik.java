@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,10 +36,10 @@ public class DaoUzytkownik {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public Collection<Uzytkownik> pobierzWszystkich() {				
+	public List<Uzytkownik> pobierzWszystkich() {				
 		if(ds == null)
 			ds = utworzZrodloDanych();
-		Collection<Uzytkownik> wszyscy = new ArrayList<Uzytkownik>();
+		List<Uzytkownik> wszyscy = new ArrayList<Uzytkownik>();
 		try{
 		otworzPolaczenie();
 		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik");

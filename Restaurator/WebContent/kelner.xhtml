@@ -25,6 +25,12 @@
 				#{noweZamowienie.idZamowienia}
 			</h:column>
 			<h:column>
+				<h:dataTable id="produkty" var="produkt" value="#{noweZamowienie.produkty}" >
+					<h:column><b>#{produkt.nazwa}</b></h:column>					
+					<h:column><b>#{produkt.ilosc}</b></h:column>
+				</h:dataTable>
+			</h:column>			
+			<h:column>
 				<f:facet name="header">Stolik</f:facet>
 				#{noweZamowienie.nrStolika}
 			</h:column>
@@ -51,9 +57,15 @@
 		<h3>Zamówienia do podania</h3>
 		Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
 		<h:dataTable id="zamowieniaDoPodania" var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}" >
-						<h:column>
+			<h:column>
 				<f:facet name="header">Zamówienie</f:facet>
 				#{zamowienieDoPodania.idZamowienia}
+				<h:column>
+				<h:dataTable id="produkty" var="produkt" value="#{zamowienieDoPodania.produkty}" >
+					<h:column><b>#{produkt.nazwa}</b></h:column>					
+					<h:column><b>#{produkt.ilosc}</b></h:column>
+				</h:dataTable>
+				</h:column>
 			</h:column>
 			<h:column>
 				<f:facet name="header">Stolik</f:facet>

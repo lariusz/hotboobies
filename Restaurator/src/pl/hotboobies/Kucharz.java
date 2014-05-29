@@ -53,7 +53,7 @@ public class Kucharz {
 	 */
 	public String pobierzZamowienie(){
 		DaoZamowienie dao = new DaoZamowienie();
-		ArrayList<Zamowienie> ostatnieNieprzydzielone = (ArrayList<Zamowienie>) dao.pobierzNajstarszeNieprzydzielone();
+		List<Zamowienie> ostatnieNieprzydzielone = dao.pobierzNajstarszeNieprzydzielone();
 		
 		if (!ostatnieNieprzydzielone.isEmpty()) {
 			DaoZamowienie daoPrzypisz = new DaoZamowienie();
@@ -95,7 +95,7 @@ public class Kucharz {
 	public void wyswietlZamowieniaWolne() {
 	
 		DaoZamowienie dao = new DaoZamowienie();
-		ArrayList<Zamowienie> wszystkie = (ArrayList<Zamowienie>) dao.pobierzWszystkieNieprzydzielone();	
+		List<Zamowienie> wszystkie = dao.pobierzWszystkieNieprzydzielone();	
 		zamowienia=wszystkie;
 		
 	}
@@ -103,11 +103,11 @@ public class Kucharz {
 	
 	public void wyswietlZamowieniaMoje() {
 		DaoZamowienie dao = new DaoZamowienie();
-		ArrayList<Zamowienie> wszystkieZamowienia = (ArrayList<Zamowienie>) dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
+		List<Zamowienie> wszystkieZamowienia = dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
 		for (Zamowienie zamowienie : wszystkieZamowienia) {
 			DaoProdukt daoProdukt = new DaoProdukt();
-			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		

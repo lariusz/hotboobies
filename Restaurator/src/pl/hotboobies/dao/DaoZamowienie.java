@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.naming.Context;
@@ -34,8 +33,8 @@ public class DaoZamowienie {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public Collection<Zamowienie> pobierzWszystkieNieprzydzielone(){				
-		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+	public List<Zamowienie> pobierzWszystkieNieprzydzielone(){				
+		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
 		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3 ORDER BY ID_ZAMOWIENIE");
@@ -57,8 +56,8 @@ public class DaoZamowienie {
 	 * @return pojedynczy wynik
 	 * @throws SQLException
 	 */
-	public Collection<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
-		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+	public List<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
+		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
 		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS=3 AND ROWNUM <= 1 ORDER BY ID_ZAMOWIENIE");
@@ -81,8 +80,8 @@ public class DaoZamowienie {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public Collection<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
-		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
+	public List<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
+		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
 		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 4 AND KUCHARZ_ID = "+idKucharza+"  ORDER BY ID_ZAMOWIENIE");
