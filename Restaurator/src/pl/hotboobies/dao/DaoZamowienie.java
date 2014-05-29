@@ -85,7 +85,7 @@ public class DaoZamowienie {
 		Collection<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
 		try{
 		otworzPolaczenie();
-		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 4 AND KUCHARZ_ID = "+idKucharza);
+		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 4 AND KUCHARZ_ID = "+idKucharza+"  ORDER BY ID_ZAMOWIENIE");
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),

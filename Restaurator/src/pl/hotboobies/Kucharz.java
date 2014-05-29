@@ -101,7 +101,7 @@ public class Kucharz {
 	}
 		
 	
-	public String wyswietlZamowieniaMoje() {
+	public void wyswietlZamowieniaMoje() {
 		DaoZamowienie dao = new DaoZamowienie();
 		ArrayList<Zamowienie> wszystkieZamowienia = (ArrayList<Zamowienie>) dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
@@ -113,7 +113,7 @@ public class Kucharz {
 		
 		zamowienia = wszystkieZamowienia;
 		Komunikat="";
-		return "kucharz-moje";
+	
 	}
 
 
