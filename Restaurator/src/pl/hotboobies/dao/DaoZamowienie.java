@@ -105,7 +105,7 @@ public class DaoZamowienie {
 		try{
 		otworzPolaczenie();
 		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
-				+ "WHERE id_status = 2 AND ID_UZYTKOWNIK = " + idUzytkownika);	
+				+ "WHERE id_status = 2 AND ID_UZYTKOWNIK = " + idUzytkownika + " ORDER BY ID_ZAMOWIENIE");	
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
@@ -128,7 +128,7 @@ public class DaoZamowienie {
 		try{
 		otworzPolaczenie();
 		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
-				+ "WHERE id_status = 4 AND ID_UZYTKOWNIK = " + idUzytkownika);	
+				+ "WHERE id_status = 5 AND ID_UZYTKOWNIK = " + idUzytkownika + " ORDER BY ID_ZAMOWIENIE");	
 		while(nowe.next()){
 			zamowieniaDoPodania.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
