@@ -171,12 +171,11 @@ public class Kelner implements Serializable{
 	/**
 	 * Tworzy puste zamówienie ze statusem <b>Tymczasowe</b>
 	 */
-	public String dodajZamowienie() throws SQLException{
+	public String dodajZamowienie() {
 		tymczasowe = new Zamowienie();
 		produktyZamowienia = new LinkedList<Produkt>();
 		tymczasowe.setIdKelnera(uzytkownik.getIdentyfikator());
 		tymczasowe.setIdStatus(1); // Status: Tymczasowe
-		tymczasowe.setIdZamowienia(new DaoZamowienie().pobierzIdOstatniegoZamowienia()+1);
 		pobierzNazwyGrupProduktow();
 		setIdGrupy(1); //Ustawia grupê na pierwszej pozycji
 		return "zamowienie";

@@ -13,11 +13,12 @@
 <h:body>
 
 <h:form>
- <br />
+<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" styleClass="wyloguj"/> 
+<h:outputText value="#{logowanie.zalogowany.nazwisko}  &emsp;"  styleClass="wyloguj"/> 
+<h:outputText value="#{logowanie.zalogowany.imie}  &nbsp;"  styleClass="wyloguj"/> 
+<br />
 <h:commandButton value="Dodaj zamówienie" action="#{kelner.dodajZamowienie}" style="float: center; width : 122px; height : 47px;" />
-<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" style="float:right;"/>
 <h1 class="title">Kelner</h1>
-
 		<h2>Moje zamówienia</h2>
 		<h3>Nowe Zamówienia</h3>	
 		Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/> <br />	

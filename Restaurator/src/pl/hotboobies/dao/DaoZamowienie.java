@@ -143,13 +143,11 @@ public class DaoZamowienie {
 		return zamowieniaDoPodania;
 	}
 	
-	public int pobierzIdOstatniegoZamowienia() throws SQLException{
-		otworzPolaczenie();
+	private int pobierzIdOstatniegoZamowienia() throws SQLException{
 		ResultSet max = st.executeQuery("SELECT max(id_zamowienie) FROM zamowienie");
 		max.next();
 		int idOstatniego = max.getInt(1);
 		max.close();
-		zamknijPolaczenie();
 		return idOstatniego;
 		
 	}
@@ -160,7 +158,7 @@ public class DaoZamowienie {
 		otworzPolaczenie();
 		st.executeUpdate("INSERT INTO zamowienie "
 				+ "(id_zamowienie, nr_stolika, id_status, id_uzytkownik, data_przyjecia) VALUES('"
-				+ tymczasowe.getIdZamowienia() + "', '" + Integer.parseInt(tymczasowe.getNrStolika()) + "', '"
+				+ (pobierzIdOstatniegoZamowienia()+1) + "', '" + Integer.parseInt(tymczasowe.getNrStolika()) + "', '"
 				+ tymczasowe.getIdStatus() + "', '"
 				+ tymczasowe.getIdKelnera() + "', " 
 				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())

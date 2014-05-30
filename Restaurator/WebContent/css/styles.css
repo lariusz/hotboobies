@@ -13,6 +13,10 @@
 	height: 20px;	
 }
 
+.wyloguj{
+	float:right;
+}
+
 #messageForm{
 	text-align: center;
 	color:red;
@@ -27,3 +31,7 @@
 #noweZamowienia{
 	float:center;
 }
+
+.col1 { width: 80%; }
+.col2 { width: 10%; }
+.col3 { width: 10%; }

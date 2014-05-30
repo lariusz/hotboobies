@@ -12,16 +12,11 @@
 </h:head>
 <h:body>
 <h:form id="form">
-<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" style="float:right;"/>
+<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" styleClass="wyloguj"/> 
+<h:outputText value="#{logowanie.zalogowany.nazwisko}  &emsp;"  styleClass="wyloguj"/> 
+<h:outputText value="#{logowanie.zalogowany.imie}  &nbsp;"  styleClass="wyloguj"/> 
+<br />
 <h1 class="title">Kierownik</h1>
-<h2>Zalogowałeś się</h2>
-<h:panelGrid columns="2"> 
-	Imię: <h:outputText value="#{logowanie.zalogowany.imie}" />
-	Nazwisko: <h:outputText value="#{logowanie.zalogowany.nazwisko}" />
-	e-mail: <h:outputText value="#{logowanie.zalogowany.mail}" />
-	tel: <h:outputText value="#{logowanie.zalogowany.telefon}" />
-	</h:panelGrid>
-	
 </h:form>
 <h:button outcome="kierownik-stan" value="Aktualizacja stanu produktów" style="float: left; height : 47px;" />
 </h:body>
