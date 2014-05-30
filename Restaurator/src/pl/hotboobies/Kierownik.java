@@ -3,8 +3,12 @@ package pl.hotboobies;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 
 import pl.hotboobies.dao.DaoProdukt;
 import pl.hotboobies.dao.DaoZamowienie;
@@ -91,5 +95,6 @@ WyswietlStan();
 		
 		return "kierownik-stan";
 			}
+
 
 }

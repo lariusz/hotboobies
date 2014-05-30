@@ -14,8 +14,8 @@
 <h:form>
 <h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" style="float:right;"/>
 <h1 class="title">Kucharz - Kuchnia</h1>
-<p><font color="red">#{kucharz.komunikat}</font></p>
 
+<h:outputText value="#{kucharz.komunikat}" styleClass="error" />
 
 #{kucharz.wyswietlZamowieniaMoje()}
 
@@ -25,7 +25,12 @@
 		 
 			<b>Zamówienie nr #{zam2.idZamowienia}</b>  <br/>
 			
-			Nr stolika : #{zam2.nrStolika} Id Kelnera : #{zam2.idKelnera} Data Przyjęcia : #{zam2.dataPrzyjecia} <br/>
+			Nr stolika : #{zam2.nrStolika} Id Kelnera : #{zam2.idKelnera} Data Przyjęcia : 
+			
+			<h:outputText value="#{zam2.dataPrzyjecia}">
+       <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Berlin" />
+    </h:outputText>
+			<br/>
 			
 		<h:dataTable id="mojeZamowienia2" var="pro2" value="#{zam2.produkty}" >
 			<h:column>Produkt <b>#{pro2.nazwa}</b> ilość : <b>#{pro2.ilosc}</b><br/> </h:column>

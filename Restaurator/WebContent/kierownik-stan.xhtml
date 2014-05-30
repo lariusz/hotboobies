@@ -21,24 +21,35 @@
 		 <f:facet name="header">Nazwa produktu</f:facet>
 		 <h:outputText value="#{pro.nazwa}"/> <br />
 			</h:column> 
+			
+				<h:column>			
+		 <f:facet name="header">Dostępność</f:facet>
+		<h:commandButton value="Nieaktywny" action="#{kierownik.aktywujProdukt(pro.id)}" rendered="#{!pro.aktywny}"  style="width : 122px;"/>
+		<h:commandButton value="Aktywny" action="#{kierownik.dezaktywujProdukt(pro.id)}" rendered="#{pro.aktywny}"  style="width : 122px;"/>
+			</h:column>  
 		
 			<h:column>			
 		 <f:facet name="header">Ilość produktu</f:facet>
 		 <h:outputText value="#{pro.ilosc}" /> <br />
 			</h:column> 
 			
-						<h:column>			
+						<h:column>		
+							
 		 <f:facet name="header">Nowy stan</f:facet>
-	<h:inputText value="#{pro.ilosc}" required="true"  
+
+	<h:inputText value="#{pro.ilosc}" required="true" id="ilosc"  
 	requiredMessage="Pole wymagane" style="width : 50px;"
+	converterMessage="Wartość musi być liczbą"
 	/>
+	
+	
+	
 			</h:column> 
 			
-		<h:column>			
-		 <f:facet name="header">Dostępność</f:facet>
-		<h:commandButton value="Nieaktywny" action="#{kierownik.aktywujProdukt(pro.id)}" rendered="#{!pro.aktywny}"  style="width : 122px;"/>
-		<h:commandButton value="Aktywny" action="#{kierownik.dezaktywujProdukt(pro.id)}" rendered="#{pro.aktywny}"  style="width : 122px;"/>
-			</h:column>  
+			<h:column>
+			<h:message for="ilosc" styleClass="error"/>
+			</h:column>
+			
 			
 		</h:dataTable>
 		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" style="float: left; height : 47px;"/> 
