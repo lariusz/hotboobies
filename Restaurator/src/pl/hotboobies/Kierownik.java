@@ -31,6 +31,7 @@ public class Kierownik {
 	public Kierownik() {
 		super();
 		raport = new Raport();
+		 WyswietlStan();
 	}
 
 	/**

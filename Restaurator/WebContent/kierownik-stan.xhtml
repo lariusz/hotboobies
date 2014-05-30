@@ -12,8 +12,9 @@
 </h:head>
 <h:body>
 <h:form>
+<h:commandLink value="Powrót" action="kierownik" style="float:right;"/>
 <h1 class="title">Kierownik - Stan produktów</h1>
- 
+  
 		<h:dataTable id="Produkty" var="pro" value="#{kierownik.produkty}" >
 			
 			<h:column>			
@@ -36,6 +37,5 @@
 		</h:dataTable>
 		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" /> 
 </h:form>
-<p><a href="kierownik.jsf">Powrót</a></p>
 </h:body>
 </html>

@@ -22,10 +22,7 @@
 	tel: <h:outputText value="#{logowanie.zalogowany.telefon}" />
 	</h:panelGrid>
 	
-<h:commandButton value="Uzupełnij stan produktów" action="#{kierownik.WyswietlStan()}" immediate="true" style="float: left; height : 47px;">
-<f:ajax render="@all"/>
-</h:commandButton>
-	
 </h:form>
+<h:button outcome="kierownik-stan" value="Aktualizacja stanu produktów" style="float: left; height : 47px;" />
 </h:body>
 </html>
