@@ -134,6 +134,21 @@ public class DaoProdukt {
 				e.printStackTrace();
 			}
 		}
+		
+		
+		/**
+		 * Aktualizuj aktywnoœæ produktu o podanym id
+		 * @return void
+		 */
+			public void aktulizujAktywnosc(int idProduktu, int stan) {
+				try{
+				otworzPolaczenie();
+				st.executeUpdate("UPDATE produkt SET aktywny = " + stan +" WHERE id_produkt = " + idProduktu);	
+				zamknijPolaczenie();
+				}catch (SQLException e){
+					e.printStackTrace();
+				}
+			}
 
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych

@@ -67,6 +67,23 @@ public class Kierownik {
 		WyswietlStan();
 	}
 	
+	public void aktywujProdukt(int idProduktu){
+		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
+	
+DaoProdukt daoAktualizuj = new DaoProdukt();
+daoAktualizuj.aktulizujAktywnosc(idProduktu, 1);
+WyswietlStan();
+
+	}
+	
+	public void dezaktywujProdukt(int idProduktu){
+		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
+DaoProdukt daoAktualizuj = new DaoProdukt();
+daoAktualizuj.aktulizujAktywnosc(idProduktu, 0);
+WyswietlStan();
+
+	}
+	
 	public String WyswietlStan(){
 			DaoProdukt dao = new DaoProdukt();
 			produkty = dao.pobierzWszystkieKolumny();	
