@@ -15,8 +15,8 @@
 <h:commandLink value="Powrót" action="kierownik" style="float:right;"/>
 <h1 class="title">Kierownik - Stan produktów</h1>
   
-		<h:dataTable id="Produkty" var="pro" value="#{kierownik.produkty}" >
-			
+		<h:dataTable id="Produkty" var="pro" value="#{kierownik.produkty}" border="1">
+
 			<h:column>			
 		 <f:facet name="header">Nazwa produktu</f:facet>
 		 <h:outputText value="#{pro.nazwa}"/> <br />
@@ -42,17 +42,14 @@
 	converterMessage="Wartość musi być liczbą"
 	/>
 	
-	
-	
 			</h:column> 
+
 			
-			<h:column>
-			<h:message for="ilosc" styleClass="error"/>
-			</h:column>
-			
-			
+
 		</h:dataTable>
-		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" style="float: left; height : 47px;"/> 
+			<h:message for="ilosc" styleClass="error"/> 
+		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" style="height : 47px;"/> 
+	
 </h:form>
 </h:body>
 </html>

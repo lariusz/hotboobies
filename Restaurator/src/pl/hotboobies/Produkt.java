@@ -9,6 +9,7 @@ public class Produkt {
 	private int id;
 	private String nazwa;
 	private String grupa;
+	private int idGrupa;
 	private int ilosc;
 	private int iloscZamawianych;
 	private Date czasAktualizacji;
@@ -24,6 +25,17 @@ public class Produkt {
 		this.ilosc = ilosc;		
 		this.czasWykonania = czasWykonania;
 		this.aktywny = aktywny;
+	}
+	
+	public Produkt(int id, String nazwa, int ilosc,
+			 int czasWykonania, boolean aktywny, int idGrupa) {
+		super();
+		this.id = id;
+		this.nazwa = nazwa;
+		this.ilosc = ilosc;		
+		this.czasWykonania = czasWykonania;
+		this.aktywny = aktywny;
+		this.idGrupa=idGrupa;
 	}
 	
 	public boolean inkrementujIloscZamawianych(){
@@ -88,6 +100,14 @@ public class Produkt {
 	}
 	public void setCzasWykonania(int czasWykonania) {
 		this.czasWykonania = czasWykonania;
+	}
+		
+	public int getIdGrupa() {
+		return idGrupa;
+	}
+
+	public void setIdGrupa(int idGrupa) {
+		this.idGrupa = idGrupa;
 	}
 
 }

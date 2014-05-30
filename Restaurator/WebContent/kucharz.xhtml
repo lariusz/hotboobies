@@ -14,10 +14,9 @@
 <h:form>
 <h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" style="float:right;"/>
 <h1 class="title">Kucharz - Kuchnia</h1>
-
-<h:outputText value="#{kucharz.komunikat}" styleClass="error" />
-
+<h:outputText value="#{kucharz.komunikat}" styleClass="error" /> <br/>
 #{kucharz.wyswietlZamowieniaMoje()}
+<h:outputText value="Ilość zamówień do przygotowania : #{kucharz.licznik}" />
 
 		<h:dataTable id="mojeZamowienia" var="zam2" value="#{kucharz.zamowienia}" >
 			
