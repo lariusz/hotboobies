@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+<link href="./css/styles.css" 
+      rel="stylesheet" type="text/css"/> 
+<title>Kierownik</title>
+</h:head>
+<h:body>
+<h:form>
+<h1 class="title">Kierownik - Stan produktów</h1>
+ 
+		<h:dataTable id="Produkty" var="pro" value="#{kierownik.produkty}" >
+			
+			<h:column>			
+		 <f:facet name="header">Nazwa produktu</f:facet>
+		 <h:outputText value="#{pro.nazwa}"/> <br />
+			</h:column> 
+		
+			<h:column>			
+		 <f:facet name="header">Ilość produktu</f:facet>
+		 <h:outputText value="#{pro.ilosc}"/> <br />
+			</h:column> 
+			
+						<h:column>			
+		 <f:facet name="header">Nowy stan</f:facet>
+	<h:inputText value="#{pro.ilosc}" required="true"  
+	requiredMessage="Pole wymagane" 
+	/>
+			</h:column> 
+			
+		</h:dataTable>
+		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" /> 
+</h:form>
+<p><a href="kierownik.jsf">Powrót</a></p>
+</h:body>
+</html>

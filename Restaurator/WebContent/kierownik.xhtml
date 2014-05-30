@@ -11,9 +11,9 @@
 <title>Kierownik</title>
 </h:head>
 <h:body>
-<h1 class="title">Kierownik</h1>
-
 <h:form id="form">
+<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" style="float:right;"/>
+<h1 class="title">Kierownik</h1>
 <h2>Zalogowałeś się</h2>
 <h:panelGrid columns="2"> 
 	Imię: <h:outputText value="#{logowanie.zalogowany.imie}" />
@@ -21,6 +21,11 @@
 	e-mail: <h:outputText value="#{logowanie.zalogowany.mail}" />
 	tel: <h:outputText value="#{logowanie.zalogowany.telefon}" />
 	</h:panelGrid>
+	
+<h:commandButton value="Uzupełnij stan produktów" action="#{kierownik.WyswietlStan()}" immediate="true" style="float: left; height : 47px;">
+<f:ajax render="@all"/>
+</h:commandButton>
+	
 </h:form>
 </h:body>
 </html>

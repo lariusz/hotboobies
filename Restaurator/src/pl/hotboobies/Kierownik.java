@@ -1,7 +1,13 @@
 package pl.hotboobies;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import pl.hotboobies.dao.DaoProdukt;
+import pl.hotboobies.dao.DaoZamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kierownika
@@ -12,7 +18,16 @@ import javax.faces.bean.SessionScoped;
 public class Kierownik {
 	
 	Raport raport;
+	private List<Produkt> produkty;
 	
+	public List<Produkt> getProdukty() {
+		return produkty;
+	}
+
+	public void setProdukty(List<Produkt> produkty) {
+		this.produkty = produkty;
+	}
+
 	public Kierownik() {
 		super();
 		raport = new Raport();
@@ -36,8 +51,27 @@ public class Kierownik {
 	/**
 	 * Pozwala uzupe³niæ zapasy magazynowe wybranego produktu
 	 */
-	public void uzupe³nijStan(Produkt produkt){
+	public void uzupelnijStan(Produkt produkt){
 		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
 	}
+	
+	public void uzupelnijStan(){
+		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
+	
+		for(Produkt produktEl : produkty) {
+			DaoProdukt daoAktualizuj = new DaoProdukt();
+			daoAktualizuj.aktulizujIloscProduktu(produktEl.getId(), produktEl.getIlosc());
+		}
+		
+		WyswietlStan();
+	}
+	
+	public String WyswietlStan(){
+			DaoProdukt dao = new DaoProdukt();
+			produkty = dao.pobierzWszystkieKolumny();	
+		
+		
+		return "kierownik-stan";
+			}
 
 }

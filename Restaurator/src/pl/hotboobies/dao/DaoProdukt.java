@@ -29,6 +29,32 @@ public class DaoProdukt {
 	
 	/** Obiekt zapytania do bazy danych */	
 	private Statement st;
+	
+	
+	/**
+	 * Pobiera wszystkie kolumny dla wszystkich grup
+	 * @return kolekcjê obiektów Zamowienie
+	 */
+	public List<Produkt> pobierzWszystkieKolumny() {
+		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		try {
+			otworzPolaczenie();
+			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM produkt ORDER BY id_grupa");
+				while(wszystkieProdukty.next()){
+					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
+							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getInt("ilosc"),
+							wszystkieProdukty.getInt("czas_wykonania"),
+							wszystkieProdukty.getInt("aktywny") == 1));
+				}
+				wszystkieProdukty.close();
+				zamknijPolaczenie();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+		return produktyGrupy;
+	}
 		
 	
 	/**
@@ -95,6 +121,19 @@ public class DaoProdukt {
 		return st.executeQuery("SELECT * FROM produkt WHERE id_produkt = " + id);
 	}
 	
+	/**
+	 * Aktualizuje iloœæ dla produktu o wskazanym id
+	 * @return void
+	 */
+		public void aktulizujIloscProduktu(int idProduktu, int iloscProduktu) {
+			try{
+			otworzPolaczenie();
+			st.executeUpdate("UPDATE produkt SET ilosc = " + iloscProduktu +" WHERE id_produkt = " + idProduktu);	
+			zamknijPolaczenie();
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+		}
 
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
