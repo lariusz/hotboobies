@@ -48,15 +48,30 @@ public class Kelner implements Serializable{
 	private List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
 	
 	public List<Zamowienie> getNoweZamowienia() {
+		return noweZamowienia;
+	}
+	
+	private void pobierzNoweZamowienia(){
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
 		noweZamowienia = daoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
 		
 		for (Zamowienie zamowienie : noweZamowienia) {
 			DaoProdukt daoProdukt = new DaoProdukt();
-			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
-		}
-		return noweZamowienia;
+		}		
+	}
+
+	
+	private void pobierzZamowieniaDoPodania(){
+		DaoZamowienie daoZamowienie = new DaoZamowienie();
+		zamowieniaDoPodania = daoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());
+		
+		for (Zamowienie zamowienie : zamowieniaDoPodania) {
+			DaoProdukt daoProdukt = new DaoProdukt();
+			List<Produkt> produkty = daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}		
 	}
 
 	public void setNoweZamowienia(List<Zamowienie> noweZamowienia) {
@@ -68,14 +83,6 @@ public class Kelner implements Serializable{
 	
 
 	public List<Zamowienie> getZamowieniaDoPodania() {
-		DaoZamowienie daoZamowienie = new DaoZamowienie();
-		zamowieniaDoPodania = daoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());
-		
-		for (Zamowienie zamowienie : zamowieniaDoPodania) {
-			DaoProdukt daoProdukt = new DaoProdukt();
-			List<Produkt> produkty = (ArrayList<Produkt>) daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
-			zamowienie.setProdukty(produkty);
-		}
 		return zamowieniaDoPodania;
 	}
 
@@ -84,11 +91,12 @@ public class Kelner implements Serializable{
 	}
 
 	public int getIloscNowychZamowien() {
-		getNoweZamowienia();
+		pobierzNoweZamowienia();
 		return noweZamowienia.size();
 	}
 
 	public int getIloscZamowienDoPodania() {
+		pobierzZamowieniaDoPodania();
 		return zamowieniaDoPodania.size();
 	}
 	
@@ -194,7 +202,10 @@ public class Kelner implements Serializable{
 		produktyGrupy = daoProdukt.pobierzWszystkieKolumny(idGrupy);
 	}
 	
-	private String usunZamówienie(int idZamowienia){
+	/**
+	 * Uswa zamówienie z listy zamówieñ
+	 */
+	public String usunZamowienie(int idZamowienia){
 		DaoPozycja daoPozycja = new DaoPozycja();
 		daoPozycja.usunPozycje(idZamowienia);
 		DaoZamowienie daoZamowienie = new DaoZamowienie();
@@ -202,22 +213,6 @@ public class Kelner implements Serializable{
 		return null;
 	}
 	
-	/**
-	 * Uswa nowe zamówienie z listy zamówieñ
-	 */
-	public String usunNoweZamowienie(int idZamowienia){
-		
-		return null;
-	}
-	
-	/**
-	 * Uswa zamówienie do podania z listy zamówieñ
-	 */
-	public String usunZamowienieDoPodania(int idZamowienia){
-		
-		return null;
-	}
-
 	/**
 	 * Dodaje do listy zamówieñ oczekuj¹cych na pobranie przez kucharza
 	 * Zmienia status zamówienia na <b>W kuchni</b>
@@ -230,10 +225,11 @@ public class Kelner implements Serializable{
 	
 	/**
 	 * Usuwa z listy zamówieñ do podania
-	 * Zmienia status zamówienia na <b>Zaserwowany</b>
+	 * Zmienia status zamówienia na <b>Zaserwowane</b>
 	 */
 	public String doKlienta(int idZamowienia){
-		System.out.println("Do klienta zamówienie nr: " + idZamowienia);
+		DaoZamowienie zamowienie = new DaoZamowienie();
+		zamowienie.zmienStatusZamowienia(idZamowienia, 6);
 		return null;
 	}
 	
