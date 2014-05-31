@@ -22,6 +22,7 @@ public class Kucharz {
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
 	private String Komunikat;
+	private int licznik;
 
 	@ManagedProperty(value="#{logowanie.zalogowany}")
 	private Uzytkownik uzytkownik;	
@@ -45,6 +46,14 @@ public class Kucharz {
 
 	public void setZamowienia(List<Zamowienie> zamowienia) {
 		this.zamowienia = zamowienia;
+	}
+	
+	public int getLicznik() {
+		return licznik;
+	}
+
+	public void setLicznik(int licznik) {
+		this.licznik = licznik;
 	}
 	
 	/**
@@ -113,6 +122,7 @@ public class Kucharz {
 		
 		zamowienia = wszystkieZamowienia;
 		Komunikat="";
+		licznik=zamowienia.size();
 	
 	}
 

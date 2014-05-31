@@ -45,7 +45,10 @@ public class DaoProdukt {
 							wszystkieProdukty.getString("nazwa"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
-							wszystkieProdukty.getInt("aktywny") == 1));
+							wszystkieProdukty.getInt("aktywny") == 1,
+							wszystkieProdukty.getInt("id_grupa"))
+							);
+						 
 				}
 				wszystkieProdukty.close();
 				zamknijPolaczenie();
