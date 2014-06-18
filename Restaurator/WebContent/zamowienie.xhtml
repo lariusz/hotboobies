@@ -1,77 +1,86 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">    
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> 
-<title>Zamówienie</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<title>Zamówienie</title>
 </h:head>
 <h:body>
-<h1 class="title">Złóż zamówienie</h1>
-<h:form id="zamowienieForm">
-Wpisz numer stolika &emsp;<h:inputText value="#{kelner.tymczasowe.nrStolika}"  id="nrStolika" required="true"  
-	requiredMessage="Pole wymagane"
-	validator="#{kelner.sprawdzNrStolika}" />
-	<h:message for="nrStolika" styleClass="error"/>
-<h:panelGrid columns="2" cellpadding="0">
-<h:panelGroup> 
-<p:dataTable id="produktyZamowienia" var="produktZamowienia" value="#{kelner.produktyZamowienia}" style="width: 700px;">
-    <f:facet name="header">
-        Produkty
-    </f:facet>
- 
-    <p:column headerText="Nazwa" styleClass="col1">
-        <h:outputText value="#{produktZamowienia.nazwa}" />
-    </p:column>
- 
-    <p:column headerText="Ilość" styleClass="col2">
-        <h:outputText value="#{produktZamowienia.iloscZamawianych}" />
-    </p:column>
- 
-    <p:column headerText="Usuń" styleClass="col3">
-       <h:commandButton value="-1" action="#{kelner.usunProdukt(produktZamowienia.id)}" >
- 			<f:ajax render=":zamowienieForm:produktyZamowienia"/>
- 		</h:commandButton>
-    </p:column>
-    <f:facet name="footer">
-        Dodane produkty do zamówienia: #{kelner.iloscProduktowZamowienia}
-    </f:facet>
-</p:dataTable>
-
-
- <h:commandButton value="Zapisz"   id="zamowienieMessage" action="#{kelner.zapisz()}" style=" width : 86px; height : 41px;"/>
- <h:commandButton value="Anuluj" action="#{kelner.anuluj()}" style=" width : 86px; height : 41px;">
- 	<f:ajax execute="@this"/>
- </h:commandButton>
- <br />
- <h:message for="zamowienieMessage" styleClass="error" />
-</h:panelGroup>	  
-<h:panelGroup >
-
-<h:panelGrid columns="2" style=" height : 199px;">
-
-
-<h:selectOneListbox value="#{kelner.idGrupy}">
-	<f:selectItems value="#{kelner.grupy}"  var="grupa" itemValue="#{grupa.id}" itemLabel="#{grupa.nazwa}" />
-	<f:ajax render="produktyGrupy"/>
-</h:selectOneListbox>
-
-<h:dataTable id="produktyGrupy" var="produktGrupy" value="#{kelner.produktyGrupy}">
-<h:column>
-	<h:commandButton value="#{produktGrupy.nazwa}" action="#{kelner.dodajProdukt(produktGrupy.id)}" >
-	<f:ajax render=":zamowienieForm:produktyZamowienia"/>
-	</h:commandButton>
-</h:column>
-
-</h:dataTable>
-</h:panelGrid>
-</h:panelGroup>
-
-</h:panelGrid>
-</h:form>
+	<h:form id="zamowienie">
+		<center>
+			<p:outputLabel value="KELNER" styleClass="title" />
+		</center>
+		<p:toolbar id="tb">
+			<f:facet name="left">
+				<p:commandButton id="zapiszZamowienie" value="Zapisz"
+					action="#{kelner.zapisz()}" ajax="false" />
+				<p:commandButton value="Anuluj" action="#{kelner.anuluj()}"
+					process="@this" />
+			</f:facet>
+			<f:facet name="right">
+				<p:spacer width="300" height="10" />
+				<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;" />
+				<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;" />
+				<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}"
+					process="@this" />
+			</f:facet>
+		</p:toolbar>
+		<p:sticky target="tb" />
+		<p:messages id="messages" showDetail="true" globalOnly="true"
+			autoUpdate="true" closable="true" />
+			<br />
+		<h:panelGrid columns="3" cellpadding="5">
+			<p:outputLabel for="nrStolika" value="Numer stolika" />
+			<p:inputText value="#{kelner.tymczasowe.nrStolika}" id="nrStolika"
+				required="true" requiredMessage="Musisz podać numer stolika"
+				validatorMessage="Numer stolika musi być liczbą od 1 do 999"
+				converterMessage="Numer stolika musi być liczbą całkowitą">
+				<f:validateLength minimum="1" maximum="3" />
+			</p:inputText>
+			<p:message for="nrStolika" />
+		</h:panelGrid>
+		<br />
+		
+		<p:tabView var="grupa" value="#{kelner.grupy}" scrollable="true" orientation="top" >
+        		<p:tab title="#{grupa.nazwa}">
+            		<h:panelGroup id="produktyGrupy">
+						<p:dataTable var="produktGrupy" value="#{kelner.produktyGrupy(grupa.id)}">
+							<p:column>
+								<p:commandButton value="#{produktGrupy.nazwa} [cena: #{produktGrupy.cena} zł - dostępne #{produktGrupy.ilosc} szt.]"
+									action="#{kelner.dodajProdukt(produktGrupy.id)}" 
+									update=":zamowienie:produktyZamowienia" process="@this"/>
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+        		</p:tab>
+    	</p:tabView>
+		
+			<h:panelGroup id="produktyZamowienia">
+				<p:dataTable var="produktZamowienia"  rendered="#{kelner.iloscProduktowZamowienia >0}"
+					value="#{kelner.produktyZamowienia}"
+					tableStyle="table-layout:auto;width:100%;"
+					emptyMessage="Nie dodano produktów">
+					<f:facet name="header">Szczegóły zamówienia</f:facet>
+					<p:column headerText="Nazwa produktu" >
+						<h:outputText value="#{produktZamowienia.nazwa}" />
+					</p:column>
+					<p:column headerText="Ilość">
+						<h:outputText value="#{produktZamowienia.iloscZamawianych}" />
+					</p:column>
+					<p:column headerText="Usuń">
+						<p:commandButton value="-1"
+							action="#{kelner.usunProdukt(produktZamowienia.id)}" 
+							update=":zamowienie:produktyZamowienia" process="@this"/>
+					</p:column>
+					<f:facet name="footer">
+       					 Dodane produkty do zamówienia: <h:outputText value="#{kelner.iloscProduktowZamowienia}" />
+   					 </f:facet>
+				</p:dataTable>
+			</h:panelGroup>
+	</h:form>
 </h:body>
 </html>

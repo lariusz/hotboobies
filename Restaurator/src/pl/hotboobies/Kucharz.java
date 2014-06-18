@@ -1,11 +1,14 @@
 package pl.hotboobies;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import pl.hotboobies.dao.DaoProdukt;
 import pl.hotboobies.dao.DaoZamowienie;
@@ -17,14 +20,16 @@ import pl.hotboobies.dao.DaoZamowienie;
 
 @ManagedBean
 @SessionScoped
-public class Kucharz {
+public class Kucharz implements Serializable {
 	
+	private static final long serialVersionUID = 360396799453001524L;
+
 	/** Zamówienia które pobra³ kucharz do przygotowania */
 	private List<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
 	private String Komunikat;
 	private int licznik;
 
-	@ManagedProperty(value="#{logowanie.zalogowany}")
+	@ManagedProperty(value="#{sesja.zalogowany}")
 	private Uzytkownik uzytkownik;	
 
 	public void setUzytkownik(Uzytkownik uzytkownik) {
@@ -61,16 +66,17 @@ public class Kucharz {
 	 * ustawiaj¹c status zamówienia na <b>Przygotywywany</b>
 	 */
 	public String pobierzZamowienie(){
-		DaoZamowienie dao = new DaoZamowienie();
-		List<Zamowienie> ostatnieNieprzydzielone = dao.pobierzNajstarszeNieprzydzielone();
+		
+		List<Zamowienie> ostatnieNieprzydzielone = DaoZamowienie.pobierzNajstarszeNieprzydzielone();
 		
 		if (!ostatnieNieprzydzielone.isEmpty()) {
-			DaoZamowienie daoPrzypisz = new DaoZamowienie();
-			daoPrzypisz.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
+			DaoZamowienie.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
 			wyswietlZamowieniaMoje();
 		}		
 		else  {
-		Komunikat="Brak zamówieñ do pobrania!";	
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacja", 
+					"Brak zamówieñ do pobrania - spróbuj za chwilê."));
 		}
 		return null;
 	}
@@ -81,8 +87,7 @@ public class Kucharz {
 	 */
 	public String zwrocZamowienie(int idZamowienia){
 	
-		DaoZamowienie daoPrzypisz = new DaoZamowienie();
-		daoPrzypisz.zwrocZamowienie(idZamowienia);
+		DaoZamowienie.zwrocZamowienie(idZamowienia);
 		wyswietlZamowieniaMoje();
 	
 		return null;
@@ -94,34 +99,28 @@ public class Kucharz {
 	 */
 	public String doKelnera(int idZamowienia){
 		
-		DaoZamowienie daoPrzypisz = new DaoZamowienie();
-		daoPrzypisz.przekazDoKelnera(idZamowienia);
+		DaoZamowienie.przekazDoKelnera(idZamowienia);
 		wyswietlZamowieniaMoje();
 		
 		return null;
 	}
 	
-	public void wyswietlZamowieniaWolne() {
-	
-		DaoZamowienie dao = new DaoZamowienie();
-		List<Zamowienie> wszystkie = dao.pobierzWszystkieNieprzydzielone();	
+	public void wyswietlZamowieniaWolne() {	
+		List<Zamowienie> wszystkie = DaoZamowienie.pobierzWszystkieNieprzydzielone();	
 		zamowienia=wszystkie;
 		
 	}
 		
 	
 	public void wyswietlZamowieniaMoje() {
-		DaoZamowienie dao = new DaoZamowienie();
-		List<Zamowienie> wszystkieZamowienia = dao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
+		List<Zamowienie> wszystkieZamowienia = DaoZamowienie.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
 		for (Zamowienie zamowienie : wszystkieZamowienia) {
-			DaoProdukt daoProdukt = new DaoProdukt();
-			List<Produkt> produkty = daoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		
 		zamowienia = wszystkieZamowienia;
-		Komunikat="";
 		licznik=zamowienia.size();
 	
 	}

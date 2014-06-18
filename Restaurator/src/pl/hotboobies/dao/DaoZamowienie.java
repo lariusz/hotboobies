@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.naming.Context;
@@ -22,10 +22,10 @@ import pl.hotboobies.Zamowienie;
  */
 public class DaoZamowienie {
 	
-	private Connection conn;
-	private Statement st;
-	private Context initContext;
-	private DataSource ds;
+	private static Connection conn;
+	private static Statement st;
+	private static Context initContext;
+	private static DataSource ds;
 	
 	
 	/**
@@ -33,20 +33,21 @@ public class DaoZamowienie {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public List<Zamowienie> pobierzWszystkieNieprzydzielone(){				
+	public static List<Zamowienie> pobierzWszystkieNieprzydzielone(){				
 		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
-		try{
 		otworzPolaczenie();
-		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3 ORDER BY ID_ZAMOWIENIE");
-		while(wszysieZamowienia.next()){
+		try{
+		ResultSet wszystkieZamowienia = st.executeQuery("SELECT * FROM zamowienie  WHERE ID_STATUS=3 ORDER BY ID_ZAMOWIENIE");
+		while(wszystkieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
-					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getTimestamp("data_przyjecia"), String.valueOf(wszysieZamowienia.getInt("nr_stolika")),
-					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
+					wszystkieZamowienia.getInt("id_zamowienie"), wszystkieZamowienia.getInt("id_status"),
+					wszystkieZamowienia.getTimestamp("data_przyjecia"), wszystkieZamowienia.getInt("nr_stolika"),
+					wszystkieZamowienia.getInt("id_uzytkownik"), wszystkieZamowienia.getInt("kucharz_id")));
 		}
-		zamknijPolaczenie();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		return wszystkie;
 	}
@@ -56,20 +57,21 @@ public class DaoZamowienie {
 	 * @return pojedynczy wynik
 	 * @throws SQLException
 	 */
-	public List<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
+	public static List<Zamowienie> pobierzNajstarszeNieprzydzielone(){				
 		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS=3 AND ROWNUM <= 1 ORDER BY ID_ZAMOWIENIE");
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getTimestamp("data_przyjecia"), String.valueOf(wszysieZamowienia.getInt("nr_stolika")),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
-		zamknijPolaczenie();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		return wszystkie;
 	}
@@ -80,41 +82,43 @@ public class DaoZamowienie {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public List<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
+	public static List<Zamowienie> pobierzPrzydzieloneDoKucharza(int idKucharza){				
 		List<Zamowienie> wszystkie = new ArrayList<Zamowienie>();
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet wszysieZamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 4 AND KUCHARZ_ID = "+idKucharza+"  ORDER BY ID_ZAMOWIENIE");
 		while(wszysieZamowienia.next()){
 			wszystkie.add(new Zamowienie(
 					wszysieZamowienia.getInt("id_zamowienie"), wszysieZamowienia.getInt("id_status"),
-					wszysieZamowienia.getTimestamp("data_przyjecia"), String.valueOf(wszysieZamowienia.getInt("nr_stolika")),
+					wszysieZamowienia.getTimestamp("data_przyjecia"), wszysieZamowienia.getInt("nr_stolika"),
 					wszysieZamowienia.getInt("id_uzytkownik"), wszysieZamowienia.getInt("kucharz_id")));
 		}
-		zamknijPolaczenie();
 		} catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		return wszystkie;
 	}
 	
 	
-	public List<Zamowienie> pobierzZamowione(int idUzytkownika) {
+	public static List<Zamowienie> pobierzZamowione(int idUzytkownika) {
 		List<Zamowienie> noweZamowienia = new ArrayList<Zamowienie>();
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
 				+ "WHERE id_status = 2 AND ID_UZYTKOWNIK = " + idUzytkownika + " ORDER BY ID_ZAMOWIENIE");	
 		while(nowe.next()){
 			noweZamowienia.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
-					nowe.getTimestamp("data_przyjecia"), String.valueOf(nowe.getInt("nr_stolika")),
+					nowe.getTimestamp("data_przyjecia"), nowe.getInt("nr_stolika"),
 					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
 		}
 		nowe.close();
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		
 		return noweZamowienia;
@@ -122,64 +126,123 @@ public class DaoZamowienie {
 	
 
 
-	public List<Zamowienie> pobierzDlaKlienta(int idUzytkownika) {
+	public static List<Zamowienie> pobierzDlaKlienta(int idUzytkownika) {
 		List<Zamowienie> zamowieniaDoPodania = new ArrayList<Zamowienie>();
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet nowe = st.executeQuery("SELECT * FROM zamowienie "				
 				+ "WHERE id_status = 5 AND ID_UZYTKOWNIK = " + idUzytkownika + " ORDER BY ID_ZAMOWIENIE");	
 		while(nowe.next()){
 			zamowieniaDoPodania.add(new Zamowienie(
 					nowe.getInt("id_zamowienie"), nowe.getInt("id_status"),
-					nowe.getTimestamp("data_przyjecia"), String.valueOf(nowe.getInt("nr_stolika")),
+					nowe.getTimestamp("data_przyjecia"), nowe.getInt("nr_stolika"),
 					nowe.getInt("id_uzytkownik"), nowe.getInt("kucharz_id")));
 		}
 		nowe.close();
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		
 		return zamowieniaDoPodania;
 	}
 	
-	private int pobierzIdOstatniegoZamowienia() throws SQLException{
+	/**
+	 * Pobiera id ostatniego zamówienia.
+	 * @return id zamówienia
+	 */
+	public static int pobierzIdOstatniegoZamowienia(){
+		int idOstatniego = 0;
+		otworzPolaczenie();
+		try{
 		ResultSet max = st.executeQuery("SELECT max(id_zamowienie) FROM zamowienie");
 		max.next();
-		int idOstatniego = max.getInt(1);
+		idOstatniego = max.getInt(1);
 		max.close();
-		return idOstatniego;
+		}catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return idOstatniego;		
+	}
+	
+	/**
+	 * Pobiera id ostatniego anulowanego zamówienia.
+	 * @return id zamówienia
+	 */
+	private static int pobierzIdOstatniegoAnulowanego(){
+		int idOstatniego = 0;
+		otworzPolaczenie();
+		try{
+		ResultSet max = st.executeQuery("SELECT max(id_anulowane) FROM anulowane");
+		max.next();
+		idOstatniego = max.getInt(1);
+		max.close();
+		}catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return idOstatniego;		
+	}
+	
+	
+	public static void dodajZamowione(Zamowienie tymczasowe) {
+		otworzPolaczenie();
+		try{
+		String sql = "INSERT INTO zamowienie "
+				+ "(id_zamowienie, nr_stolika, id_status, id_uzytkownik, data_przyjecia) VALUES('"
+				+ tymczasowe.getIdZamowienia() + "', '" + tymczasowe.getNrStolika() + "', '"
+				+ tymczasowe.getIdStatus() + "', '"
+				+ tymczasowe.getIdKelnera() + "', " 
+				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())
+				+ "', 'YYYY/MM/DD hh24:mi:ss'))";
+		st.executeUpdate(sql);	
+		}catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+	}
+	
+	/**
+	 * Zapisuje w tabeli anulowane szczegó³y zamówienia o danym identyfikatorze
+	 * @param idZamowienia
+	 * @param przyczyna
+	 */
+	public static void anulujZamowienie(int idZamowienia, String przyczyna) {
+		int id_anulowane = pobierzIdOstatniegoAnulowanego() + 1;
+		otworzPolaczenie();
+		try {
+			st.execute("INSERT INTO anulowane "
+					+ "(id_anulowane ,id_zamowienie, przyczyna, data_anul) VALUES('"
+					+ id_anulowane + "', '" + idZamowienia + "', '"
+					+ przyczyna + "', "
+					+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())
+					+ "', 'YYYY/MM/DD hh24:mi:ss'))");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
 		
 	}
 	
 	
-	public void dodajZamowione(Zamowienie tymczasowe) {
-		try{
-		otworzPolaczenie();
-		st.executeUpdate("INSERT INTO zamowienie "
-				+ "(id_zamowienie, nr_stolika, id_status, id_uzytkownik, data_przyjecia) VALUES('"
-				+ (pobierzIdOstatniegoZamowienia()+1) + "', '" + Integer.parseInt(tymczasowe.getNrStolika()) + "', '"
-				+ tymczasowe.getIdStatus() + "', '"
-				+ tymczasowe.getIdKelnera() + "', " 
-				+ "TO_DATE('" + new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(tymczasowe.getDataPrzyjecia())
-				+ "', 'YYYY/MM/DD hh24:mi:ss'))");	
-		zamknijPolaczenie();
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Przypisuje zamówienie odpowiedniemu kucharzowi 
 	 * @return void
 	 */
-	public void przypiszZamowienieKucharzowi(int idKucharza, int idZamowienia) {
-		try{
+	public static void przypiszZamowienieKucharzowi(int idKucharza, int idZamowienia) {
 		otworzPolaczenie();
+		try{
 		st.executeUpdate("UPDATE ZAMOWIENIE SET KUCHARZ_ID = " + idKucharza +", ID_STATUS = 4 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 	}
 	
@@ -187,13 +250,14 @@ public class DaoZamowienie {
 	 * Przypisuje zamówienie odpowiedniemu kucharzowi 
 	 * @return void
 	 */
-	public void zmienStatusZamowienia(int idZamowienia, int idStatus) {
-		try{
+	public static void zmienStatusZamowienia(int idZamowienia, int idStatus) {
 		otworzPolaczenie();
+		try{
 		st.executeUpdate("UPDATE zamowienie SET id_status = " + idStatus +"WHERE id_zamowienie = " + idZamowienia);	
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 	}
 	
@@ -201,14 +265,34 @@ public class DaoZamowienie {
 	 * Usuwa zamówienie o danym identyfikatorze
 	 * @param idZamowienia
 	 */
-	public void usunZamowienie(int idZamowienia) {
+	public static void usunZamowienie(int idZamowienia) {
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			st.executeUpdate("DELETE FROM zamowienie WHERE id_zamowienie = " + idZamowienia);
-			zamknijPolaczenie();			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
+	}
+	
+
+	
+	/**
+	 * Zmienia status zamówienia na anulowane
+	 * @param idZamowienia
+	 * @param przyczyna
+	 */
+	public static void zmienStatusNaAnulowane(int idZamowienia) {
+		otworzPolaczenie();			
+		try {
+			st.executeUpdate("UPDATE ZAMOWIENIE SET ID_STATUS = 7 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  finally {
+			zamknijPolaczenie();
+		}
+		
 	}
 	
 	
@@ -216,15 +300,14 @@ public class DaoZamowienie {
 	 * Zwraca zamówienie do puli zamówieñ nieprzydzielonych
 	 * @return void
 	 */
-	public void zwrocZamowienie(int idZamowienia) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
-		try{
+	public static void zwrocZamowienie(int idZamowienia) {
 		otworzPolaczenie();
+		try{
 		st.executeUpdate("UPDATE ZAMOWIENIE SET ID_STATUS = 3 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 	}
 	
@@ -232,15 +315,14 @@ public class DaoZamowienie {
 	 * Przekazuje zrealizowane zamówienie do Kelnera
 	 * @return void
 	 */
-	public void przekazDoKelnera(int idZamowienia) {
-		if(ds == null)
-			ds = utworzZrodloDanych();
-		try{
+	public static void przekazDoKelnera(int idZamowienia) {
 		otworzPolaczenie();
+		try{
 		st.executeUpdate("UPDATE ZAMOWIENIE SET ID_STATUS = 5 WHERE ID_ZAMOWIENIE = " + idZamowienia);	
-		zamknijPolaczenie();
 		}catch (SQLException e){
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 	}
 	
@@ -248,7 +330,7 @@ public class DaoZamowienie {
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
-	private DataSource utworzZrodloDanych(){
+	private static DataSource utworzZrodloDanych(){
 		DataSource ds = null;
 		try {
 			initContext = new InitialContext();
@@ -261,27 +343,34 @@ public class DaoZamowienie {
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void otworzPolaczenie() throws SQLException {
+	private static void otworzPolaczenie() {		
 		if(ds == null)
 			ds = utworzZrodloDanych();
+		try{
 		conn = ds.getConnection();
 		st = conn.createStatement();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void zamknijPolaczenie() throws SQLException{
+	private static void zamknijPolaczenie(){
+		try{
 			if (st != null) {
 				st.close();
 			}
 			if (conn != null) {
 				conn.close();
 			}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
 	}
+
 
 }

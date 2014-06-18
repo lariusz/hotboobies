@@ -11,45 +11,39 @@
 <title>Kierownik</title>
 </h:head>
 <h:body>
-<h:form>
-<h:commandLink value="Powrót" action="kierownik" style="float:right;"/>
-<h1 class="title">Kierownik - Stan produktów</h1>
-  
-		<h:dataTable id="Produkty" var="pro" value="#{kierownik.produkty}" border="1">
-
-			<h:column>			
-		 <f:facet name="header">Nazwa produktu</f:facet>
-		 <h:outputText value="#{pro.nazwa}"/> <br />
-			</h:column> 
-			
-				<h:column>			
-		 <f:facet name="header">Dostępność</f:facet>
-		<h:commandButton value="Nieaktywny" action="#{kierownik.aktywujProdukt(pro.id)}" rendered="#{!pro.aktywny}"  style="width : 122px;"/>
-		<h:commandButton value="Aktywny" action="#{kierownik.dezaktywujProdukt(pro.id)}" rendered="#{pro.aktywny}"  style="width : 122px;"/>
-			</h:column>  
-		
-			<h:column>			
-		 <f:facet name="header">Ilość produktu</f:facet>
-		 <h:outputText value="#{pro.ilosc}" /> <br />
-			</h:column> 
-			
-						<h:column>		
-							
-		 <f:facet name="header">Nowy stan</f:facet>
-
-	<h:inputText value="#{pro.ilosc}" required="true" id="ilosc"  
-	requiredMessage="Pole wymagane" style="width : 50px;"
-	converterMessage="Wartość musi być liczbą"
-	/>
-	
-			</h:column> 
-
-			
-
-		</h:dataTable>
-			<h:message for="ilosc" styleClass="error"/> 
-		<h:commandButton value="Aktualizuj" action="#{kierownik.uzupelnijStan}" style="height : 47px;"/> 
-	
-</h:form>
+<h:form id="aktualizacja">
+<center>
+<p:outputLabel value="KIEROWNIK" styleClass="title" />
+</center>
+<p:toolbar id="tb">
+    <f:facet name="left">
+        <p:button outcome="kierownik" value="Raporty"  />
+        <p:commandButton value="Aktualizuj wszystko" action="#{kierownik.aktualizujWszystkie()}" />
+    </f:facet>
+    <f:facet name="right">
+		<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;"  /> 
+		<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;"  /> 
+		<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" /> 
+    </f:facet>
+</p:toolbar> 
+<p:sticky target="tb" />
+<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+<br />
+	<h:panelGroup id ="produkty">
+		<p:dataTable var="produkt" value="#{kierownik.produkty}" tableStyle="table-layout:auto;width:100%;">
+			<p:column  headerText="Nazwa produktu">
+				<p:outputLabel value="#{produkt.nazwa}" />
+			</p:column>
+			<p:column headerText="Nowy stan" styleClass="centerInRow">
+				<p:spinner min="0" max="999" value="#{produkt.ilosc}" required="true" id="ilosc"
+					requiredMessage="Pole wymagane" converterMessage="Wartość musi być liczbą" />
+			</p:column>
+			<p:column headerText="Dostępność" styleClass="centerInRow">
+				<p:commandButton value="#{produkt.aktywny ? 'Aktywny' : 'Nieaktywny'}"
+					action="#{kierownik.zmienAktywuj(produkt.id)}" update="@this" style="width : 150px;" />
+			</p:column>
+		</p:dataTable>
+	</h:panelGroup>
+	</h:form>
 </h:body>
 </html>

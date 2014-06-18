@@ -18,29 +18,30 @@ public class DaoPozycja {
 
 	
 	/** Obiekt ¿ród³ danych*/	
-	private DataSource ds;
+	private static DataSource ds;
 	
 	/** Obiekt po³¹czenia z baza danych */	
-	private Connection conn;
+	private static Connection conn;
 	
 	/** Obiekt zapytania do bazy danych */	
-	private Statement st;
+	private static Statement st;
 		
 	/**
 	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
 	 * @return zbiór wyników
 	 */
-	public void dodajPozycjeZamowienia(int idZamowienia, int idProdukt,	int ilosc) {
+	public static void dodajPozycjeZamowienia(int idZamowienia, int idProdukt,	int ilosc) {
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			int id = pobierzIdOstatniejPozycji();
 			st.executeUpdate("INSERT INTO pozycja "
 					+ "(id_pozycja, id_zamowienie, id_produkt, ilosc) VALUES('"
 					+ (id + 1) + "', '" + idZamowienia + "', '" + idProdukt
 					+ "', '" + ilosc + "')");
-			zamknijPolaczenie();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			zamknijPolaczenie();
 		}
 	}
 	
@@ -49,19 +50,25 @@ public class DaoPozycja {
 	 * Usuwa wszystkie pozycje z danego zamówienia
 	 * @param idZamowienia
 	 */
-	public void usunPozycje(int idZamowienia) {
+	public static void usunPozycje(int idZamowienia) {
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			st.executeUpdate("DELETE FROM pozycja WHERE id_zamowienie = " + idZamowienia);
-			zamknijPolaczenie();			
+						
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		} finally{
+			zamknijPolaczenie();
+		}
 	}
 	
 	
-	private int pobierzIdOstatniejPozycji() throws SQLException{
-		
+	/**
+	 * Pobiera identyfikator ostatniej pozycji
+	 * @return id ostatniej pozycji
+	 * @throws SQLException
+	 */
+	private static int pobierzIdOstatniejPozycji() throws SQLException{
 		ResultSet max = st.executeQuery("SELECT max(id_pozycja) FROM pozycja");
 		max.next();
 		return max.getInt(1);
@@ -71,7 +78,7 @@ public class DaoPozycja {
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
-	private DataSource utworzZrodloDanych(){
+	private static DataSource utworzZrodloDanych(){
 		try {
 			Context initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
@@ -84,27 +91,33 @@ public class DaoPozycja {
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void otworzPolaczenie() throws SQLException {
-		if(ds == null)
+	private static void otworzPolaczenie(){
+		if (ds == null)
 			ds = utworzZrodloDanych();
-		conn = ds.getConnection();
-		st = conn.createStatement();
+		try {
+			conn = ds.getConnection();
+			st = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void zamknijPolaczenie() throws SQLException{
+	private static void zamknijPolaczenie(){
+		try {
 			if (st != null) {
 				st.close();
 			}
 			if (conn != null) {
 				conn.close();
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 

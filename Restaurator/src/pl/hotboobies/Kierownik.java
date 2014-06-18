@@ -1,5 +1,6 @@
 package pl.hotboobies;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +20,18 @@ import pl.hotboobies.dao.DaoZamowienie;
  */
 @ManagedBean
 @SessionScoped
-public class Kierownik {
+public class Kierownik implements Serializable{
 	
+	private static final long serialVersionUID = 1705949180511598664L;
+
+	
+	public Kierownik() {
+		super();
+		produkty = DaoProdukt.pobierzWszystkieKolumny();
+	}
+
 	Raport raport;
-	private List<Produkt> produkty;
+	private List<Produkt> produkty = new ArrayList<Produkt>();
 	
 	public List<Produkt> getProdukty() {
 		return produkty;
@@ -32,11 +41,6 @@ public class Kierownik {
 		this.produkty = produkty;
 	}
 
-	public Kierownik() {
-		super();
-		raport = new Raport();
-		 WyswietlStan();
-	}
 
 	/**
 	 * Wyœwietla wybrany typ raportu
@@ -44,57 +48,34 @@ public class Kierownik {
 	 */
 	public void pokazRaport(String typ){
 		switch(typ){
-		case "typ1": raport.generujRaportTyp1(); break;
-		case "typ2": raport.generujRaportTyp2(); break;
-		case "typ3": raport.generujRaportTyp3(); break;
-		case "typ4": raport.generujRaportTyp4(); break;
 		}
 		//TODO obs³uga wyœwietlenia raportu na formatce
 	}
 	
+	/**
+	 * Aktualizuje wszystkie pozycje.
+	 */
+	public void aktualizujWszystkie(){
+		boolean success = true;
+		for(Produkt produktEl : produkty) {
+			success = success & DaoProdukt.aktulizujIloscProduktu(produktEl.getId(), produktEl.getIlosc() , produktEl.isAktywny());
+		} if (success){
+			FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacja",
+								"Aktualizacja produktów powiod³a siê."));
+		}
+	}
 	
 	/**
-	 * Pozwala uzupe³niæ zapasy magazynowe wybranego produktu
+	 * Zmienia parametr aktywny na przeciwny
+	 * @param idProdukt
 	 */
-	public void uzupelnijStan(Produkt produkt){
-		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
-	}
-	
-	public void uzupelnijStan(){
-		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
-	
+	public void zmienAktywuj(int idProdukt){
 		for(Produkt produktEl : produkty) {
-			DaoProdukt daoAktualizuj = new DaoProdukt();
-			daoAktualizuj.aktulizujIloscProduktu(produktEl.getId(), produktEl.getIlosc());
+			if(produktEl.getId() == idProdukt)
+				produktEl.setAktywny(!produktEl.isAktywny());
 		}
-		
-		WyswietlStan();
 	}
-	
-	public void aktywujProdukt(int idProduktu){
-		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
-	
-DaoProdukt daoAktualizuj = new DaoProdukt();
-daoAktualizuj.aktulizujAktywnosc(idProduktu, 1);
-WyswietlStan();
-
-	}
-	
-	public void dezaktywujProdukt(int idProduktu){
-		//TODO do przemyœlenia czy bêdziemy realizowaæ to za pomoca okienka modalnego czy w inny sposób		
-DaoProdukt daoAktualizuj = new DaoProdukt();
-daoAktualizuj.aktulizujAktywnosc(idProduktu, 0);
-WyswietlStan();
-
-	}
-	
-	public String WyswietlStan(){
-			DaoProdukt dao = new DaoProdukt();
-			produkty = dao.pobierzWszystkieKolumny();	
-		
-		
-		return "kierownik-stan";
-			}
-
-
 }

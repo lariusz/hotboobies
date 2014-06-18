@@ -5,10 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -22,23 +20,23 @@ import pl.hotboobies.Produkt;
 public class DaoProdukt {
 	
 	/** Obiekt ¿ród³ danych*/	
-	private DataSource ds;
+	private static DataSource ds;
 	
 	/** Obiekt po³¹czenia z baza danych */	
-	private Connection conn;
+	private static Connection conn;
 	
 	/** Obiekt zapytania do bazy danych */	
-	private Statement st;
+	private static Statement st;
 	
 	
 	/**
 	 * Pobiera wszystkie kolumny dla wszystkich grup
 	 * @return kolekcjê obiektów Zamowienie
 	 */
-	public List<Produkt> pobierzWszystkieKolumny() {
+	public static List<Produkt> pobierzWszystkieKolumny() {
 		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM produkt ORDER BY id_grupa");
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
@@ -50,10 +48,11 @@ public class DaoProdukt {
 							);
 						 
 				}
-				wszystkieProdukty.close();
 				zamknijPolaczenie();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally{
+				zamknijPolaczenie();
 			}
 		
 		return produktyGrupy;
@@ -65,22 +64,24 @@ public class DaoProdukt {
 	 * @param grupa produktów dla której maja zostaæ zwrócone wyniki
 	 * @return kolekcjê obiektów Zamowienie
 	 */
-	public List<Produkt> pobierzWszystkieKolumny(int grupa) {
+	public static List<Produkt> pobierzWszystkieProdukty(int grupa) {
 		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM produkt WHERE id_grupa = " + grupa);
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getDouble("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
 							wszystkieProdukty.getInt("aktywny") == 1));
 				}
 				wszystkieProdukty.close();
-				zamknijPolaczenie();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally{
+				zamknijPolaczenie();
 			}
 		
 		return produktyGrupy;
@@ -92,104 +93,106 @@ public class DaoProdukt {
 	 * @param identyfikator zamówienia dla którego maja zostaæ zwrócone wyniki
 	 * @return kolekcjê obiektów Zamowienie
 	 */
-	public List<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
+	public static List<Produkt> pobierzPozycjeZamowienia(int idZamowienia) {
 		List<Produkt> produktyGrupy = new ArrayList<Produkt>();
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
 			ResultSet wszystkieProdukty = st.executeQuery("SELECT * FROM POZYCJA P, PRODUKT PR WHERE P.ID_PRODUKT=PR.ID_PRODUKT AND P.ID_ZAMOWIENIE = "+ idZamowienia);
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
-							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getString("nazwa"),							
+							wszystkieProdukty.getDouble("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
 							wszystkieProdukty.getInt("aktywny") == 1));
 				}
 				wszystkieProdukty.close();
-				zamknijPolaczenie();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally{
+				zamknijPolaczenie();
 			}
 		
 		return produktyGrupy;
 	}
 	
 	/**
-	 * Pobiera wszystkie produkt o podanym id
-	 * @param id produkty dla którego ma zostaæ zwrócony wynik
-	 * @return zbiór wyników
-	 * @throws SQLException
+	 * Aktualizuje iloœæ i aktywnoœæ dla produktu o wskazanym id
 	 */
-	public ResultSet pobierzProdukt(int id) throws SQLException{
-		otworzPolaczenie();
-		return st.executeQuery("SELECT * FROM produkt WHERE id_produkt = " + id);
-	}
-	
-	/**
-	 * Aktualizuje iloœæ dla produktu o wskazanym id
-	 * @return void
-	 */
-		public void aktulizujIloscProduktu(int idProduktu, int iloscProduktu) {
-			try{
-			otworzPolaczenie();
-			st.executeUpdate("UPDATE produkt SET ilosc = " + iloscProduktu +" WHERE id_produkt = " + idProduktu);	
+	public static boolean aktulizujIloscProduktu(int idProduktu, int iloscProduktu, boolean aktywny) {
+		otworzPolaczenie();		
+		try{
+		st.executeUpdate("UPDATE produkt SET ilosc = " + iloscProduktu 
+				+ ", aktywny = "+ (aktywny ? 1:0) + " WHERE id_produkt = " + idProduktu);	
+		}catch (SQLException e){
+			e.printStackTrace(); 
+			return false;
+		} finally{
 			zamknijPolaczenie();
-			}catch (SQLException e){
-				e.printStackTrace();
-			}
 		}
+		return true;
+	}
 		
 		
-		/**
-		 * Aktualizuj aktywnoœæ produktu o podanym id
-		 * @return void
-		 */
-			public void aktulizujAktywnosc(int idProduktu, int stan) {
-				try{
-				otworzPolaczenie();
-				st.executeUpdate("UPDATE produkt SET aktywny = " + stan +" WHERE id_produkt = " + idProduktu);	
-				zamknijPolaczenie();
-				}catch (SQLException e){
-					e.printStackTrace();
-				}
-			}
+	/**
+	 * Aktualizuj aktywnoœæ produktu o podanym id
+	 */
+	public static void aktulizujAktywnosc(int idProduktu, int stan) {
+		otworzPolaczenie();
+		try {
+			st.executeUpdate("UPDATE produkt SET aktywny = " + stan
+					+ " WHERE id_produkt = " + idProduktu);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+	}
 
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
-	private DataSource utworzZrodloDanych(){
+	private static DataSource utworzZrodloDanych() {
 		try {
 			InitialContext initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
 		} catch (NamingException e) {
 			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
 		}
 		return ds;
 	}
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void otworzPolaczenie() throws SQLException {
-		if(ds == null)
+	private static void otworzPolaczenie() {
+		if (ds == null)
 			ds = utworzZrodloDanych();
-		conn = ds.getConnection();
-		st = conn.createStatement();
+		try {
+			conn = ds.getConnection();
+			st = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void zamknijPolaczenie() throws SQLException{
+	private static void zamknijPolaczenie() {
+		try {
 			if (st != null) {
 				st.close();
 			}
 			if (conn != null) {
 				conn.close();
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 

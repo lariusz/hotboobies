@@ -22,13 +22,13 @@ import pl.hotboobies.Grupa;
 public class DaoGrupa {
 	
 	/** Obiekt ¿ród³ danych*/	
-	private DataSource ds;
+	private static DataSource ds;
 	
 	/** Obiekt po³¹czenia z baza danych */	
-	private Connection conn;
+	private static Connection conn;
 	
 	/** Obiekt zapytania do bazy danych */	
-	private Statement st;
+	private static Statement st;
 	
 	
 	/**
@@ -36,9 +36,7 @@ public class DaoGrupa {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public List<Grupa> pobierzWszystkieKolumny() {
-		if (ds == null)
-			ds = utworzZrodloDanych();
+	public static List<Grupa> pobierzWszystkieGrupy() {
 		List<Grupa> grupy = new ArrayList<Grupa>();
 		try {
 			otworzPolaczenie();
@@ -60,7 +58,7 @@ public class DaoGrupa {
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
-	private DataSource utworzZrodloDanych(){
+	private static DataSource utworzZrodloDanych(){
 		try {
 			InitialContext initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
@@ -72,25 +70,34 @@ public class DaoGrupa {
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void otworzPolaczenie() throws SQLException {
-		conn = ds.getConnection();
-		st = conn.createStatement();
+	private static void otworzPolaczenie() {
+		if (ds == null)
+			ds = utworzZrodloDanych();
+		try {
+			conn = ds.getConnection();
+			st = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void zamknijPolaczenie() throws SQLException{
+	private static void zamknijPolaczenie() {
+		try {
 			if (st != null) {
 				st.close();
 			}
 			if (conn != null) {
 				conn.close();
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
+	
 
 }

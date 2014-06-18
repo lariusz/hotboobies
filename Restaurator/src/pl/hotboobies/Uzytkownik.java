@@ -20,7 +20,6 @@ public class Uzytkownik implements Serializable{
 	private String telefon;
 	private boolean zablokowany;
 	
-	
 	public Uzytkownik(){
 		super();
 	}

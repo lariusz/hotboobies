@@ -9,7 +9,7 @@ public class Zamowienie {
 	private String status;
 	private int idStatus;
 	private Date dataPrzyjecia;
-	private String nrStolika;
+	private Integer nrStolika;
 	private int idKucharza;
 	private int idKelnera;
 	private String uwaga;
@@ -25,7 +25,7 @@ public class Zamowienie {
 
 
 	public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia,
-			String nrStolika, int idKelnera, int idKucharza) {
+			Integer nrStolika, int idKelnera, int idKucharza) {
 		this.idZamowienia = idZamowienia;
 		this.idStatus = idStatus;
 		this.dataPrzyjecia = dataPrzyjecia;
@@ -67,11 +67,11 @@ public class Zamowienie {
 		this.dataPrzyjecia = dataPrzyjecia;
 	}
 
-	public String getNrStolika() {
+	public Integer getNrStolika() {
 		return nrStolika;
 	}
 
-	public void setNrStolika(String nrStolika) {
+	public void setNrStolika(Integer nrStolika) {
 		this.nrStolika = nrStolika;
 	}
 

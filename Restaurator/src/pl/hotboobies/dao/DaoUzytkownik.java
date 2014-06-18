@@ -1,6 +1,7 @@
 package pl.hotboobies.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,13 +23,13 @@ import pl.hotboobies.Uzytkownik;
 public class DaoUzytkownik {
 	
 	/** Obiekt ¿ród³ danych*/	
-	private DataSource ds;
+	private static DataSource ds;
 	
 	/** Obiekt po³¹czenia z baza danych */	
-	private Connection conn;
+	private static Connection conn;
 	
 	/** Obiekt zapytania do bazy danych */	
-	private Statement st;
+	private static Statement st;
 	
 	
 	/**
@@ -36,7 +37,7 @@ public class DaoUzytkownik {
 	 * @return zbiór wyników
 	 * @throws SQLException
 	 */
-	public List<Uzytkownik> pobierzWszystkich() {				
+	public static List<Uzytkownik> pobierzWszystkich() {				
 		if(ds == null)
 			ds = utworzZrodloDanych();
 		List<Uzytkownik> wszyscy = new ArrayList<Uzytkownik>();
@@ -63,11 +64,65 @@ public class DaoUzytkownik {
 		return wszyscy;
 	}
 	
+	public static Uzytkownik pobierzUzytkownika(String login, String haslo) {				
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		Uzytkownik user = null;
+		try{
+		otworzPolaczenie();
+		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik WHERE login = '" + login.toLowerCase() + "' AND haslo = '" + haslo + "'");
+		while(uzytkownik.next()){
+			user = new Uzytkownik(
+					uzytkownik.getInt("id_uzytkownik"),
+					uzytkownik.getString("login"),
+					uzytkownik.getString("haslo"),
+					uzytkownik.getInt("id_rola"),
+					uzytkownik.getString("imie"),
+					uzytkownik.getString("nazwisko"),
+					uzytkownik.getString("mail"),
+					uzytkownik.getString("telefon"),
+					uzytkownik.getInt("blokuj") == 1);
+		}
+		uzytkownik.close();
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return user;
+	}
+	
+	
+	public static boolean czyJestUserWBazie(String login, String haslo) {				
+		boolean jest = false;
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		PreparedStatement ps = null;		
+		otworzPolaczenie();
+		try{
+		ps = conn.prepareStatement("SELECT login, haslo FROM uzytkownik where login= ? and haslo= ?");
+		ps.setString(1, login.toLowerCase());
+		ps.setString(2, haslo);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		if(rs.next()){
+			jest = true;
+		}
+		
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+				zamknijPolaczenie();
+		}
+		return jest;
+	}
+	
+	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
 	 * @return obiekt ¿ród³a danych
 	 */
-	private DataSource utworzZrodloDanych(){
+	private static DataSource utworzZrodloDanych(){
 		DataSource ds = null;
 		try {
 			InitialContext initContext = new InitialContext();
@@ -80,25 +135,31 @@ public class DaoUzytkownik {
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	private void otworzPolaczenie() throws SQLException {
-		conn = ds.getConnection();
-		st = conn.createStatement();
+	private static void otworzPolaczenie() {
+		try {
+			conn = ds.getConnection();
+			st = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
-	 * @throws SQLException
 	 */
-	public void zamknijPolaczenie() throws SQLException{
+	public static void zamknijPolaczenie() {
+		try {
 			if (st != null) {
 				st.close();
 			}
 			if (conn != null) {
 				conn.close();
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

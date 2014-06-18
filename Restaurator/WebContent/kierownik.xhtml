@@ -11,13 +11,23 @@
 <title>Kierownik</title>
 </h:head>
 <h:body>
-<h:form id="form">
-<h:commandLink value="Wyloguj" action="#{logowanie.wyloguj()}" styleClass="wyloguj"/> 
-<h:outputText value="#{logowanie.zalogowany.nazwisko}  &emsp;"  styleClass="wyloguj"/> 
-<h:outputText value="#{logowanie.zalogowany.imie}  &nbsp;"  styleClass="wyloguj"/> 
+<h:form id="produkty">
+<center>
+<p:outputLabel value="KIEROWNIK" styleClass="title" />
+</center>
+<p:toolbar id="tb">
+    <f:facet name="left">
+        <p:button outcome="kierownik-stan" value="Aktualizacja stanu produktów"  />
+    </f:facet>
+    <f:facet name="right">
+		<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;"  /> 
+		<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;"  /> 
+		<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" /> 
+    </f:facet>
+</p:toolbar> 
+<p:sticky target="tb" />
 <br />
-<h1 class="title">Kierownik</h1>
+
 </h:form>
-<h:button outcome="kierownik-stan" value="Aktualizacja stanu produktów" style="float: left; height : 47px;" />
 </h:body>
 </html>

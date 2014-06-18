@@ -12,16 +12,18 @@ public class Produkt {
 	private int idGrupa;
 	private int ilosc;
 	private int iloscZamawianych;
+	private double cena;
 	private Date czasAktualizacji;
 	private int czasWykonania;
 	private boolean aktywny;
 
 	
-	public Produkt(int id, String nazwa, int ilosc,
+	public Produkt(int id, String nazwa, double cena, int ilosc,
 			 int czasWykonania, boolean aktywny) {
 		super();
 		this.id = id;
 		this.nazwa = nazwa;
+		this.cena = cena;
 		this.ilosc = ilosc;		
 		this.czasWykonania = czasWykonania;
 		this.aktywny = aktywny;
@@ -40,12 +42,14 @@ public class Produkt {
 	
 	public boolean inkrementujIloscZamawianych(){
 		iloscZamawianych++;
+		ilosc--;
 		return true;
 	}
 	
 	public boolean dekrementujIloscZamawianych(){
 		if(iloscZamawianych>0){
 		iloscZamawianych--;
+		ilosc++;
 		return true;
 		}
 		else return false;
@@ -81,6 +85,14 @@ public class Produkt {
 
 	public void setIloscZamawianych(int iloscZamawianych) {
 		this.iloscZamawianych = iloscZamawianych;
+	}
+
+	public double getCena() {
+		return cena;
+	}
+
+	public void setCena(double cena) {
+		this.cena = cena;
 	}
 
 	public Date getCzasAktualizacji() {
