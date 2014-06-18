@@ -48,19 +48,18 @@
 		<p:tabView var="grupa" value="#{kelner.grupy}" scrollable="true" orientation="top" >
         		<p:tab title="#{grupa.nazwa}">
             		<h:panelGroup id="produktyGrupy">
-						<p:dataTable var="produktGrupy" value="#{kelner.produktyGrupy(grupa.id)}">
-							<p:column>
+						<ui:repeat var="produktGrupy" value="#{kelner.produktyGrupy(grupa.id)}">
 								<p:commandButton value="#{produktGrupy.nazwa} [cena: #{produktGrupy.cena} zł - dostępne #{produktGrupy.ilosc} szt.]"
-									action="#{kelner.dodajProdukt(produktGrupy.id)}" 
+									action="#{kelner.dodajProdukt(produktGrupy.id)}" disabled="#{!produktGrupy.aktywny}"
 									update=":zamowienie:produktyZamowienia" process="@this"/>
-							</p:column>
-						</p:dataTable>
+							<p:spacer width="50" />
+						</ui:repeat>
 					</h:panelGroup>
         		</p:tab>
     	</p:tabView>
 		
 			<h:panelGroup id="produktyZamowienia">
-				<p:dataTable var="produktZamowienia"  rendered="#{kelner.iloscProduktowZamowienia >0}"
+				<p:dataTable var="produktZamowienia"  
 					value="#{kelner.produktyZamowienia}"
 					tableStyle="table-layout:auto;width:100%;"
 					emptyMessage="Nie dodano produktów">
@@ -68,12 +67,22 @@
 					<p:column headerText="Nazwa produktu" >
 						<h:outputText value="#{produktZamowienia.nazwa}" />
 					</p:column>
-					<p:column headerText="Ilość">
+					<p:column headerText="Ilość" styleClass="centerInRow">
 						<h:outputText value="#{produktZamowienia.iloscZamawianych}" />
 					</p:column>
-					<p:column headerText="Usuń">
+					<p:column headerText="Cena" styleClass="centerInRow">
+						<h:outputText value="#{produktZamowienia.cena * produktZamowienia.iloscZamawianych}" >
+						<f:convertNumber currencySymbol="zł" type="currency" minFractionDigits="2"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Usuń" styleClass="centerInRow">
 						<p:commandButton value="-1"
-							action="#{kelner.usunProdukt(produktZamowienia.id)}" 
+							action="#{kelner. zmniejszIlośćProduktu(produktZamowienia.id)}" 
+							update=":zamowienie:produktyZamowienia" process="@this"/>
+					</p:column>
+					<p:column headerText="Dodaj" styleClass="centerInRow">
+						<p:commandButton value="+1"
+							action="#{kelner.zwiekszIlośćProduktu(produktZamowienia.id)}" 
 							update=":zamowienie:produktyZamowienia" process="@this"/>
 					</p:column>
 					<f:facet name="footer">

@@ -72,7 +72,7 @@ public class DaoProdukt {
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 							wszystkieProdukty.getString("nazwa"),
-							wszystkieProdukty.getDouble("cena"),
+							wszystkieProdukty.getBigDecimal("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
 							wszystkieProdukty.getInt("aktywny") == 1));
@@ -82,8 +82,7 @@ public class DaoProdukt {
 				e.printStackTrace();
 			} finally{
 				zamknijPolaczenie();
-			}
-		
+			}		
 		return produktyGrupy;
 	}
 	
@@ -101,7 +100,7 @@ public class DaoProdukt {
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 							wszystkieProdukty.getString("nazwa"),							
-							wszystkieProdukty.getDouble("cena"),
+							wszystkieProdukty.getBigDecimal("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
 							wszystkieProdukty.getInt("aktywny") == 1));

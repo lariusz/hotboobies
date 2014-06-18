@@ -1,129 +1,164 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">    
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> 
-<title>Kelner</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<title>Kelner</title>
 </h:head>
 <h:body>
-
-<h:form id="kelner">
-<center>
-<p:outputLabel value="KELNER" styleClass="title" />
-</center>
-<p:toolbar id="tb">
-    <f:facet name="left">
-        <p:button outcome="kelner" value="Odśwież"  />
-        <p:commandButton value="Dodaj zamówienie"  action="#{kelner.dodajZamowienie()}" />
-    </f:facet>
-    <f:facet name="right">
-		<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;"  /> 
-		<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;"  /> 
-		<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" /> 
-    </f:facet>
-</p:toolbar> 
-<p:sticky target="tb" />
-<br />
-	<h:panelGroup id="noweZamowienia">
-		<p:dataTable var="noweZamowienie" value="#{kelner.noweZamowienia}"
-			 rendered="#{kelner.iloscNowychZamowien >0}" tableStyle="table-layout:auto;width:100%;">
-			<f:facet name="header">Nowe Zamówienia</f:facet>
-			<p:column headerText="Numer" styleClass="centerInRow">
-				<h:outputText value="#{noweZamowienie.idZamowienia}" />
-			</p:column>
-			<p:column headerText="Nazwa produktu">
-			<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
-				<h:outputText value="#{produkt.nazwa}"/> <br />
-			</ui:repeat>
-			</p:column>
-			<p:column headerText="Ilość" styleClass="centerInRow">
-			<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
-				<h:outputText value="#{produkt.ilosc}"/> <br/>			
-			</ui:repeat>
-			</p:column>			
-			<p:column headerText="Stolik" style="text-align: center;">
-				<h:outputText value="#{noweZamowienie.nrStolika}" />
-			</p:column>
-			<p:column headerText="Data złożenia zamówienia" styleClass="centerInRow">
-				<h:outputText value="#{noweZamowienie.dataPrzyjecia}">
-			  		<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Berlin" />
-				</h:outputText>
-			</p:column>
-			<p:column headerText="Usuń" styleClass="centerInRow">
-				<p:commandButton value="Usuń"  type="button" onclick="PF('usunNowe').show();"/>
-			<p:dialog header="Usuń nowe zamówienie" widgetVar="usunNowe" height="150" width="300" modal="true" resizable="false">
-				<p:panelGrid columns="1">
-				<p:inputTextarea id="punz" value="#{noweZamowienie.przyczynaAnulowania}" autoResize="false" style="resize: none; width: 235px;"/>
-				<p:watermark for="punz" value="Podaj przyczynę usunięcia zamówienia" />
-					<f:facet name="footer">
-				<p:commandButton value="Usuń" action="#{kelner.usunZamowienie(noweZamowienie.idZamowienia, noweZamowienie.przyczynaAnulowania)}"
-				onclick="PF('dialog').show();" update=":kelner:noweZamowienia"/>
-				</f:facet>
-				</p:panelGrid>
-			</p:dialog>
+	<h:form id="kelner">
+		<center>
+			<p:outputLabel value="KELNER" styleClass="title" />
+		</center>
+		<p:toolbar id="tb">
+			<f:facet name="left">
+				<p:commandButton value="Dodaj zamówienie"
+					action="#{kelner.dodajZamowienie()}" />
+			</f:facet>
+			<f:facet name="right">
+				<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;" />
+				<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;" />
+				<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" />
+			</f:facet>
+		</p:toolbar>
+		<p:sticky target="tb" />
+		<p:messages id="msgs" showDetail="true" globalOnly="true"
+			autoUpdate="true" closable="true" />
+		<br />
+		<h:panelGroup id="noweZamowienia">
 		
-			</p:column>
-			<p:column headerText="Przekaż" styleClass="centerInRow">
-				<p:commandButton value="Do kuchni" action="#{kelner.doKuchni(noweZamowienie.idZamowienia)}" update=":kelner:noweZamowienia"/>
-			</p:column>
-			<f:facet name="footer">
-				Ilość nowych zamówień: <h:outputText value="#{kelner.iloscNowychZamowien}"/>
-			</f:facet>
+			<p:dataTable var="noweZamowienie" value="#{kelner.noweZamowienia}"
+				rendered="#{kelner.iloscNowychZamowien >0}"
+				tableStyle="table-layout:auto;width:100%;">
+				<f:facet name="header">Nowe Zamówienia</f:facet>
+				<p:column headerText="Numer" styleClass="centerInRow">
+					<h:outputText value="#{noweZamowienie.idZamowienia}" />
+				</p:column>
+				<p:column headerText="Nazwa produktu">
+					<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
+						<h:outputText value="#{produkt.nazwa}" />
+						<br />
+					</ui:repeat>
+				</p:column>
+				<p:column headerText="Ilość" styleClass="centerInRow">
+					<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
+						<h:outputText value="#{produkt.ilosc}" />
+						<br />
+					</ui:repeat>
+				</p:column>
+				<p:column headerText="Stolik" style="text-align: center;">
+					<h:outputText value="#{noweZamowienie.nrStolika}" />
+				</p:column>
+				<p:column headerText="Data złożenia zamówienia"
+					styleClass="centerInRow">
+					<h:outputText value="#{noweZamowienie.dataPrzyjecia}">
+						<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+							timeZone="Europe/Berlin" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Usuń" styleClass="centerInRow">
+					<p:commandButton value="Usuń" type="button"
+						onclick="PF('usunNowe').show(); PF('poll').stop();" />
+					<p:dialog header="Usuń nowe zamówienie" widgetVar="usunNowe"
+						height="150" width="300" modal="true" resizable="false" closable="false">
+						<p:panelGrid columns="1">
+							<p:inputTextarea id="punz"
+								value="#{noweZamowienie.przyczynaAnulowania}" autoResize="false"
+								style="resize: none; width: 235px;" />
+							<p:watermark for="punz"
+								value="Podaj przyczynę usunięcia zamówienia" />
+							<f:facet name="footer">
+								<p:commandButton value="Usuń"
+									action="#{kelner.usunZamowienie(noweZamowienie.idZamowienia, noweZamowienie.przyczynaAnulowania)}"
+									onclick="PF('usunNowe').hide(); PF('poll').start();" update=":kelner:noweZamowienia" />
+									<p:button value="Anuluj" onclick="PF('usunNowe').hide() ; PF('poll').start();" />
+							</f:facet>
+						</p:panelGrid>
+					</p:dialog>
 
-		</p:dataTable>
-</h:panelGroup>
-		<br />	
-	<h:panelGroup id="zamowieniaDoPodania">		
-		<p:dataTable  var="zamowienieDoPodania" value="#{kelner.zamowieniaDoPodania}"  
-					rendered="#{kelner.iloscZamowienDoPodania >0}" tableStyle="table-layout:auto;width:100%;">
-			<f:facet name="header">Zamówienia do podania</f:facet>
-			<p:column headerText="Numer" styleClass="centerInRow">
-				<h:outputText value="#{zamowienieDoPodania.idZamowienia}" />
-			</p:column>
-			<p:column headerText="Nazwa produktu">
-			<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
-				<h:outputText value="#{produkt.nazwa}"/> <br />
-			</ui:repeat>
-			</p:column>
-			<p:column headerText="Ilość" styleClass="centerInRow">
-			<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
-				<h:outputText value="#{produkt.ilosc}" /> <br/>			
-			</ui:repeat>
-			</p:column>			
-			<p:column headerText="Stolik" styleClass="centerInRow">
-				<h:outputText value="#{zamowienieDoPodania.nrStolika}" />
-			</p:column>
-			<p:column headerText="Data złożenia zamówienia" styleClass="centerInRow">
-				<h:outputText value="#{zamowienieDoPodania.dataPrzyjecia}">
-			  		<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Berlin" />
-				</h:outputText>
-			</p:column>
-			<p:column headerText="Usuń" styleClass="centerInRow">
-				<p:commandButton value="Usuń"  type="button" onclick="PF('usunPod').show();"/>
-				<p:dialog header="Usuń zamówienie do podania" widgetVar="usunPod" height="150" width="300" modal="true" resizable="false"  >
-				<p:panelGrid columns="1"> 
-					<p:inputTextarea  id="puzdp" value="#{zamowienieDoPodania.przyczynaAnulowania}" autoResize="false" style="resize: none; width: 235px;"/>
-					<p:watermark for="puzdp" value="Podaj przyczynę usunięcia zamówienia" />
-					<f:facet name="footer">
-					<p:commandButton value="Usuń" action="#{kelner.usunZamowienie(zamowienieDoPodania.idZamowienia, zamowienieDoPodania.przyczynaAnulowania)}"
-					onclick="PF('dialog').show();" update=":kelner:zamowieniaDoPodania"/>
-					</f:facet>
-				</p:panelGrid>
-				</p:dialog>
-			</p:column>
-			<p:column headerText="Przekaż" styleClass="centerInRow">
-				<p:commandButton value="Do klienta" action="#{kelner.doKlienta(zamowienieDoPodania.idZamowienia)}" update=":kelner:zamowieniaDoPodania"/>
-			</p:column>
-			<f:facet name="footer">
-				Ilość zamówień do podania: <h:outputText value="#{kelner.iloscZamowienDoPodania}"/>
-			</f:facet>
-		</p:dataTable>
-	</h:panelGroup>
-	   </h:form>
+				</p:column>
+				<p:column headerText="Przekaż" styleClass="centerInRow">
+					<p:commandButton value="Do kuchni"
+						action="#{kelner.doKuchni(noweZamowienie.idZamowienia)}"
+						update=":kelner:noweZamowienia" />
+				</p:column>
+				<f:facet name="footer">
+				Ilość nowych zamówień: <h:outputText
+						value="#{kelner.iloscNowychZamowien}" />
+				</f:facet>
+
+			</p:dataTable>
+		</h:panelGroup>
+		<br />
+		<h:panelGroup id="zamowieniaDoPodania">
+			<p:dataTable var="zamowienieDoPodania"
+				value="#{kelner.zamowieniaDoPodania}"
+				rendered="#{kelner.iloscZamowienDoPodania >0}"
+				tableStyle="table-layout:auto;width:100%;">
+				<f:facet name="header">Zamówienia do podania</f:facet>
+				<p:column headerText="Numer" styleClass="centerInRow">
+					<h:outputText value="#{zamowienieDoPodania.idZamowienia}" />
+				</p:column>
+				<p:column headerText="Nazwa produktu">
+					<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
+						<h:outputText value="#{produkt.nazwa}" />
+						<br />
+					</ui:repeat>
+				</p:column>
+				<p:column headerText="Ilość" styleClass="centerInRow">
+					<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
+						<h:outputText value="#{produkt.ilosc}" />
+						<br />
+					</ui:repeat>
+				</p:column>
+				<p:column headerText="Stolik" styleClass="centerInRow">
+					<h:outputText value="#{zamowienieDoPodania.nrStolika}" />
+				</p:column>
+				<p:column headerText="Data złożenia zamówienia"
+					styleClass="centerInRow">
+					<h:outputText value="#{zamowienieDoPodania.dataPrzyjecia}">
+						<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+							timeZone="Europe/Berlin" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Usuń" styleClass="centerInRow">
+					<p:commandButton value="Usuń" type="button"
+						onclick="PF('usunPod').show(); PF('poll').stop()" />
+					<p:dialog header="Usuń zamówienie do podania" widgetVar="usunPod"
+						height="150" width="300" modal="true" resizable="false" closable="false">
+						<p:panelGrid columns="1">
+							<p:inputTextarea id="puzdp"
+								value="#{zamowienieDoPodania.przyczynaAnulowania}"
+								autoResize="false" style="resize: none; width: 235px;" />
+							<p:watermark for="puzdp"
+								value="Podaj przyczynę usunięcia zamówienia" />
+							<f:facet name="footer">
+								<p:commandButton value="Usuń"
+									action="#{kelner.usunZamowienie(zamowienieDoPodania.idZamowienia, zamowienieDoPodania.przyczynaAnulowania)}"
+									onclick="PF('usunPod').hide(); PF('poll').start();"
+									update=":kelner:zamowieniaDoPodania" />
+									<p:button value="Anuluj" onclick="PF('usunPod').hide(); PF('poll').start();" />
+							</f:facet>
+						</p:panelGrid>
+					</p:dialog>
+				</p:column>
+				<p:column headerText="Przekaż" styleClass="centerInRow">
+					<p:commandButton value="Do klienta"
+						action="#{kelner.doKlienta(zamowienieDoPodania.idZamowienia)}"
+						update=":kelner:zamowieniaDoPodania" />
+				</p:column>
+				<f:facet name="footer">
+				Ilość zamówień do podania: <h:outputText
+						value="#{kelner.iloscZamowienDoPodania}" />
+				</f:facet>
+			</p:dataTable>
+			<p:poll interval="3" widgetVar="poll" update="zamowieniaDoPodania noweZamowienia" />
+		</h:panelGroup>
+		
+	</h:form>
 </h:body>
 </html>

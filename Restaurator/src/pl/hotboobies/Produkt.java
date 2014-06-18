@@ -1,5 +1,6 @@
 package pl.hotboobies;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
@@ -12,13 +13,13 @@ public class Produkt {
 	private int idGrupa;
 	private int ilosc;
 	private int iloscZamawianych;
-	private double cena;
+	private BigDecimal cena;
 	private Date czasAktualizacji;
 	private int czasWykonania;
 	private boolean aktywny;
 
 	
-	public Produkt(int id, String nazwa, double cena, int ilosc,
+	public Produkt(int id, String nazwa, BigDecimal cena, int ilosc,
 			 int czasWykonania, boolean aktywny) {
 		super();
 		this.id = id;
@@ -87,11 +88,11 @@ public class Produkt {
 		this.iloscZamawianych = iloscZamawianych;
 	}
 
-	public double getCena() {
+	public BigDecimal getCena() {
 		return cena;
 	}
 
-	public void setCena(double cena) {
+	public void setCena(BigDecimal cena) {
 		this.cena = cena;
 	}
 

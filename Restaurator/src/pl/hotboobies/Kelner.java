@@ -215,6 +215,11 @@ public class Kelner implements Serializable{
 	public String usunZamowienie(int idZamowienia, String przyczyna){
 		DaoZamowienie.anulujZamowienie(idZamowienia, przyczyna);
 		DaoZamowienie.zmienStatusNaAnulowane(idZamowienia);
+		FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacja",
+							"Zamówienie zosta³o usuniête"));	
 		return null;
 	}
 
@@ -272,12 +277,26 @@ public class Kelner implements Serializable{
 	 * Dekrementuje iloœæ produktu na zamówieniu. W przypadku gdy iloœæ produktu jest równa 1 to 
 	 * usuwa produkt z tymczasowego zamówienia.
 	 */
-	public String usunProdukt(String id){
+	public String zmniejszIloœæProduktu(String id){
 		for (Produkt produkt : produktyZamowienia) {
 			if(produkt.getId() == Integer.valueOf(id)){
 				produkt.dekrementujIloscZamawianych();
 				if(produkt.getIloscZamawianych() == 0)
 					produktyZamowienia.remove(produkt);
+				break;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Dekrementuje iloœæ produktu na zamówieniu. W przypadku gdy iloœæ produktu jest równa 1 to 
+	 * usuwa produkt z tymczasowego zamówienia.
+	 */
+	public String zwiekszIloœæProduktu(String id){
+		for (Produkt produkt : produktyZamowienia) {
+			if(produkt.getId() == Integer.valueOf(id)){
+				produkt.inkrementujIloscZamawianych();
 				break;
 			}
 		}
