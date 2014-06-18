@@ -30,6 +30,17 @@ public class Produkt {
 		this.aktywny = aktywny;
 	}
 	
+	public Produkt(int id, String nazwa, BigDecimal cena, int iloscZamawianych,
+			 int czasWykonania) {
+		super();
+		this.id = id;
+		this.nazwa = nazwa;
+		this.cena = cena;
+		this.iloscZamawianych = iloscZamawianych;		
+		this.czasWykonania = czasWykonania;
+	}
+	
+	
 	public Produkt(int id, String nazwa, int ilosc,
 			 int czasWykonania, boolean aktywny, int idGrupa) {
 		super();

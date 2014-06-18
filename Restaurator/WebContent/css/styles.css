@@ -20,15 +20,9 @@
 }
 
 #messageForm{
-	text-align: center;
 	color:red;
 }
 
-#loginForm{
-	text-align: right;
-	margin-left: 40%;
-
-}
 
 #noweZamowienia{
 	float:center;

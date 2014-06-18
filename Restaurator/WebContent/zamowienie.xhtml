@@ -67,10 +67,10 @@
 					<p:column headerText="Nazwa produktu" >
 						<h:outputText value="#{produktZamowienia.nazwa}" />
 					</p:column>
-					<p:column headerText="Ilość" styleClass="centerInRow">
+					<p:column headerText="Ilość"  footerText="Razem" styleClass="centerInRow">
 						<h:outputText value="#{produktZamowienia.iloscZamawianych}" />
 					</p:column>
-					<p:column headerText="Cena" styleClass="centerInRow">
+					<p:column headerText="Cena" footerText="#{kelner.sumaZamowienia(kelner.produktyZamowienia)}" styleClass="centerInRow">
 						<h:outputText value="#{produktZamowienia.cena * produktZamowienia.iloscZamawianych}" >
 						<f:convertNumber currencySymbol="zł" type="currency" minFractionDigits="2"/>
 						</h:outputText>

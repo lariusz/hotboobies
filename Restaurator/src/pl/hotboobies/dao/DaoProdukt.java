@@ -101,9 +101,8 @@ public class DaoProdukt {
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 							wszystkieProdukty.getString("nazwa"),							
 							wszystkieProdukty.getBigDecimal("cena"),
-							wszystkieProdukty.getInt("ilosc"),
-							wszystkieProdukty.getInt("czas_wykonania"),
-							wszystkieProdukty.getInt("aktywny") == 1));
+							wszystkieProdukty.getInt("ilosc_zamawianych"),
+							wszystkieProdukty.getInt("czas_wykonania")));
 				}
 				wszystkieProdukty.close();
 			} catch (SQLException e) {

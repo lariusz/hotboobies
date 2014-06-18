@@ -17,7 +17,6 @@
 </center>
 <p:toolbar id="tb">
     <f:facet name="left">
-        <p:button outcome="kucharz" value="Odśwież"  />
       	<p:commandButton value="Pobierz zamówienie" action="#{kucharz.pobierzZamowienie()}" update=":kucharz:mojeZamowienia" />
     </f:facet>
     <f:facet name="right">
@@ -48,9 +47,12 @@
 			<p:column headerText="Ilość" styleClass="centerInRow">
 			<f:facet name="header"></f:facet>
 			<ui:repeat var="produkt" value="#{mojeZamowienie.produkty}">
-				<h:outputText value="#{produkt.ilosc}"  /> <br/>			
+				<h:outputText value="#{produkt.iloscZamawianych}"  /> <br/>			
 			</ui:repeat>
-			</p:column>			
+			</p:column>
+			<p:column headerText="Wartość" styleClass="centerInRow">
+					<h:outputText value="#{kelner.sumaZamowienia(mojeZamowienie.produkty)}" />
+			</p:column>		
 			<p:column  headerText="Stolik" styleClass="centerInRow">
 				<h:outputText value="#{mojeZamowienie.nrStolika}"  />
 			</p:column>
@@ -69,6 +71,7 @@
 				<h:outputText value="Ilość zamówień do przygotowania : #{kucharz.licznik}" />
 			</f:facet>
 		</p:dataTable>
+		<p:poll interval="3" widgetVar="poll" update="mojeZamowienia" />
 </h:panelGroup>
 </h:form>
 </h:body>

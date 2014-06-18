@@ -1,10 +1,13 @@
 package pl.hotboobies;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -301,6 +304,17 @@ public class Kelner implements Serializable{
 			}
 		}
 		return null;
+	}
+	
+	public String sumaZamowienia(List<Produkt> produktyZamowienia){
+		BigDecimal suma = new BigDecimal(0);
+		for(Produkt produkt : produktyZamowienia){
+			suma = suma.add(produkt.getCena().multiply(BigDecimal.valueOf(produkt.getIloscZamawianych())));
+		}
+		NumberFormat costFormat = NumberFormat.getCurrencyInstance();
+		costFormat.setMinimumFractionDigits(2);
+		return costFormat.format(suma);
+		
 	}
 	
 	/**

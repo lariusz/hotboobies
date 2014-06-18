@@ -35,7 +35,7 @@ public class DaoPozycja {
 		try {
 			int id = pobierzIdOstatniejPozycji();
 			st.executeUpdate("INSERT INTO pozycja "
-					+ "(id_pozycja, id_zamowienie, id_produkt, ilosc) VALUES('"
+					+ "(id_pozycja, id_zamowienie, id_produkt, ilosc_zamawianych) VALUES('"
 					+ (id + 1) + "', '" + idZamowienia + "', '" + idProdukt
 					+ "', '" + ilosc + "')");
 		} catch (SQLException e) {

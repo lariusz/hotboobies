@@ -46,9 +46,12 @@
 				</p:column>
 				<p:column headerText="Ilość" styleClass="centerInRow">
 					<ui:repeat var="produkt" value="#{noweZamowienie.produkty}">
-						<h:outputText value="#{produkt.ilosc}" />
+						<h:outputText value="#{produkt.iloscZamawianych}" />
 						<br />
 					</ui:repeat>
+				</p:column>
+				<p:column headerText="Wartość" styleClass="centerInRow">
+					<h:outputText value="#{kelner.sumaZamowienia(noweZamowienie.produkty)}" />
 				</p:column>
 				<p:column headerText="Stolik" style="text-align: center;">
 					<h:outputText value="#{noweZamowienie.nrStolika}" />
@@ -108,12 +111,15 @@
 						<h:outputText value="#{produkt.nazwa}" />
 						<br />
 					</ui:repeat>
-				</p:column>
+				</p:column>				
 				<p:column headerText="Ilość" styleClass="centerInRow">
 					<ui:repeat var="produkt" value="#{zamowienieDoPodania.produkty}">
-						<h:outputText value="#{produkt.ilosc}" />
+						<h:outputText value="#{produkt.iloscZamawianych}" />
 						<br />
 					</ui:repeat>
+				</p:column>
+				<p:column headerText="Wartość" styleClass="centerInRow">
+					<h:outputText value="#{kelner.sumaZamowienia(zamowienieDoPodania.produkty)}" />
 				</p:column>
 				<p:column headerText="Stolik" styleClass="centerInRow">
 					<h:outputText value="#{zamowienieDoPodania.nrStolika}" />
