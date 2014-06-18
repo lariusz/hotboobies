@@ -27,7 +27,74 @@
 </p:toolbar> 
 <p:sticky target="tb" />
 <br />
-
-</h:form>
+		<p:tabView scrollable="true" orientation="top">
+			<p:tab title="Raport kucharza">
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="kucharz" value="Wybierz kucharza:" />
+					<p:selectOneMenu  id="kucharz" value="#{raport.kucharz}">
+						<f:selectItem itemLabel="Wybierz" itemValue="" />
+						<f:selectItems value="#{raport.kucharze}" var="kuch" 
+									   itemLabel="#{kuch.imie} #{kuch.nazwisko}"
+									   itemValue="#{kuch}" />
+					</p:selectOneMenu>
+					<p:message for="kucharz" />
+					<p:outputLabel for="kucharzDataOd" value="Data od:" />
+					<p:calendar id="kucharzDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="kucharzDataOd" />
+					<p:outputLabel for="kucharzDataDo" value="Data do:" />
+					<p:calendar id="kucharzDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="kucharzDataDo" />
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="Raport kelnera">
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="kelner" value="Wybierz kelnera:" />
+					<p:selectOneMenu  id="kelner" value="#{raport.kucharz}">
+						<f:selectItem itemLabel="Wybierz" itemValue="" />
+						<f:selectItems value="#{raport.kelnerzy}" var="kel" 
+									   itemLabel="#{kel.imie} #{kel.nazwisko}"
+									   itemValue="#{kel}" />
+					</p:selectOneMenu>
+					<p:message for="kucharz" />
+					<p:outputLabel for="kelnerDataOd" value="Data od:" />
+					<p:calendar id="kelnerDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="kelnerDataOd" />
+					<p:outputLabel for="kelnerDataDo" value="Data do:" />
+					<p:calendar id="kelnerDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="kelnerDataDo" />
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="Raport zamowionych produktów">
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="produktDataOd" value="Data od:" />
+					<p:calendar id="produktDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="produktDataOd" />
+					<p:outputLabel for="produktDataDo" value="Data do:" />
+					<p:calendar id="produktDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="produktDataDo" />
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="Raport zamówień">
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="zamowienieDataOd" value="Data od:" />
+					<p:calendar id="zamowienieDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="zamowienieDataOd" />
+					<p:outputLabel for="zamowienieDataDo" value="Data do:" />
+					<p:calendar id="zamowienieDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="zamowienieDataDo" />
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="Raport anulowanych zamówień">
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="anulowaneDataOd" value="Data od:" />
+					<p:calendar id="anulowaneDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="anulowaneDataOd" />
+					<p:outputLabel for="anulowaneDataDo" value="Data do:" />
+					<p:calendar id="anulowaneDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
+					<p:message for="anulowaneDataDo" />
+				</h:panelGrid>
+			</p:tab>
+		</p:tabView>
+	</h:form>
 </h:body>
 </html>

@@ -38,11 +38,9 @@ public class DaoUzytkownik {
 	 * @throws SQLException
 	 */
 	public static List<Uzytkownik> pobierzWszystkich() {				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		List<Uzytkownik> wszyscy = new ArrayList<Uzytkownik>();
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik");
 		while(uzytkownik.next()){
 			wszyscy.add(new Uzytkownik(
@@ -65,11 +63,9 @@ public class DaoUzytkownik {
 	}
 	
 	public static Uzytkownik pobierzUzytkownika(String login, String haslo) {				
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		Uzytkownik user = null;
-		try{
 		otworzPolaczenie();
+		try{
 		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik WHERE login = '" + login.toLowerCase() + "' AND haslo = '" + haslo + "'");
 		while(uzytkownik.next()){
 			user = new Uzytkownik(
@@ -94,8 +90,6 @@ public class DaoUzytkownik {
 	
 	public static boolean czyJestUserWBazie(String login, String haslo) {				
 		boolean jest = false;
-		if(ds == null)
-			ds = utworzZrodloDanych();
 		PreparedStatement ps = null;		
 		otworzPolaczenie();
 		try{
@@ -117,6 +111,55 @@ public class DaoUzytkownik {
 		return jest;
 	}
 	
+	public static List<Uzytkownik> pobierzKelnerow() {
+		List<Uzytkownik> kelnerzy = new ArrayList<Uzytkownik>();
+		otworzPolaczenie();
+		try{
+		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik WHERE id_rola = 2");
+		while(uzytkownik.next()){
+			kelnerzy.add(new Uzytkownik(
+					uzytkownik.getInt("id_uzytkownik"),
+					uzytkownik.getString("login"),
+					uzytkownik.getString("haslo"),
+					uzytkownik.getInt("id_rola"),
+					uzytkownik.getString("imie"),
+					uzytkownik.getString("nazwisko"),
+					uzytkownik.getString("mail"),
+					uzytkownik.getString("telefon"),
+					uzytkownik.getInt("blokuj") == 1));
+		}
+		uzytkownik.close();
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return kelnerzy;
+	}
+	
+	public static List<Uzytkownik> pobierzKucharzy() {
+		List<Uzytkownik> kucharze = new ArrayList<Uzytkownik>();
+		otworzPolaczenie();
+		try{
+		ResultSet uzytkownik =  st.executeQuery("SELECT * FROM uzytkownik WHERE id_rola = 3");
+		while(uzytkownik.next()){
+			kucharze.add(new Uzytkownik(
+					uzytkownik.getInt("id_uzytkownik"),
+					uzytkownik.getString("login"),
+					uzytkownik.getString("haslo"),
+					uzytkownik.getInt("id_rola"),
+					uzytkownik.getString("imie"),
+					uzytkownik.getString("nazwisko"),
+					uzytkownik.getString("mail"),
+					uzytkownik.getString("telefon"),
+					uzytkownik.getInt("blokuj") == 1));
+		}
+		uzytkownik.close();
+		zamknijPolaczenie();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		return kucharze;
+	}
 	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -137,6 +180,8 @@ public class DaoUzytkownik {
 	 * Otwiera po³¹czenie z baz¹ danych
 	 */
 	private static void otworzPolaczenie() {
+		if(ds == null)
+			ds = utworzZrodloDanych();
 		try {
 			conn = ds.getConnection();
 			st = conn.createStatement();
@@ -161,5 +206,7 @@ public class DaoUzytkownik {
 			e.printStackTrace();
 		}
 	}
+
+
 
 }
