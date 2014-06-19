@@ -14,6 +14,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import pl.hotboobies.Produkt;
 import pl.hotboobies.Zamowienie;
 
 /**
@@ -371,6 +372,120 @@ public class DaoZamowienie {
 			e.printStackTrace();
 		}
 	}
+
+	public static List<Zamowienie> pobierzZamowieniaKucharza(int identyfikator,
+			Date dataOd, Date dataDo) {
+		List<Zamowienie> zamowieniaKucharza = new ArrayList<Zamowienie>();
+		otworzPolaczenie();
+		try{
+		ResultSet zamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE id_status = 6 AND kucharz_id = "+identyfikator
+				+" AND (data_przyjecia BETWEEN '" +new SimpleDateFormat("YYYY/MM/dd").format(dataOd)
+				+ "' AND '" +new SimpleDateFormat("YYYY/MM/dd").format(dataDo)+ "') ORDER BY ID_ZAMOWIENIE");
+		while(zamowienia.next()){
+			zamowieniaKucharza.add(new Zamowienie(
+					zamowienia.getInt("id_zamowienie"), zamowienia.getInt("id_status"),
+					zamowienia.getTimestamp("data_przyjecia"), zamowienia.getInt("nr_stolika"),
+					zamowienia.getInt("id_uzytkownik"), zamowienia.getInt("kucharz_id")));
+		}
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return zamowieniaKucharza;		
+	}
+	
+	public static List<Zamowienie> pobierzZamowieniaKelnera(int identyfikator,
+			Date dataOd, Date dataDo) {
+		List<Zamowienie> zamowieniaKelnera = new ArrayList<Zamowienie>();
+		otworzPolaczenie();
+		try{
+		ResultSet zamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 6 AND id_uzytkownik = "+identyfikator
+				+" AND (data_przyjecia BETWEEN '" +new SimpleDateFormat("YYYY/MM/dd").format(dataOd)
+				+ "' AND '" +new SimpleDateFormat("YYYY/MM/dd").format(dataDo)+ "') ORDER BY ID_ZAMOWIENIE");
+		while(zamowienia.next()){
+			zamowieniaKelnera.add(new Zamowienie(
+					zamowienia.getInt("id_zamowienie"), zamowienia.getInt("id_status"),
+					zamowienia.getTimestamp("data_przyjecia"), zamowienia.getInt("nr_stolika"),
+					zamowienia.getInt("id_uzytkownik"), zamowienia.getInt("kucharz_id")));
+		}
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return zamowieniaKelnera;		
+	}
+
+	public static List<Produkt> pobierzZamowioneProdukty(Date dataOd, Date dataDo) {
+		List<Produkt> zamowioneProdukty = new ArrayList<Produkt>();
+		otworzPolaczenie();
+		try{
+		ResultSet produkty = st.executeQuery("SELECT p.NAZWA, p.CENA, sum(poz.ILOSC_ZAMAWIANYCH) "
+				+ "FROM produkt p INNER JOIN pozycja poz USING(id_produkt) "
+				+ "INNER JOIN zamowienie z USING (id_zamowienie) "
+				+ "WHERE z.id_status = 6"
+				+" AND (data_przyjecia BETWEEN '" +new SimpleDateFormat("YYYY/MM/dd").format(dataOd)
+				+ "' AND '" +new SimpleDateFormat("YYYY/MM/dd").format(dataDo)+ "') GROUP BY p.NAZWA, p.CENA");
+		while(produkty.next()){
+			zamowioneProdukty.add(new Produkt(produkty.getString(1),							
+					produkty.getBigDecimal(2),
+					produkty.getInt(3)));
+		}
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return zamowioneProdukty;		
+	}
+
+	public static List<Zamowienie> pobierzZamowienia(Date dataOd, Date dataDo) {
+		List<Zamowienie> wszystkieZamowienia = new ArrayList<Zamowienie>();
+		otworzPolaczenie();
+		try{
+		ResultSet zamowienia = st.executeQuery("SELECT * FROM zamowienie WHERE ID_STATUS = 6 "
+				+"AND (data_przyjecia BETWEEN '" +new SimpleDateFormat("YYYY/MM/dd").format(dataOd)
+				+ "' AND '" +new SimpleDateFormat("YYYY/MM/dd").format(dataDo)+ "') ORDER BY ID_ZAMOWIENIE");
+		while(zamowienia.next()){
+			wszystkieZamowienia.add(new Zamowienie(
+					zamowienia.getInt("id_zamowienie"), zamowienia.getInt("id_status"),
+					zamowienia.getTimestamp("data_przyjecia"), zamowienia.getInt("nr_stolika"),
+					zamowienia.getInt("id_uzytkownik"), zamowienia.getInt("kucharz_id")));
+		}
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return wszystkieZamowienia;	
+	}
+
+	public static List<Zamowienie> pobierzAnulowaneZamowienia(Date dataOd, Date dataDo) {
+		List<Zamowienie> zamowieniaAnulowane = new ArrayList<Zamowienie>();
+		otworzPolaczenie();
+		try{
+		ResultSet zamowienia = st.executeQuery("SELECT ID_ZAMOWIENIE, z.NR_STOLIKA, z.DATA_PRZYJECIA, a.DATA_ANUL, a.PRZYCZYNA "
+				+ "FROM zamowienie z INNER JOIN anulowane a USING(id_zamowienie) "
+				+ "WHERE z.id_status = 7"
+				+" AND (data_przyjecia BETWEEN '" +new SimpleDateFormat("YYYY/MM/dd").format(dataOd)
+				+ "' AND '" +new SimpleDateFormat("YYYY/MM/dd").format(dataDo)+ "')");
+		while(zamowienia.next()){
+			zamowieniaAnulowane.add(new Zamowienie(
+					zamowienia.getInt("id_zamowienie"), zamowienia.getInt("nr_stolika"),
+					zamowienia.getTimestamp("data_przyjecia"),
+					zamowienia.getTimestamp("data_anul"),
+					zamowienia.getString("przyczyna")));
+		}
+		} catch (SQLException e){
+			e.printStackTrace();
+		} finally {
+			zamknijPolaczenie();
+		}
+		return zamowieniaAnulowane;	
+	}
+		
+	
 
 
 }

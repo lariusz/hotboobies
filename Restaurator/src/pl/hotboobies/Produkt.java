@@ -17,8 +17,17 @@ public class Produkt {
 	private Date czasAktualizacji;
 	private int czasWykonania;
 	private boolean aktywny;
+	private int sumaZamawianych;
 
 	
+	public int getSumaZamawianych() {
+		return sumaZamawianych;
+	}
+
+	public void setSumaZamawianych(int sumaZamawianych) {
+		this.sumaZamawianych = sumaZamawianych;
+	}
+
 	public Produkt(int id, String nazwa, BigDecimal cena, int ilosc,
 			 int czasWykonania, boolean aktywny) {
 		super();
@@ -28,6 +37,14 @@ public class Produkt {
 		this.ilosc = ilosc;		
 		this.czasWykonania = czasWykonania;
 		this.aktywny = aktywny;
+	}
+	
+	public Produkt(String nazwa, BigDecimal cena, int sumaZamawianych) {
+		super();
+		this.nazwa = nazwa;
+		this.cena = cena;
+		this.sumaZamawianych = sumaZamawianych;
+
 	}
 	
 	public Produkt(int id, String nazwa, BigDecimal cena, int iloscZamawianych,

@@ -23,7 +23,16 @@ public class Zamowienie {
 		
 	}
 
-
+	public Zamowienie(int idZamowienia, Integer nrStolika,Date dataPrzyjecia,
+			 Date dataAnulowania, String przyczynaAnulowania) {
+		this.idZamowienia = idZamowienia;
+		this.nrStolika = nrStolika;
+		this.dataPrzyjecia = dataPrzyjecia;
+		this.dataAnulowania = dataAnulowania;
+		this.przyczynaAnulowania = przyczynaAnulowania;
+		
+	}
+	
 	public Zamowienie(int idZamowienia, int idStatus, Date dataPrzyjecia,
 			Integer nrStolika, int idKelnera, int idKucharza) {
 		this.idZamowienia = idZamowienia;

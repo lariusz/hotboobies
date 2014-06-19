@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
+import pl.hotboobies.dao.DaoProdukt;
 import pl.hotboobies.dao.DaoUzytkownik;
+import pl.hotboobies.dao.DaoZamowienie;
 
 /**
  * 	Klasa pozwalaj¹ca na generowanie raportów.
@@ -16,7 +20,7 @@ import pl.hotboobies.dao.DaoUzytkownik;
  */
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class Raport implements Serializable{
 
 	private static final long serialVersionUID = 4994624611961321842L;
@@ -25,28 +29,34 @@ public class Raport implements Serializable{
 	private Date dataDo;	
 	private List<Uzytkownik> kelnerzy = new ArrayList<>();
 	private List<Uzytkownik> kucharze = new ArrayList<>();
-	private Uzytkownik kelner;
-	private Uzytkownik kucharz;
+	private List<Zamowienie> zamowieniaKucharza = new ArrayList<>();
+	private List<Zamowienie> zamowieniaKelnera = new ArrayList<>();
+	private List<Zamowienie> zamowienia = new ArrayList<>();
+	private List<Zamowienie> zamowieniaAnulowane = new ArrayList<>();
+	private List<Produkt> zamowioneProdukty = new ArrayList<>();
 	
+	private int kucharzId;
+	private int kelnerId;
 	
-	public Uzytkownik getKelner() {
-		return kelner;
+	public int getKucharzId() {
+		return kucharzId;
 	}
 
-	public void setKelner(Uzytkownik kelner) {
-		this.kelner = kelner;
+	public void setKucharzId(int kucharzId) {
+		this.kucharzId = kucharzId;
 	}
 
-	public Uzytkownik getKucharz() {
-		return kucharz;
+	public int getKelnerId() {
+		return kelnerId;
 	}
 
-	public void setKucharz(Uzytkownik kucharz) {
-		this.kucharz = kucharz;
+	public void setKelnerId(int kelnerId) {
+		this.kelnerId = kelnerId;
 	}
 	
 	public List<Uzytkownik> getKelnerzy() {
-		return kelnerzy = DaoUzytkownik.pobierzKelnerow();
+		kelnerzy = DaoUzytkownik.pobierzKelnerow();
+		return kelnerzy;
 	}
 
 	public void setKelnerzy(List<Uzytkownik> kelnerzy) {
@@ -54,7 +64,8 @@ public class Raport implements Serializable{
 	}
 
 	public List<Uzytkownik> getKucharze() {		
-		return kucharze = DaoUzytkownik.pobierzKucharzy();
+		kucharze = DaoUzytkownik.pobierzKucharzy();
+		return kucharze;
 	}
 
 	public void setKucharze(List<Uzytkownik> kucharze) {
@@ -77,41 +88,127 @@ public class Raport implements Serializable{
 		this.dataDo = dataDo;
 	}
 	
-	
+	public List<Zamowienie> getZamowieniaKucharza() {
+		return zamowieniaKucharza;
+	}
 
+	public void setZamowieniaKucharza(List<Zamowienie> zamowieniaKucharza) {
+		this.zamowieniaKucharza = zamowieniaKucharza;
+	}
+
+	public List<Zamowienie> getZamowieniaKelnera() {
+		return zamowieniaKelnera;
+	}
+
+	public void setZamowieniaKelnera(List<Zamowienie> zamowieniaKelnera) {
+		this.zamowieniaKelnera = zamowieniaKelnera;
+	}
+
+	public List<Zamowienie> getZamowienia() {
+		return zamowienia;
+	}
+
+	public void setZamowienia(List<Zamowienie> zamowienia) {
+		this.zamowienia = zamowienia;
+	}
+
+	public List<Zamowienie> getZamowieniaAnulowane() {
+		return zamowieniaAnulowane;
+	}
+
+	public void setZamowieniaAnulowane(List<Zamowienie> zamowieniaAnulowane) {
+		this.zamowieniaAnulowane = zamowieniaAnulowane;
+	}
+
+	public List<Produkt> getZamowioneProdukty() {
+		return zamowioneProdukty;
+	}
+
+	public void setZamowioneProdukty(List<Produkt> zamowioneProdukty) {
+		this.zamowioneProdukty = zamowioneProdukty;
+	}
+
+	public int getIloscZamowienKucharza() {
+		return zamowieniaKucharza.size();
+	}
+	
+	public int getIloscZamowienKelnera() {
+		return zamowieniaKelnera.size();
+	}
+	
+	public int getIloscZamowien() {
+		return zamowienia.size();
+	}
+	
+	public int getIloscZamowienAnulowanych() {
+		return zamowieniaAnulowane.size();
+	}
+	
+	public int getIloscProduktow() {
+		return zamowioneProdukty.size();
+	}
+	
 	/**
 	 * Generuje raport zamówieñ kucharza
 	 */
 	public void generujRaportKucharza(){
-		
+		zamowieniaKucharza = DaoZamowienie.pobierzZamowieniaKucharza(kucharzId, dataOd, dataDo);
+		for (Zamowienie zamowienie : zamowieniaKucharza) {
+			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}
+		if(zamowieniaKucharza.size() == 0)
+			pokazKomunikatBrakWynikow();
 	}
 
 	/**
 	 * Generuje raport zamówieñ kelnera
 	 */
-	public void generujRaportKelnera(int idUzytkownika, Date dataOd, Date dataDo){
-		
+	public void generujRaportKelnera(){
+		zamowieniaKelnera = DaoZamowienie.pobierzZamowieniaKelnera(kelnerId, dataOd, dataDo);
+		for (Zamowienie zamowienie : zamowieniaKelnera) {
+			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}
+		if(zamowieniaKelnera.size() == 0)
+			pokazKomunikatBrakWynikow();
 	}
 
 	/**
 	 * Generuje raport zamóionych produktów
 	 */
-	public void generujRaportZamowionychProduktow(Date dataOd, Date dataDo){
-		
+	public void generujRaportZamowionychProduktow(){
+		zamowioneProdukty = DaoZamowienie.pobierzZamowioneProdukty(dataOd, dataDo);
+		if(zamowioneProdukty.size() == 0)
+			pokazKomunikatBrakWynikow();
 	}
 
 	/**
 	 * Generuje raport zamówieñ
 	 */
 	public void generujRaportZamowien(){
-		
+		zamowienia = DaoZamowienie.pobierzZamowienia(dataOd, dataDo);
+		for (Zamowienie zamowienie : zamowienia) {
+			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			zamowienie.setProdukty(produkty);
+		}
+		if(zamowienia.size() == 0)
+			pokazKomunikatBrakWynikow();
 	}
 	
 	/**
 	 * Generuje raport anulowanych zamówieñ
 	 */
-	public void generujRaportAnulowanychZamowien(Date dataOd, Date dataDo){
-		
+	public void generujRaportAnulowanychZamowien(){
+		zamowieniaAnulowane  = DaoZamowienie.pobierzAnulowaneZamowienia(dataOd, dataDo);
+		if(zamowieniaAnulowane.size() == 0)
+			pokazKomunikatBrakWynikow();
+	}
+	
+	public void pokazKomunikatBrakWynikow(){
+        FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Zapytanie nie zwróci³o ¿adnych wyników", 
+				"Zapytanie nie zwróci³o ¿adnych wyników"));
 	}
 
 }

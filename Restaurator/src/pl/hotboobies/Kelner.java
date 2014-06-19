@@ -28,7 +28,7 @@ import pl.hotboobies.dao.DaoZamowienie;
  */
 @ManagedBean
 @SessionScoped
-public class Kelner implements Serializable{
+public class Kelner extends Uzytkownik implements Serializable{
 	
 	private static final long serialVersionUID = -2043621321850425369L;
 
@@ -293,8 +293,7 @@ public class Kelner implements Serializable{
 	}
 	
 	/**
-	 * Dekrementuje iloœæ produktu na zamówieniu. W przypadku gdy iloœæ produktu jest równa 1 to 
-	 * usuwa produkt z tymczasowego zamówienia.
+	 * Inkrementuje iloœæ produktu na zamówieniu. 
 	 */
 	public String zwiekszIloœæProduktu(String id){
 		for (Produkt produkt : produktyZamowienia) {
@@ -306,6 +305,11 @@ public class Kelner implements Serializable{
 		return null;
 	}
 	
+	/**
+	 * Oblicza sumê wartoœci pozycji zamówienia
+	 * @param produktyZamowienia lista produktów zamówienia
+	 * @return suma w formacie waluty PLN
+	 */
 	public String sumaZamowienia(List<Produkt> produktyZamowienia){
 		BigDecimal suma = new BigDecimal(0);
 		for(Produkt produkt : produktyZamowienia){

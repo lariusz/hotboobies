@@ -20,7 +20,7 @@ import pl.hotboobies.dao.DaoZamowienie;
  */
 @ManagedBean
 @SessionScoped
-public class Kierownik implements Serializable{
+public class Kierownik extends Uzytkownik implements Serializable{
 	
 	private static final long serialVersionUID = 1705949180511598664L;
 
@@ -30,7 +30,7 @@ public class Kierownik implements Serializable{
 		produkty = DaoProdukt.pobierzWszystkieKolumny();
 	}
 
-	Raport raport;
+	/** Lista produktów do aktualizacji */
 	private List<Produkt> produkty = new ArrayList<Produkt>();
 	
 	public List<Produkt> getProdukty() {
@@ -42,16 +42,6 @@ public class Kierownik implements Serializable{
 	}
 
 
-	/**
-	 * Wyœwietla wybrany typ raportu
-	 * @param typ - typ raportu
-	 */
-	public void pokazRaport(String typ){
-		switch(typ){
-		}
-		//TODO obs³uga wyœwietlenia raportu na formatce
-	}
-	
 	/**
 	 * Aktualizuje wszystkie pozycje.
 	 */

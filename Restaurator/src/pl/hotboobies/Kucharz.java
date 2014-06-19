@@ -20,7 +20,7 @@ import pl.hotboobies.dao.DaoZamowienie;
 
 @ManagedBean
 @SessionScoped
-public class Kucharz implements Serializable {
+public class Kucharz extends Uzytkownik implements Serializable {
 	
 	private static final long serialVersionUID = 360396799453001524L;
 

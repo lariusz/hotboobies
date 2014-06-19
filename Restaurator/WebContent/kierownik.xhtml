@@ -1,98 +1,297 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-<link href="./css/styles.css" 
-      rel="stylesheet" type="text/css"/> 
-<title>Kierownik</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<title>Kierownik</title>
 </h:head>
 <h:body>
-<h:form id="produkty">
-<center>
-<p:outputLabel value="KIEROWNIK" styleClass="title" />
-</center>
-<p:toolbar id="tb">
-    <f:facet name="left">
-        <p:button outcome="kierownik-stan" value="Aktualizacja stanu produktów"  />
-    </f:facet>
-    <f:facet name="right">
-		<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;"  /> 
-		<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;"  /> 
-		<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" /> 
-    </f:facet>
-</p:toolbar> 
-<p:sticky target="tb" />
-<br />
+	<h:form id="produkty">
+		<center>
+			<p:outputLabel value="KIEROWNIK" styleClass="title" />
+		</center>
+		<p:toolbar id="tb">
+			<f:facet name="left">
+				<p:button outcome="kierownik-stan"
+					value="Aktualizacja stanu produktów" />
+			</f:facet>
+			<f:facet name="right">
+				<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;" />
+				<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;" />
+				<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" />
+			</f:facet>
+		</p:toolbar>
+		<p:sticky target="tb" />
+		<p:growl id="growl"  life="5000" redisplay="false"/>  
+		<br />
 		<p:tabView scrollable="true" orientation="top">
 			<p:tab title="Raport kucharza">
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid id="raportKucharza" columns="2" cellpadding="5">
 					<p:outputLabel for="kucharz" value="Wybierz kucharza:" />
-					<p:selectOneMenu  id="kucharz" value="#{raport.kucharz}">
+					<p:selectOneMenu id="kucharz" value="#{raport.kucharzId}"
+						required="true" requiredMessage="Pole Wybierz kucharza: musi byc wypełnione">
 						<f:selectItem itemLabel="Wybierz" itemValue="" />
-						<f:selectItems value="#{raport.kucharze}" var="kuch" 
-									   itemLabel="#{kuch.imie} #{kuch.nazwisko}"
-									   itemValue="#{kuch}" />
+						<f:selectItems value="#{raport.kucharze}" var="kuch"
+							itemLabel="#{kuch.imie} #{kuch.nazwisko}"
+							itemValue="#{kuch.identyfikator}" />
 					</p:selectOneMenu>
-					<p:message for="kucharz" />
 					<p:outputLabel for="kucharzDataOd" value="Data od:" />
-					<p:calendar id="kucharzDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="kucharzDataOd" />
+					<p:calendar id="kucharzDataOd" value="#{raport.dataOd}" requiredMessage="Pole Data od: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
 					<p:outputLabel for="kucharzDataDo" value="Data do:" />
-					<p:calendar id="kucharzDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="kucharzDataDo" />
+					<p:calendar id="kucharzDataDo" value="#{raport.dataDo}"
+						required="true" requiredMessage="Pole Data do: musi byc wypełnione"
+						mode="popup" navigator="true" pattern="dd-MM-yyyy" />
+					<p:commandButton value="Generuj raport"
+						action="#{raport.generujRaportKucharza}"
+						update="zamowieniaKucharza :produkty:growl" process="raportKucharza" />
 				</h:panelGrid>
+				<h:panelGroup id="zamowieniaKucharza">
+					<p:dataTable var="zamowienieKucharza"
+						value="#{raport.zamowieniaKucharza}"
+						rendered="#{raport.iloscZamowienKucharza > 0}"
+						tableStyle="table-layout:auto;width:100%;">
+						<f:facet name="header">Zamówienia kucharza</f:facet>
+						<p:column headerText="Numer" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKucharza.idZamowienia}" />
+						</p:column>
+						<p:column headerText="Nazwa produktu">
+							<ui:repeat var="produkt" value="#{zamowienieKucharza.produkty}">
+								<h:outputText value="#{produkt.nazwa}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Ilość" styleClass="centerInRow">
+							<ui:repeat var="produkt" value="#{zamowienieKucharza.produkty}">
+								<h:outputText value="#{produkt.iloscZamawianych}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Wartość" styleClass="centerInRow">
+							<h:outputText
+								value="#{kelner.sumaZamowienia(zamowienieKucharza.produkty)}" />
+						</p:column>
+						<p:column headerText="Stolik" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKucharza.nrStolika}" />
+						</p:column>
+						<p:column headerText="Data złożenia zamówienia"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKucharza.dataPrzyjecia}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+									timeZone="Europe/Berlin" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+				Ilość zamówień kucharza: <h:outputText
+								value="#{raport.iloscZamowienKucharza}" />
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
 			</p:tab>
 			<p:tab title="Raport kelnera">
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid id="raportKelnera" columns="2" cellpadding="5">
 					<p:outputLabel for="kelner" value="Wybierz kelnera:" />
-					<p:selectOneMenu  id="kelner" value="#{raport.kucharz}">
+					<p:selectOneMenu id="kelner" value="#{raport.kelnerId}"
+						required="true" requiredMessage="Pole Wybierz kelnera: musi byc wypełnione">
 						<f:selectItem itemLabel="Wybierz" itemValue="" />
-						<f:selectItems value="#{raport.kelnerzy}" var="kel" 
-									   itemLabel="#{kel.imie} #{kel.nazwisko}"
-									   itemValue="#{kel}" />
+						<f:selectItems value="#{raport.kelnerzy}" var="kel"
+							itemLabel="#{kel.imie} #{kel.nazwisko}"
+							itemValue="#{kel.identyfikator}" />
 					</p:selectOneMenu>
-					<p:message for="kucharz" />
 					<p:outputLabel for="kelnerDataOd" value="Data od:" />
-					<p:calendar id="kelnerDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="kelnerDataOd" />
+					<p:calendar id="kelnerDataOd" value="#{raport.dataOd}" requiredMessage="Pole Data od: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
 					<p:outputLabel for="kelnerDataDo" value="Data do:" />
-					<p:calendar id="kelnerDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="kelnerDataDo" />
+					<p:calendar id="kelnerDataDo" value="#{raport.dataDo}" requiredMessage="Pole Data do: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
+					<p:commandButton value="Generuj raport"
+						action="#{raport.generujRaportKelnera()}"
+						update="zamowieniaKelnera :produkty:growl" process="raportKelnera" />
 				</h:panelGrid>
+				<h:panelGroup id="zamowieniaKelnera">
+					<p:dataTable var="zamowienieKelnera"
+						value="#{raport.zamowieniaKelnera}"
+						rendered="#{raport.iloscZamowienKelnera > 0}"
+						tableStyle="table-layout:auto;width:100%;">
+						<f:facet name="header">Zamówienia kelnera</f:facet>
+						<p:column headerText="Numer" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKelnera.idZamowienia}" />
+						</p:column>
+						<p:column headerText="Nazwa produktu">
+							<ui:repeat var="produkt" value="#{zamowienieKelnera.produkty}">
+								<h:outputText value="#{produkt.nazwa}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Ilość" styleClass="centerInRow">
+							<ui:repeat var="produkt" value="#{zamowienieKelnera.produkty}">
+								<h:outputText value="#{produkt.iloscZamawianych}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Wartość" styleClass="centerInRow">
+							<h:outputText
+								value="#{kelner.sumaZamowienia(zamowienieKelnera.produkty)}" />
+						</p:column>
+						<p:column headerText="Stolik" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKelnera.nrStolika}" />
+						</p:column>
+						<p:column headerText="Data złożenia zamówienia"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienieKelnera.dataPrzyjecia}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+									timeZone="Europe/Berlin" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+				Ilość zamówień kelnera: <h:outputText
+								value="#{raport.iloscZamowienKelnera}" />
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
 			</p:tab>
 			<p:tab title="Raport zamowionych produktów">
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid id="raportProduktów" columns="2" cellpadding="5">
 					<p:outputLabel for="produktDataOd" value="Data od:" />
-					<p:calendar id="produktDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="produktDataOd" />
+					<p:calendar id="produktDataOd" value="#{raport.dataOd}" requiredMessage="Pole Data od: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
 					<p:outputLabel for="produktDataDo" value="Data do:" />
-					<p:calendar id="produktDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="produktDataDo" />
+					<p:calendar id="produktDataDo" value="#{raport.dataDo}" requiredMessage="Pole Data do: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
+					<p:commandButton value="Generuj raport"
+						action="#{raport.generujRaportZamowionychProduktow()}"
+						update="produkty :produkty:growl" process="raportProduktów" />
 				</h:panelGrid>
+				<h:panelGroup id="produkty">
+					<p:dataTable var="produkt" value="#{raport.zamowioneProdukty}"
+						rendered="#{raport.iloscProduktow > 0}"
+						tableStyle="table-layout:auto;width:100%;">
+						<f:facet name="header">Zamówione produkty</f:facet>
+						<p:column headerText="Nazwa produktu">
+							<h:outputText value="#{produkt.nazwa}" />
+						</p:column>
+						<p:column headerText="Cena" styleClass="centerInRow">
+							<h:outputText value="#{produkt.cena}">
+								<f:convertNumber currencySymbol="zł" type="currency"
+									minFractionDigits="2" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Ilość zamówionych produktów"
+							styleClass="centerInRow">
+							<h:outputText value="#{produkt.sumaZamawianych}" />
+						</p:column>
+						<f:facet name="footer">
+				Ilość produktów: <h:outputText value="#{raport.iloscProduktow}" />
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
 			</p:tab>
 			<p:tab title="Raport zamówień">
-				<h:panelGrid columns="3" cellpadding="5">
+				<h:panelGrid id="raportZamowien" columns="2" cellpadding="5">
 					<p:outputLabel for="zamowienieDataOd" value="Data od:" />
-					<p:calendar id="zamowienieDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="zamowienieDataOd" />
+					<p:calendar id="zamowienieDataOd" value="#{raport.dataOd}" requiredMessage="Pole Data od: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
 					<p:outputLabel for="zamowienieDataDo" value="Data do:" />
-					<p:calendar id="zamowienieDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="zamowienieDataDo" />
+					<p:calendar id="zamowienieDataDo" value="#{raport.dataDo}" requiredMessage="Pole Data do: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
+					<p:commandButton value="Generuj raport"
+						action="#{raport.generujRaportZamowien()}" update="zamowienia :produkty:growl"
+						process="raportZamowien" />
 				</h:panelGrid>
+				<h:panelGroup id="zamowienia">
+					<p:dataTable var="zamowienie" value="#{raport.zamowienia}"
+						rendered="#{raport.iloscZamowien > 0}"
+						tableStyle="table-layout:auto;width:100%;">
+						<f:facet name="header">Wszystkie zamówienia</f:facet>
+						<p:column headerText="Numer" styleClass="centerInRow">
+							<h:outputText value="#{zamowienie.idZamowienia}" />
+						</p:column>
+						<p:column headerText="Nazwa produktu">
+							<ui:repeat var="produkt" value="#{zamowienie.produkty}">
+								<h:outputText value="#{produkt.nazwa}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Ilość" styleClass="centerInRow">
+							<ui:repeat var="produkt" value="#{zamowienie.produkty}">
+								<h:outputText value="#{produkt.iloscZamawianych}" />
+								<br />
+							</ui:repeat>
+						</p:column>
+						<p:column headerText="Wartość" styleClass="centerInRow">
+							<h:outputText
+								value="#{kelner.sumaZamowienia(zamowienie.produkty)}" />
+						</p:column>
+						<p:column headerText="Stolik" styleClass="centerInRow">
+							<h:outputText value="#{zamowienie.nrStolika}" />
+						</p:column>
+						<p:column headerText="Data złożenia zamówienia"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienie.dataPrzyjecia}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+									timeZone="Europe/Berlin" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+				Ilość wszystkich zamówień: <h:outputText
+								value="#{raport.iloscZamowien}" />
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
 			</p:tab>
-			<p:tab title="Raport anulowanych zamówień">
-				<h:panelGrid columns="3" cellpadding="5">
+			<p:tab title="Raport zamówień anulowanych">
+				<h:panelGrid id="raportZamowienAnulowanych" columns="3"
+					cellpadding="5">
 					<p:outputLabel for="anulowaneDataOd" value="Data od:" />
-					<p:calendar id="anulowaneDataOd" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="anulowaneDataOd" />
+					<p:calendar id="anulowaneDataOd" value="#{raport.dataOd}" requiredMessage="Pole Data od: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
 					<p:outputLabel for="anulowaneDataDo" value="Data do:" />
-					<p:calendar id="anulowaneDataDo" value="#{raport.dataOd}" mode="popup" navigator="true" pattern="dd-MM-yyyy"/>
-					<p:message for="anulowaneDataDo" />
+					<p:calendar id="anulowaneDataDo" value="#{raport.dataDo}" requiredMessage="Pole Data do: musi byc wypełnione"
+						required="true" mode="popup" navigator="true" pattern="dd-MM-yyyy" />
+					<p:commandButton value="Generuj raport"
+						action="#{raport.generujRaportAnulowanychZamowien()}"
+						update="zamowieniaAnulowane :produkty:growl" process="raportZamowienAnulowanych" />
 				</h:panelGrid>
+				<h:panelGroup id="zamowieniaAnulowane">
+					<p:dataTable var="zamowienieAnulowane"
+						value="#{raport.zamowieniaAnulowane}"
+						rendered="#{raport.iloscZamowienAnulowanych > 0}"
+						tableStyle="table-layout:auto;width:100%;">
+						<f:facet name="header">Zamówienia anulowane</f:facet>
+						<p:column headerText="Numer" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieAnulowane.idZamowienia}" />
+						</p:column>
+						<p:column headerText="Stolik" styleClass="centerInRow">
+							<h:outputText value="#{zamowienieAnulowane.nrStolika}" />
+						</p:column>
+						<p:column headerText="Data złożenia zamówienia"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienieAnulowane.dataPrzyjecia}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+									timeZone="Europe/Berlin" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Data anulowania zamówienia"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienieAnulowane.dataAnulowania}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss"
+									timeZone="Europe/Berlin" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Przyczyna anulowania"
+							styleClass="centerInRow">
+							<h:outputText value="#{zamowienieAnulowane.przyczynaAnulowania}" />
+						</p:column>
+						<f:facet name="footer">
+				Ilość zamówień anulowanych: <h:outputText
+								value="#{raport.iloscZamowienAnulowanych}" />
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
 			</p:tab>
 		</p:tabView>
 	</h:form>
