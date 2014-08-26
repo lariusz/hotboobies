@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.DaoUzytkownik;
+import pl.hotboobies.dao.UzytkownikDao;
 
 @ManagedBean
 @RequestScoped
@@ -71,9 +71,9 @@ public class Logowanie implements Serializable  {
 		String login = logujacy.getLogin();
 		String haslo = logujacy.getHaslo();
 		Uzytkownik uzytkownik = null;
-		boolean zalogowany = DaoUzytkownik.czyJestUserWBazie(login, haslo);
+		boolean zalogowany = UzytkownikDao.czyJestUserWBazie(login, haslo);
 		if(zalogowany){
-			uzytkownik = DaoUzytkownik.pobierzUzytkownika(login, haslo);
+			uzytkownik = UzytkownikDao.pobierzUzytkownika(login, haslo);
 				if (!uzytkownik.isZablokowany()) {
 					logujacy.setImie(uzytkownik.getImie());
 					logujacy.setNazwisko(uzytkownik.getNazwisko());

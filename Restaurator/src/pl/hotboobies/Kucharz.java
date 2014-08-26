@@ -10,8 +10,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.DaoProdukt;
-import pl.hotboobies.dao.DaoZamowienie;
+import pl.hotboobies.dao.ProduktDao;
+import pl.hotboobies.dao.ZamowienieDao;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kucharza
@@ -67,10 +67,10 @@ public class Kucharz extends Uzytkownik implements Serializable {
 	 */
 	public String pobierzZamowienie(){
 		
-		List<Zamowienie> ostatnieNieprzydzielone = DaoZamowienie.pobierzNajstarszeNieprzydzielone();
+		List<Zamowienie> ostatnieNieprzydzielone = ZamowienieDao.pobierzNajstarszeNieprzydzielone();
 		
 		if (!ostatnieNieprzydzielone.isEmpty()) {
-			DaoZamowienie.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
+			ZamowienieDao.przypiszZamowienieKucharzowi(uzytkownik.getIdentyfikator(), ostatnieNieprzydzielone.get(0).getIdZamowienia());
 			wyswietlZamowieniaMoje();
 		}		
 		else  {
@@ -87,7 +87,7 @@ public class Kucharz extends Uzytkownik implements Serializable {
 	 */
 	public String zwrocZamowienie(int idZamowienia){
 	
-		DaoZamowienie.zwrocZamowienie(idZamowienia);
+		ZamowienieDao.zwrocZamowienie(idZamowienia);
 		wyswietlZamowieniaMoje();
 	
 		return null;
@@ -99,24 +99,24 @@ public class Kucharz extends Uzytkownik implements Serializable {
 	 */
 	public String doKelnera(int idZamowienia){
 		
-		DaoZamowienie.przekazDoKelnera(idZamowienia);
+		ZamowienieDao.przekazDoKelnera(idZamowienia);
 		wyswietlZamowieniaMoje();
 		
 		return null;
 	}
 	
 	public void wyswietlZamowieniaWolne() {	
-		List<Zamowienie> wszystkie = DaoZamowienie.pobierzWszystkieNieprzydzielone();	
+		List<Zamowienie> wszystkie = ZamowienieDao.pobierzWszystkieNieprzydzielone();	
 		zamowienia=wszystkie;
 		
 	}
 		
 	
 	public void wyswietlZamowieniaMoje() {
-		List<Zamowienie> wszystkieZamowienia = DaoZamowienie.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
+		List<Zamowienie> wszystkieZamowienia = ZamowienieDao.pobierzPrzydzieloneDoKucharza(uzytkownik.getIdentyfikator());
 
 		for (Zamowienie zamowienie : wszystkieZamowienia) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		

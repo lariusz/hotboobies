@@ -20,7 +20,7 @@ import pl.hotboobies.Uzytkownik;
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoUzytkownik {
+public class UzytkownikDao {
 	
 	/** Obiekt ¿ród³ danych*/	
 	private static DataSource ds;

@@ -10,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.DaoProdukt;
-import pl.hotboobies.dao.DaoUzytkownik;
-import pl.hotboobies.dao.DaoZamowienie;
+import pl.hotboobies.dao.ProduktDao;
+import pl.hotboobies.dao.UzytkownikDao;
+import pl.hotboobies.dao.ZamowienieDao;
 
 /**
  * 	Klasa pozwalaj¹ca na generowanie raportów.
@@ -55,7 +55,7 @@ public class Raport implements Serializable{
 	}
 	
 	public List<Uzytkownik> getKelnerzy() {
-		kelnerzy = DaoUzytkownik.pobierzKelnerow();
+		kelnerzy = UzytkownikDao.pobierzKelnerow();
 		return kelnerzy;
 	}
 
@@ -64,7 +64,7 @@ public class Raport implements Serializable{
 	}
 
 	public List<Uzytkownik> getKucharze() {		
-		kucharze = DaoUzytkownik.pobierzKucharzy();
+		kucharze = UzytkownikDao.pobierzKucharzy();
 		return kucharze;
 	}
 
@@ -152,9 +152,9 @@ public class Raport implements Serializable{
 	 * Generuje raport zamówieñ kucharza
 	 */
 	public void generujRaportKucharza(){
-		zamowieniaKucharza = DaoZamowienie.pobierzZamowieniaKucharza(kucharzId, dataOd, dataDo);
+		zamowieniaKucharza = ZamowienieDao.pobierzZamowieniaKucharza(kucharzId, dataOd, dataDo);
 		for (Zamowienie zamowienie : zamowieniaKucharza) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		if(zamowieniaKucharza.size() == 0)
@@ -165,9 +165,9 @@ public class Raport implements Serializable{
 	 * Generuje raport zamówieñ kelnera
 	 */
 	public void generujRaportKelnera(){
-		zamowieniaKelnera = DaoZamowienie.pobierzZamowieniaKelnera(kelnerId, dataOd, dataDo);
+		zamowieniaKelnera = ZamowienieDao.pobierzZamowieniaKelnera(kelnerId, dataOd, dataDo);
 		for (Zamowienie zamowienie : zamowieniaKelnera) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		if(zamowieniaKelnera.size() == 0)
@@ -178,7 +178,7 @@ public class Raport implements Serializable{
 	 * Generuje raport zamóionych produktów
 	 */
 	public void generujRaportZamowionychProduktow(){
-		zamowioneProdukty = DaoZamowienie.pobierzZamowioneProdukty(dataOd, dataDo);
+		zamowioneProdukty = ZamowienieDao.pobierzZamowioneProdukty(dataOd, dataDo);
 		if(zamowioneProdukty.size() == 0)
 			pokazKomunikatBrakWynikow();
 	}
@@ -187,9 +187,9 @@ public class Raport implements Serializable{
 	 * Generuje raport zamówieñ
 	 */
 	public void generujRaportZamowien(){
-		zamowienia = DaoZamowienie.pobierzZamowienia(dataOd, dataDo);
+		zamowienia = ZamowienieDao.pobierzZamowienia(dataOd, dataDo);
 		for (Zamowienie zamowienie : zamowienia) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}
 		if(zamowienia.size() == 0)
@@ -200,7 +200,7 @@ public class Raport implements Serializable{
 	 * Generuje raport anulowanych zamówieñ
 	 */
 	public void generujRaportAnulowanychZamowien(){
-		zamowieniaAnulowane  = DaoZamowienie.pobierzAnulowaneZamowienia(dataOd, dataDo);
+		zamowieniaAnulowane  = ZamowienieDao.pobierzAnulowaneZamowienia(dataOd, dataDo);
 		if(zamowieniaAnulowane.size() == 0)
 			pokazKomunikatBrakWynikow();
 	}

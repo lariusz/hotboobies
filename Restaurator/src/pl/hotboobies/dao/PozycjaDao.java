@@ -4,22 +4,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import pl.hotboobies.Grupa;
-
 /**
- * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Grupa
+ * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Pozycja
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoGrupa {
+public class PozycjaDao {
+
 	
 	/** Obiekt ¿ród³ danych*/	
 	private static DataSource ds;
@@ -29,30 +25,54 @@ public class DaoGrupa {
 	
 	/** Obiekt zapytania do bazy danych */	
 	private static Statement st;
+		
+	/**
+	 * Pobiera wszystkie nazwy dla wszystkich grup produktów z bazy danych
+	 * @return zbiór wyników
+	 */
+	public static void dodajPozycjeZamowienia(int idZamowienia, int idProdukt,	int ilosc) {
+		otworzPolaczenie();
+		try {
+			int id = pobierzIdOstatniejPozycji();
+			st.executeUpdate("INSERT INTO pozycja "
+					+ "(id_pozycja, id_zamowienie, id_produkt, ilosc_zamawianych) VALUES('"
+					+ (id + 1) + "', '" + idZamowienia + "', '" + idProdukt
+					+ "', '" + ilosc + "')");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			zamknijPolaczenie();
+		}
+	}
 	
 	
 	/**
-	 * Pobiera wszystkie kolumny dla wszystkich grup produktów z bazy danych
-	 * @return zbiór wyników
-	 * @throws SQLException
+	 * Usuwa wszystkie pozycje z danego zamówienia
+	 * @param idZamowienia
 	 */
-	public static List<Grupa> pobierzWszystkieGrupy() {
-		List<Grupa> grupy = new ArrayList<Grupa>();
+	public static void usunPozycje(int idZamowienia) {
+		otworzPolaczenie();
 		try {
-			otworzPolaczenie();
-			ResultSet wszystkieGrupy = st.executeQuery("SELECT * FROM grupa");
-			while (wszystkieGrupy.next()) {
-				grupy.add(new Grupa(wszystkieGrupy.getInt("id_grupa"),
-						wszystkieGrupy.getString("nazwa")));
-			}
-			wszystkieGrupy.close();
-			zamknijPolaczenie();
+			st.executeUpdate("DELETE FROM pozycja WHERE id_zamowienie = " + idZamowienia);
+						
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			zamknijPolaczenie();
 		}
-		return grupy;
 	}
 	
+	
+	/**
+	 * Pobiera identyfikator ostatniej pozycji
+	 * @return id ostatniej pozycji
+	 * @throws SQLException
+	 */
+	private static int pobierzIdOstatniejPozycji() throws SQLException{
+		ResultSet max = st.executeQuery("SELECT max(id_pozycja) FROM pozycja");
+		max.next();
+		return max.getInt(1);
+	}
 	
 	/**
 	 * Wyszukuje w JNDI po³¹czenie do bazy danych
@@ -60,18 +80,19 @@ public class DaoGrupa {
 	 */
 	private static DataSource utworzZrodloDanych(){
 		try {
-			InitialContext initContext = new InitialContext();
+			Context initContext = new InitialContext();
 			ds = (DataSource) initContext.lookup("java:/oracle");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 		return ds;
 	}
+
 	
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych
 	 */
-	private static void otworzPolaczenie() {
+	private static void otworzPolaczenie(){
 		if (ds == null)
 			ds = utworzZrodloDanych();
 		try {
@@ -86,7 +107,7 @@ public class DaoGrupa {
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych
 	 */
-	private static void zamknijPolaczenie() {
+	private static void zamknijPolaczenie(){
 		try {
 			if (st != null) {
 				st.close();
@@ -98,6 +119,8 @@ public class DaoGrupa {
 			e.printStackTrace();
 		}
 	}
-	
+
+
+
 
 }

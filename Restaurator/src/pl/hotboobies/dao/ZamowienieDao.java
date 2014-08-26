@@ -21,7 +21,7 @@ import pl.hotboobies.Zamowienie;
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoZamowienie {
+public class ZamowienieDao {
 	
 	private static Connection conn;
 	private static Statement st;

@@ -17,7 +17,7 @@ import pl.hotboobies.Produkt;
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Produkt
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class DaoProdukt {
+public class ProduktDao {
 	
 	/** Obiekt ¿ród³ danych*/	
 	private static DataSource ds;

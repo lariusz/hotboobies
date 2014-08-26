@@ -11,8 +11,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
-import pl.hotboobies.dao.DaoProdukt;
-import pl.hotboobies.dao.DaoZamowienie;
+import pl.hotboobies.dao.ProduktDao;
+import pl.hotboobies.dao.ZamowienieDao;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kierownika
@@ -27,7 +27,7 @@ public class Kierownik extends Uzytkownik implements Serializable{
 	
 	public Kierownik() {
 		super();
-		produkty = DaoProdukt.pobierzWszystkieKolumny();
+		produkty = ProduktDao.pobierzWszystkieKolumny();
 	}
 
 	/** Lista produktów do aktualizacji */
@@ -48,7 +48,7 @@ public class Kierownik extends Uzytkownik implements Serializable{
 	public void aktualizujWszystkie(){
 		boolean success = true;
 		for(Produkt produktEl : produkty) {
-			success = success & DaoProdukt.aktulizujIloscProduktu(produktEl.getId(), produktEl.getIlosc() , produktEl.isAktywny());
+			success = success & ProduktDao.aktulizujIloscProduktu(produktEl.getId(), produktEl.getIlosc() , produktEl.isAktywny());
 		} if (success){
 			FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage(

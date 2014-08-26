@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.DaoUzytkownik;
+import pl.hotboobies.dao.UzytkownikDao;
 
 @ManagedBean
 @SessionScoped

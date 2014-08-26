@@ -17,10 +17,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
-import pl.hotboobies.dao.DaoGrupa;
-import pl.hotboobies.dao.DaoPozycja;
-import pl.hotboobies.dao.DaoProdukt;
-import pl.hotboobies.dao.DaoZamowienie;
+import pl.hotboobies.dao.GrupaDao;
+import pl.hotboobies.dao.PozycjaDao;
+import pl.hotboobies.dao.ProduktDao;
+import pl.hotboobies.dao.ZamowienieDao;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kelnera
@@ -164,9 +164,9 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Pobiera nowe zamówienia z bazy danych w celu wype³nienia listy.
 	 */
 	private void pobierzNoweZamowienia(){
-		noweZamowienia = DaoZamowienie.pobierzZamowione(uzytkownik.getIdentyfikator());	
+		noweZamowienia = ZamowienieDao.pobierzZamowione(uzytkownik.getIdentyfikator());	
 		for (Zamowienie zamowienie : noweZamowienia) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}		
 	}
@@ -175,9 +175,9 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Pobiera zamówienia do podania z bazy danych w celu wype³nienia listy.
 	 */
 	private void pobierzZamowieniaDoPodania(){
-		zamowieniaDoPodania = DaoZamowienie.pobierzDlaKlienta(uzytkownik.getIdentyfikator());
+		zamowieniaDoPodania = ZamowienieDao.pobierzDlaKlienta(uzytkownik.getIdentyfikator());
 		for (Zamowienie zamowienie : zamowieniaDoPodania) {
-			List<Produkt> produkty = DaoProdukt.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
 			zamowienie.setProdukty(produkty);
 		}		
 	}
@@ -201,7 +201,7 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * i obiekty umieszcza na liœcie grup produktów.
 	 */
 	private void pobierzNazwyGrupProduktow(){
-		grupy = DaoGrupa.pobierzWszystkieGrupy();
+		grupy = GrupaDao.pobierzWszystkieGrupy();
 	}
 	
 	
@@ -209,15 +209,15 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Pobiera z bazy wszystkie informacje o produktach danej grupy  i umieszcza obiekty na liœcie produktów.
 	 */
 	private void pobierzProdukty(int idGrupy){
-		produktyGrupy = DaoProdukt.pobierzWszystkieProdukty(idGrupy);
+		produktyGrupy = ProduktDao.pobierzWszystkieProdukty(idGrupy);
 	}
 	
 	/**
 	 * Uswa zamówienie z listy zamówieñ
 	 */
 	public String usunZamowienie(int idZamowienia, String przyczyna){
-		DaoZamowienie.anulujZamowienie(idZamowienia, przyczyna);
-		DaoZamowienie.zmienStatusNaAnulowane(idZamowienia);
+		ZamowienieDao.anulujZamowienie(idZamowienia, przyczyna);
+		ZamowienieDao.zmienStatusNaAnulowane(idZamowienia);
 		FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(
 					null,
@@ -232,7 +232,7 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Zmienia status zamówienia na <b>W kuchni</b>
 	 */
 	public String doKuchni(int idZamowienia){
-		DaoZamowienie.zmienStatusZamowienia(idZamowienia, 3);
+		ZamowienieDao.zmienStatusZamowienia(idZamowienia, 3);
 		return null;
 	}
 	
@@ -241,7 +241,7 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Zmienia status zamówienia na <b>Zaserwowane</b>
 	 */
 	public String doKlienta(int idZamowienia){
-		DaoZamowienie.zmienStatusZamowienia(idZamowienia, 6);
+		ZamowienieDao.zmienStatusZamowienia(idZamowienia, 6);
 		return null;
 	}
 	
@@ -338,11 +338,11 @@ public class Kelner extends Uzytkownik implements Serializable{
 			tymczasowe.setProdukty(produktyZamowienia);
 			tymczasowe.setDataPrzyjecia(new Date());
 			tymczasowe.setIdStatus(2);
-			int idZamowienia = DaoZamowienie.pobierzIdOstatniegoZamowienia() + 1;
+			int idZamowienia = ZamowienieDao.pobierzIdOstatniegoZamowienia() + 1;
 			tymczasowe.setIdZamowienia(idZamowienia);
-			DaoZamowienie.dodajZamowione(tymczasowe);
+			ZamowienieDao.dodajZamowione(tymczasowe);
 			for (Produkt produkt : produktyZamowienia) {
-				DaoPozycja.dodajPozycjeZamowienia(tymczasowe.getIdZamowienia(),
+				PozycjaDao.dodajPozycjeZamowienia(tymczasowe.getIdZamowienia(),
 						produkt.getId(), produkt.getIloscZamawianych());
 			}
 			return "kelner?faces-redirect=true";
