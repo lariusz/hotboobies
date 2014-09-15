@@ -1,15 +1,9 @@
 package pl.hotboobies.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import pl.hotboobies.dto.Produkt;
 
@@ -17,16 +11,7 @@ import pl.hotboobies.dto.Produkt;
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Produkt
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class ProduktDao {
-	
-	/** Obiekt ¿ród³ danych*/	
-	private static DataSource ds;
-	
-	/** Obiekt po³¹czenia z baza danych */	
-	private static Connection conn;
-	
-	/** Obiekt zapytania do bazy danych */	
-	private static Statement st;
+public class ProduktDao extends AbstractDao {
 	
 	
 	/**
@@ -146,54 +131,5 @@ public class ProduktDao {
 			zamknijPolaczenie();
 		}
 	}
-
-	/**
-	 * Wyszukuje w JNDI po³¹czenie do bazy danych
-	 * @return obiekt ¿ród³a danych
-	 */
-	private static DataSource utworzZrodloDanych() {
-		try {
-			InitialContext initContext = new InitialContext();
-			ds = (DataSource) initContext.lookup("java:/oracle");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} finally {
-			zamknijPolaczenie();
-		}
-		return ds;
-	}
-	
-	/**
-	 * Otwiera po³¹czenie z baz¹ danych
-	 */
-	private static void otworzPolaczenie() {
-		if (ds == null)
-			ds = utworzZrodloDanych();
-		try {
-			conn = ds.getConnection();
-			st = conn.createStatement();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Zamyka po³¹czenie z baz¹ danych
-	 */
-	private static void zamknijPolaczenie() {
-		try {
-			if (st != null) {
-				st.close();
-			}
-			if (conn != null) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-
 
 }

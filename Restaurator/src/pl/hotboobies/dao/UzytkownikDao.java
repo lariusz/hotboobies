@@ -12,7 +12,7 @@ import pl.hotboobies.dto.Uzytkownik;
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
-public class UzytkownikDao extends Connector {
+public class UzytkownikDao extends AbstractDao {
 	
 
 	/**
