@@ -13,7 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import pl.hotboobies.Grupa;
+import pl.hotboobies.dto.Grupa;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Grupa

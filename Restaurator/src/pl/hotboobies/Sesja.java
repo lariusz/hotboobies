@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import pl.hotboobies.dao.UzytkownikDao;
+import pl.hotboobies.dto.Uzytkownik;
 
 @ManagedBean
 @SessionScoped

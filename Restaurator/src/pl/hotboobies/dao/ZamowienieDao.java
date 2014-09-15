@@ -14,8 +14,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import pl.hotboobies.Produkt;
-import pl.hotboobies.Zamowienie;
+import pl.hotboobies.dto.Produkt;
+import pl.hotboobies.dto.Zamowienie;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Zamowienie

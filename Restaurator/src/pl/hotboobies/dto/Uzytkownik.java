@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.dto;
 
 import java.io.Serializable;
 

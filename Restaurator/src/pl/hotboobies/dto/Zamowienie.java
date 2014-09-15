@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.dto;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Zamowienie {
 	private List<Produkt> produkty;
 	
 	public Zamowienie() {
-		
+		super();
 	}
 
 	public Zamowienie(int idZamowienia, Integer nrStolika,Date dataPrzyjecia,

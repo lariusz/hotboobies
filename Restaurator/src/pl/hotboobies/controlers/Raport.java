@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.controlers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +13,9 @@ import javax.faces.context.FacesContext;
 import pl.hotboobies.dao.ProduktDao;
 import pl.hotboobies.dao.UzytkownikDao;
 import pl.hotboobies.dao.ZamowienieDao;
+import pl.hotboobies.dto.Produkt;
+import pl.hotboobies.dto.Uzytkownik;
+import pl.hotboobies.dto.Zamowienie;
 
 /**
  * 	Klasa pozwalaj¹ca na generowanie raportów.

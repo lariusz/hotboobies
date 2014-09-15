@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.controlers;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,6 +21,10 @@ import pl.hotboobies.dao.GrupaDao;
 import pl.hotboobies.dao.PozycjaDao;
 import pl.hotboobies.dao.ProduktDao;
 import pl.hotboobies.dao.ZamowienieDao;
+import pl.hotboobies.dto.Grupa;
+import pl.hotboobies.dto.Produkt;
+import pl.hotboobies.dto.Uzytkownik;
+import pl.hotboobies.dto.Zamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kelnera
@@ -28,7 +32,7 @@ import pl.hotboobies.dao.ZamowienieDao;
  */
 @ManagedBean
 @SessionScoped
-public class Kelner extends Uzytkownik implements Serializable{
+public class Kelner implements Serializable{
 	
 	
 	private static final long serialVersionUID = -2043621321850425369L;

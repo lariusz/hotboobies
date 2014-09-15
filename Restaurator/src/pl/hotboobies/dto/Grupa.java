@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.dto;
 
 
 public class Grupa {
@@ -7,7 +7,6 @@ public class Grupa {
 	private int id;
 
 	public Grupa(int id, String nazwa) {
-		super();
 		this.id = id;
 		this.nazwa = nazwa;
 	}	

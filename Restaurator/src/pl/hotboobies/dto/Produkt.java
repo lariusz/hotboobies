@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,18 +19,9 @@ public class Produkt {
 	private boolean aktywny;
 	private int sumaZamawianych;
 
-	
-	public int getSumaZamawianych() {
-		return sumaZamawianych;
-	}
-
-	public void setSumaZamawianych(int sumaZamawianych) {
-		this.sumaZamawianych = sumaZamawianych;
-	}
 
 	public Produkt(int id, String nazwa, BigDecimal cena, int ilosc,
 			 int czasWykonania, boolean aktywny) {
-		super();
 		this.id = id;
 		this.nazwa = nazwa;
 		this.cena = cena;
@@ -83,6 +74,16 @@ public class Produkt {
 		}
 		else return false;
 	}
+
+	
+	public int getSumaZamawianych() {
+		return sumaZamawianych;
+	}
+
+	public void setSumaZamawianych(int sumaZamawianych) {
+		this.sumaZamawianych = sumaZamawianych;
+	}
+	
 	
 	public int getId() {
 		return id;

@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.hotboobies.controlers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import javax.faces.context.FacesContext;
 
 import pl.hotboobies.dao.ProduktDao;
 import pl.hotboobies.dao.ZamowienieDao;
+import pl.hotboobies.dto.Produkt;
+import pl.hotboobies.dto.Uzytkownik;
+import pl.hotboobies.dto.Zamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kucharza
@@ -20,7 +23,7 @@ import pl.hotboobies.dao.ZamowienieDao;
 
 @ManagedBean
 @SessionScoped
-public class Kucharz extends Uzytkownik implements Serializable {
+public class Kucharz implements Serializable {
 	
 	private static final long serialVersionUID = 360396799453001524L;
 
