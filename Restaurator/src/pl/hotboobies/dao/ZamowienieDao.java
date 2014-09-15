@@ -18,7 +18,7 @@ import pl.hotboobies.Produkt;
 import pl.hotboobies.Zamowienie;
 
 /**
- * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik
+ * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Zamowienie
  *  @author <a href="mailto:mlarysz@us.edu.pl">Micha³ Larysz</a> *
  */
 public class ZamowienieDao {
@@ -28,6 +28,52 @@ public class ZamowienieDao {
 	private static Context initContext;
 	private static DataSource ds;
 	
+	
+	/**
+	 * Wyszukuje w JNDI po³¹czenie do bazy danych
+	 * @return obiekt ¿ród³a danych
+	 */
+	private static DataSource utworzZrodloDanych(){
+		DataSource ds = null;
+		try {
+			initContext = new InitialContext();
+			ds = (DataSource) initContext.lookup("java:/oracle");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return ds;
+	}
+	
+	/**
+	 * Otwiera po³¹czenie z baz¹ danych
+	 */
+	private static void otworzPolaczenie() {		
+		if(ds == null)
+			ds = utworzZrodloDanych();
+		try{
+		conn = ds.getConnection();
+		st = conn.createStatement();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Zamyka po³¹czenie z baz¹ danych
+	 */
+	private static void zamknijPolaczenie(){
+		try{
+			if (st != null) {
+				st.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Pobiera wszystkie kolumny dla wszystkich zamówieñ nieprzydzielonych
@@ -326,52 +372,7 @@ public class ZamowienieDao {
 			zamknijPolaczenie();
 		}
 	}
-	
-	/**
-	 * Wyszukuje w JNDI po³¹czenie do bazy danych
-	 * @return obiekt ¿ród³a danych
-	 */
-	private static DataSource utworzZrodloDanych(){
-		DataSource ds = null;
-		try {
-			initContext = new InitialContext();
-			ds = (DataSource) initContext.lookup("java:/oracle");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return ds;
-	}
-	
-	/**
-	 * Otwiera po³¹czenie z baz¹ danych
-	 */
-	private static void otworzPolaczenie() {		
-		if(ds == null)
-			ds = utworzZrodloDanych();
-		try{
-		conn = ds.getConnection();
-		st = conn.createStatement();
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-	}
-	
-	
-	/**
-	 * Zamyka po³¹czenie z baz¹ danych
-	 */
-	private static void zamknijPolaczenie(){
-		try{
-			if (st != null) {
-				st.close();
-			}
-			if (conn != null) {
-				conn.close();
-			}
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-	}
+
 
 	public static List<Zamowienie> pobierzZamowieniaKucharza(int identyfikator,
 			Date dataOd, Date dataDo) {

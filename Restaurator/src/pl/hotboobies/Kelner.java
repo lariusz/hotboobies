@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -29,6 +29,7 @@ import pl.hotboobies.dao.ZamowienieDao;
 @ManagedBean
 @SessionScoped
 public class Kelner extends Uzytkownik implements Serializable{
+	
 	
 	private static final long serialVersionUID = -2043621321850425369L;
 
@@ -164,11 +165,11 @@ public class Kelner extends Uzytkownik implements Serializable{
 	 * Pobiera nowe zamówienia z bazy danych w celu wype³nienia listy.
 	 */
 	private void pobierzNoweZamowienia(){
-		noweZamowienia = ZamowienieDao.pobierzZamowione(uzytkownik.getIdentyfikator());	
-		for (Zamowienie zamowienie : noweZamowienia) {
-			List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
-			zamowienie.setProdukty(produkty);
-		}		
+			noweZamowienia = ZamowienieDao.pobierzZamowione(uzytkownik.getIdentyfikator());	
+			for (Zamowienie zamowienie : noweZamowienia) {
+				List<Produkt> produkty = ProduktDao.pobierzPozycjeZamowienia(zamowienie.getIdZamowienia());
+				zamowienie.setProdukty(produkty);
+			}	
 	}
 
 	/**
