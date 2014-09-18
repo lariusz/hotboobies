@@ -1,4 +1,4 @@
-package pl.hotboobies.controlers;
+package pl.restaurator.controlers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,12 +10,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.ProduktDao;
-import pl.hotboobies.dao.UzytkownikDao;
-import pl.hotboobies.dao.ZamowienieDao;
-import pl.hotboobies.dto.Produkt;
-import pl.hotboobies.dto.Uzytkownik;
-import pl.hotboobies.dto.Zamowienie;
+import pl.restaurator.dao.ProduktDao;
+import pl.restaurator.dao.UzytkownikDao;
+import pl.restaurator.dao.ZamowienieDao;
+import pl.restaurator.dto.Produkt;
+import pl.restaurator.dto.Uzytkownik;
+import pl.restaurator.dto.Zamowienie;
 
 /**
  * 	Klasa pozwalaj¹ca na generowanie raportów.

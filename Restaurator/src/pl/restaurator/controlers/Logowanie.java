@@ -1,4 +1,4 @@
-package pl.hotboobies;
+package pl.restaurator.controlers;
 
 import java.io.Serializable;
 
@@ -8,8 +8,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.UzytkownikDao;
-import pl.hotboobies.dto.Uzytkownik;
+import pl.restaurator.dao.UzytkownikDao;
+import pl.restaurator.dto.Uzytkownik;
 
 @ManagedBean
 @RequestScoped

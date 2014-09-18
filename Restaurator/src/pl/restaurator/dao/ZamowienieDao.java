@@ -1,4 +1,4 @@
-package pl.hotboobies.dao;
+package pl.restaurator.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import pl.hotboobies.dto.Produkt;
-import pl.hotboobies.dto.Zamowienie;
+import pl.restaurator.dto.Produkt;
+import pl.restaurator.dto.Zamowienie;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Zamowienie

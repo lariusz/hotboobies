@@ -1,4 +1,4 @@
-package pl.hotboobies.dao;
+package pl.restaurator.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.hotboobies.dto.Uzytkownik;
+import pl.restaurator.dto.Uzytkownik;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Uzytkownik

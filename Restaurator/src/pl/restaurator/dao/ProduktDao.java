@@ -1,11 +1,11 @@
-package pl.hotboobies.dao;
+package pl.restaurator.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.hotboobies.dto.Produkt;
+import pl.restaurator.dto.Produkt;
 
 /**
  * Klasa udostêpniaj¹ca metody dostêpu do bazy danych dla obiektu Produkt
@@ -26,6 +26,7 @@ public class ProduktDao extends AbstractDao {
 				while(wszystkieProdukty.next()){
 					produktyGrupy.add(new Produkt(wszystkieProdukty.getInt("id_produkt"),
 							wszystkieProdukty.getString("nazwa"),
+							wszystkieProdukty.getBigDecimal("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
 							wszystkieProdukty.getInt("aktywny") == 1,
@@ -60,7 +61,7 @@ public class ProduktDao extends AbstractDao {
 							wszystkieProdukty.getBigDecimal("cena"),
 							wszystkieProdukty.getInt("ilosc"),
 							wszystkieProdukty.getInt("czas_wykonania"),
-							wszystkieProdukty.getInt("aktywny") == 1));
+							wszystkieProdukty.getInt("aktywny") == 1, grupa));
 				}
 				wszystkieProdukty.close();
 			} catch (SQLException e) {

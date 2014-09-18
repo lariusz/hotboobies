@@ -22,7 +22,7 @@
 			<f:facet name="right">
 				<p:outputLabel value="#{sesja.zalogowany.imie}  &nbsp;" />
 				<p:outputLabel value="#{sesja.zalogowany.nazwisko}  &emsp;" />
-				<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" />
+				<p:commandButton value="Wyloguj" action="#{logowanie.wyloguj()}" process="@this"/>
 			</f:facet>
 		</p:toolbar>
 		<p:sticky target="tb" />

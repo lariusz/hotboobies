@@ -1,4 +1,4 @@
-package pl.hotboobies.controlers;
+package pl.restaurator.controlers;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,14 +17,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
-import pl.hotboobies.dao.GrupaDao;
-import pl.hotboobies.dao.PozycjaDao;
-import pl.hotboobies.dao.ProduktDao;
-import pl.hotboobies.dao.ZamowienieDao;
-import pl.hotboobies.dto.Grupa;
-import pl.hotboobies.dto.Produkt;
-import pl.hotboobies.dto.Uzytkownik;
-import pl.hotboobies.dto.Zamowienie;
+import pl.restaurator.dao.GrupaDao;
+import pl.restaurator.dao.PozycjaDao;
+import pl.restaurator.dao.ProduktDao;
+import pl.restaurator.dao.ZamowienieDao;
+import pl.restaurator.dto.Grupa;
+import pl.restaurator.dto.Produkt;
+import pl.restaurator.dto.Uzytkownik;
+import pl.restaurator.dto.Zamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kelnera
@@ -260,6 +260,8 @@ public class Kelner implements Serializable{
 			if (produktGrupy.getId() == Integer.valueOf(id)) {
 				if (produktyZamowienia.isEmpty()) {
 					produktGrupy.inkrementujIloscZamawianych();
+					produktGrupy.dekrementujIlosc();
+					ProduktDao.aktulizujIloscProduktu(produktGrupy.getId(), produktGrupy.getIlosc(), produktGrupy.isAktywny());
 					produktyZamowienia.add(produktGrupy);
 					jestNaLiscie = true;
 				} else {
@@ -267,11 +269,15 @@ public class Kelner implements Serializable{
 						if (produktZamowienia.getId() == produktGrupy.getId()) {
 							jestNaLiscie = true;
 							produktZamowienia.inkrementujIloscZamawianych();
+							produktGrupy.dekrementujIlosc();
+							ProduktDao.aktulizujIloscProduktu(produktGrupy.getId(), produktGrupy.getIlosc(), produktGrupy.isAktywny());
 						}
 					}
 				}
 				if(!jestNaLiscie){
 					produktGrupy.inkrementujIloscZamawianych();
+					produktGrupy.dekrementujIlosc();
+					ProduktDao.aktulizujIloscProduktu(produktGrupy.getId(), produktGrupy.getIlosc(), produktGrupy.isAktywny());
 					produktyZamowienia.add(produktGrupy);
 				}
 				
@@ -289,6 +295,7 @@ public class Kelner implements Serializable{
 		for (Produkt produkt : produktyZamowienia) {
 			if(produkt.getId() == Integer.valueOf(id)){
 				produkt.dekrementujIloscZamawianych();
+				produkt.inkrementujIlosc();
 				if(produkt.getIloscZamawianych() == 0)
 					produktyZamowienia.remove(produkt);
 				break;
@@ -377,6 +384,17 @@ public class Kelner implements Serializable{
 	 * Anuluje sk³adanie zamówienia
 	 */
 	public String anuluj(){
+		
+		for(Produkt produktZamowienia : produktyZamowienia){
+			for(Produkt produktGrupy : produktyGrupy(produktZamowienia.getIdGrupa())){
+				if(produktZamowienia.getId() == produktGrupy.getId()){
+					ProduktDao.aktulizujIloscProduktu(produktZamowienia.getId(), 
+							(produktGrupy.getIlosc() + produktZamowienia.getIloscZamawianych()), true);
+				}
+			}
+			
+		}
+		
 		produktyZamowienia = null;
 		tymczasowe = null;
 		return "kelner?faces-redirect=true";		

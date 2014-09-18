@@ -1,4 +1,4 @@
-package pl.hotboobies.controlers;
+package pl.restaurator.controlers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,11 +10,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import pl.hotboobies.dao.ProduktDao;
-import pl.hotboobies.dao.ZamowienieDao;
-import pl.hotboobies.dto.Produkt;
-import pl.hotboobies.dto.Uzytkownik;
-import pl.hotboobies.dto.Zamowienie;
+import pl.restaurator.dao.ProduktDao;
+import pl.restaurator.dao.ZamowienieDao;
+import pl.restaurator.dto.Produkt;
+import pl.restaurator.dto.Uzytkownik;
+import pl.restaurator.dto.Zamowienie;
 
 /**
  * 	Kontroler dla czynnoœci wykonywanych przez Kucharza

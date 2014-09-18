@@ -1,4 +1,4 @@
-package pl.hotboobies.dto;
+package pl.restaurator.dto;
 
 
 public class Grupa {

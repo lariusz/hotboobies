@@ -1,4 +1,4 @@
-package pl.hotboobies.dto;
+package pl.restaurator.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,7 +31,6 @@ public class Produkt {
 	}
 	
 	public Produkt(String nazwa, BigDecimal cena, int sumaZamawianych) {
-		super();
 		this.nazwa = nazwa;
 		this.cena = cena;
 		this.sumaZamawianych = sumaZamawianych;
@@ -40,7 +39,6 @@ public class Produkt {
 	
 	public Produkt(int id, String nazwa, BigDecimal cena, int iloscZamawianych,
 			 int czasWykonania) {
-		super();
 		this.id = id;
 		this.nazwa = nazwa;
 		this.cena = cena;
@@ -49,11 +47,11 @@ public class Produkt {
 	}
 	
 	
-	public Produkt(int id, String nazwa, int ilosc,
+	public Produkt(int id, String nazwa, BigDecimal cena, int ilosc,
 			 int czasWykonania, boolean aktywny, int idGrupa) {
-		super();
 		this.id = id;
 		this.nazwa = nazwa;
+		this.cena = cena;
 		this.ilosc = ilosc;		
 		this.czasWykonania = czasWykonania;
 		this.aktywny = aktywny;
@@ -62,15 +60,34 @@ public class Produkt {
 	
 	public boolean inkrementujIloscZamawianych(){
 		iloscZamawianych++;
-		ilosc--;
+		return true;
+	}
+	
+	public boolean inkrementujIlosc(){
+		if(ilosc == 0){
+			aktywny = true;
+		}
+		ilosc++;
 		return true;
 	}
 	
 	public boolean dekrementujIloscZamawianych(){
 		if(iloscZamawianych>0){
 		iloscZamawianych--;
-		ilosc++;
 		return true;
+		}
+		else return false;
+	}
+	
+	public boolean dekrementujIlosc(){
+		if(ilosc == 1){
+			ilosc--;
+			aktywny = false;
+			return true;
+		}
+		else if(ilosc > 1){
+			ilosc--;
+			return true;
 		}
 		else return false;
 	}

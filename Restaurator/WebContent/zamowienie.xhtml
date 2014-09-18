@@ -18,8 +18,7 @@
 			<f:facet name="left">
 				<p:commandButton id="zapiszZamowienie" value="Zapisz"
 					action="#{kelner.zapisz()}" ajax="false" />
-				<p:commandButton value="Anuluj" action="#{kelner.anuluj()}"
-					process="@this" />
+				<p:commandButton value="Anuluj" action="#{kelner.anuluj()}"	process="@this" />
 			</f:facet>
 			<f:facet name="right">
 				<p:spacer width="300" height="10" />
@@ -45,18 +44,20 @@
 		</h:panelGrid>
 		<br />
 		
+		<h:panelGroup id="grupy">
 		<p:tabView var="grupa" value="#{kelner.grupy}" scrollable="true" orientation="top" >
         		<p:tab title="#{grupa.nazwa}">
             		<h:panelGroup id="produktyGrupy">
 						<ui:repeat var="produktGrupy" value="#{kelner.produktyGrupy(grupa.id)}">
 								<p:commandButton value="#{produktGrupy.nazwa} [cena: #{produktGrupy.cena} zł - dostępne #{produktGrupy.ilosc} szt.]"
 									action="#{kelner.dodajProdukt(produktGrupy.id)}" disabled="#{!produktGrupy.aktywny}"
-									update=":zamowienie:produktyZamowienia" process="@this"/>
+									update=":zamowienie:produktyZamowienia @this" process="@this"/>
 							<p:spacer width="50" />
 						</ui:repeat>
 					</h:panelGroup>
         		</p:tab>
     	</p:tabView>
+    	</h:panelGroup>
 		
 			<h:panelGroup id="produktyZamowienia">
 				<p:dataTable var="produktZamowienia"  

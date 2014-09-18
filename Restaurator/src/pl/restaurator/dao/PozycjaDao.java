@@ -1,4 +1,4 @@
-package pl.hotboobies.dao;
+package pl.restaurator.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
